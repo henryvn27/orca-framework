@@ -43,13 +43,14 @@ Run queued Notion payloads explicitly:
 ```sh
 orca notion outbox
 orca notion outbox --json
+orca notion payload --example
 orca notion sync --dry-run --all
 orca notion sync --dry-run --json --all
 ORCA_NOTION_SYNC_COMMAND=/path/to/notion-adapter orca notion sync --all
 orca notion sync .orca/notion/outbox/2026-06-22T12:00:00Z-goal_unified-example-handoff-1.json
 ```
 
-Dry-run validates queued payloads without calling the adapter or moving files. Add `--json` when an agent or CI gate needs a machine-readable sync summary. Payloads must include `schema_version: 1`, `payload_type: goal_event`, `action`, `canonical_backend`, `goal_slug`, `phase`, object-shaped `payload`, and `updated_at`. The adapter command receives one argument: the JSON payload path. ORCA moves a payload to `.orca/notion/synced/` only after the adapter exits `0`; missing config, adapter failure, and malformed payloads leave files in `.orca/notion/outbox/`.
+Dry-run validates queued payloads without calling the adapter or moving files. Add `--json` when an agent or CI gate needs a machine-readable sync summary. Use `orca notion payload --example` to print a valid adapter payload example. Payloads must include `schema_version: 1`, `payload_type: goal_event`, `action`, `canonical_backend`, `goal_slug`, `phase`, object-shaped `payload`, and `updated_at`. The adapter command receives one argument: the JSON payload path. ORCA moves a payload to `.orca/notion/synced/` only after the adapter exits `0`; missing config, adapter failure, and malformed payloads leave files in `.orca/notion/outbox/`.
 
 If Notion is unavailable, ORCA uses a local markdown fallback:
 

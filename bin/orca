@@ -914,7 +914,8 @@ orca_notion_doctor() {
     printf '"notion_outbox_count":%s,' "$outbox_count"
     printf '"notion_synced_count":%s,' "$synced_count"
     printf '"linear_configured":%s,' "$linear_configured"
-    printf '"ready":%s' "$ready"
+    printf '"ready":%s,' "$ready"
+    printf '"ok":%s' "$ready"
     printf '}\n'
   else
     printf 'notion issue board: '

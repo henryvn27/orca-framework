@@ -168,6 +168,15 @@ need_json_field "$tmp/notion-doctor-success.json" "ready" "true"
 need_grep '"notion_issue_board_configured":true' "$tmp/notion-doctor-success.json"
 need_grep '"notion_sync_command_status":"executable"' "$tmp/notion-doctor-success.json"
 need_grep '"ready":true' "$tmp/notion-doctor-success.json"
+ORCA_ROOT="$success_root" ORCA_NOTION_SYNC_COMMAND="$sync_script" ./bin/orca notion adapter --doctor "$adapter_fixture" > "$tmp/notion-adapter-doctor-success.json"
+need_json_field "$tmp/notion-adapter-doctor-success.json" "ok" "false"
+need_grep '"backend":{' "$tmp/notion-adapter-doctor-success.json"
+need_grep '"adapter":{' "$tmp/notion-adapter-doctor-success.json"
+need_grep '"notion_issue_board_configured":true' "$tmp/notion-adapter-doctor-success.json"
+need_grep '"notion_sync_command_status":"executable"' "$tmp/notion-adapter-doctor-success.json"
+need_grep '"ready":true' "$tmp/notion-adapter-doctor-success.json"
+need_grep '"token_present":false' "$tmp/notion-adapter-doctor-success.json"
+need_grep '"live_ready":false' "$tmp/notion-adapter-doctor-success.json"
 ORCA_ROOT="$success_root" ORCA_NOTION_SYNC_COMMAND="$sync_script" ./bin/orca notion doctor --strict >/dev/null
 ORCA_ROOT="$success_root" ORCA_NOTION_SYNC_COMMAND="$sync_script" ./bin/orca notion doctor --strict --json >/dev/null
 

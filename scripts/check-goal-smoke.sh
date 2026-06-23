@@ -250,6 +250,7 @@ need_json_field "$tmp/notion-payload-malformed-stdin.json" "target" "-"
 need_json_field "$tmp/notion-payload-malformed-stdin.json" "valid" "false"
 need_json_field "$tmp/notion-payload-malformed-stdin.json" "ok" "false"
 need_grep "Malformed Notion payload" "$tmp/notion-payload-malformed-stdin.err"
+printf '{not json}\n' > "$tmp/notion-adapter-malformed-payload.json"
 adapter_fixture="scripts/fixtures/notion/goal-event-valid.json"
 ORCA_ROOT="$fallback_root" ./bin/orca notion adapter --check "$adapter_fixture" > "$tmp/notion-adapter-check.txt"
 need_grep "notion-adapter: action=create" "$tmp/notion-adapter-check.txt"
@@ -271,6 +272,12 @@ if ORCA_ROOT="$fallback_root" ./bin/orca notion adapter --json-check --doctor > 
 fi
 need_json_field "$tmp/notion-adapter-json-check-option.json" "ok" "false"
 need_json_field "$tmp/notion-adapter-json-check-option.json" "error" "PAYLOAD is required"
+if ORCA_ROOT="$fallback_root" ./bin/orca notion adapter --json-check "$tmp/notion-adapter-malformed-payload.json" > "$tmp/notion-adapter-json-check-malformed.json" 2>&1; then
+  fail "expected adapter json-check with malformed payload to fail"
+fi
+need_json_field "$tmp/notion-adapter-json-check-malformed.json" "ok" "false"
+need_json_field "$tmp/notion-adapter-json-check-malformed.json" "error" "Malformed Notion payload"
+need_json_field "$tmp/notion-adapter-json-check-malformed.json" "target" "$tmp/notion-adapter-malformed-payload.json"
 ORCA_ROOT="$fallback_root" ./bin/orca notion adapter --help > "$tmp/notion-adapter-help.txt"
 need_grep "json-check validates payload shape and adapter plan readiness" "$tmp/notion-adapter-help.txt"
 need_grep "doctor combines backend readiness, adapter readiness, and live sync readiness as top-level ok" "$tmp/notion-adapter-help.txt"
@@ -292,6 +299,12 @@ if ORCA_ROOT="$fallback_root" ./bin/orca notion adapter --doctor --json-check > 
 fi
 need_json_field "$tmp/notion-adapter-doctor-option.json" "ok" "false"
 need_json_field "$tmp/notion-adapter-doctor-option.json" "error" "PAYLOAD is required"
+if ORCA_ROOT="$fallback_root" ./bin/orca notion adapter --doctor "$tmp/notion-adapter-malformed-payload.json" > "$tmp/notion-adapter-doctor-malformed.json" 2>&1; then
+  fail "expected adapter doctor with malformed payload to fail"
+fi
+need_json_field "$tmp/notion-adapter-doctor-malformed.json" "ok" "false"
+need_json_field "$tmp/notion-adapter-doctor-malformed.json" "error" "Malformed Notion payload"
+need_json_field "$tmp/notion-adapter-doctor-malformed.json" "target" "$tmp/notion-adapter-malformed-payload.json"
 ORCA_ROOT="$fallback_root" ./bin/orca notion adapter --dry-run "$adapter_fixture" > "$tmp/notion-adapter-dry-run.json"
 need_json_field "$tmp/notion-adapter-dry-run.json" "action" "create"
 need_json_field "$tmp/notion-adapter-dry-run.json" "data_source_id" "issue-board-123"

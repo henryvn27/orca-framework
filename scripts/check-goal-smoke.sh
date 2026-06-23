@@ -170,6 +170,30 @@ need_json_field "$tmp/notion-sync-empty-json.json" "dry_run" "true"
 need_json_field "$tmp/notion-sync-empty-json.json" "valid" "0"
 need_json_field "$tmp/notion-sync-empty-json.json" "failed" "0"
 need_json_field "$tmp/notion-sync-empty-json.json" "ok" "true"
+if ORCA_ROOT="$fallback_root" ./bin/orca notion sync --json --bad > "$tmp/notion-sync-bad-json-first.json" 2>&1; then
+  fail "expected notion sync --json --bad to fail"
+fi
+need_json_field "$tmp/notion-sync-bad-json-first.json" "target" "--bad"
+need_json_field "$tmp/notion-sync-bad-json-first.json" "dry_run" "false"
+need_json_field "$tmp/notion-sync-bad-json-first.json" "failed" "1"
+need_json_field "$tmp/notion-sync-bad-json-first.json" "ok" "false"
+need_json_field "$tmp/notion-sync-bad-json-first.json" "error" "unknown notion sync option: --bad"
+if ORCA_ROOT="$fallback_root" ./bin/orca notion sync --bad --json > "$tmp/notion-sync-bad-json-last.json" 2>&1; then
+  fail "expected notion sync --bad --json to fail"
+fi
+need_json_field "$tmp/notion-sync-bad-json-last.json" "target" "--bad"
+need_json_field "$tmp/notion-sync-bad-json-last.json" "dry_run" "false"
+need_json_field "$tmp/notion-sync-bad-json-last.json" "failed" "1"
+need_json_field "$tmp/notion-sync-bad-json-last.json" "ok" "false"
+need_json_field "$tmp/notion-sync-bad-json-last.json" "error" "unknown notion sync option: --bad"
+if ORCA_ROOT="$fallback_root" ./bin/orca notion sync --dry-run --json --bad > "$tmp/notion-sync-bad-dry-json.json" 2>&1; then
+  fail "expected notion sync --dry-run --json --bad to fail"
+fi
+need_json_field "$tmp/notion-sync-bad-dry-json.json" "target" "--bad"
+need_json_field "$tmp/notion-sync-bad-dry-json.json" "dry_run" "true"
+need_json_field "$tmp/notion-sync-bad-dry-json.json" "failed" "1"
+need_json_field "$tmp/notion-sync-bad-dry-json.json" "ok" "false"
+need_json_field "$tmp/notion-sync-bad-dry-json.json" "error" "unknown notion sync option: --bad"
 fallback_outbox_before=$(/usr/bin/find "$fallback_root/notion/outbox" -type f 2>/dev/null | wc -l | tr -d ' ')
 handoff_root="$tmp/notion-handoff"
 handoff_payload=$(ORCA_ROOT="$handoff_root" ./bin/orca notion handoff --issue "Update Notion issue after PR merge" --status Done --note "Live Notion unavailable")

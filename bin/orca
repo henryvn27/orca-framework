@@ -525,6 +525,9 @@ RUBY
       ;;
     -h|--help)
       printf 'Usage: orca notion adapter --check PAYLOAD | --json-check PAYLOAD | --doctor PAYLOAD | --dry-run PAYLOAD\n'
+      printf '\n'
+      printf '  --json-check validates payload shape and adapter plan readiness.\n'
+      printf '  --doctor combines backend readiness, adapter readiness, and live sync readiness as top-level ok.\n'
       ;;
     *)
       printf 'Usage: orca notion adapter --check PAYLOAD | --json-check PAYLOAD | --doctor PAYLOAD | --dry-run PAYLOAD\n' >&2

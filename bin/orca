@@ -12,6 +12,7 @@ Usage:
   orca goal <outcome> [--pack NAME] [--auto] [--max-cycles N] [--until blocked|done] [--plan-only]
   orca progress
   orca unify
+  orca notion sync [PAYLOAD|--all]
   orca backend status
   orca help
   orca list
@@ -27,6 +28,7 @@ Examples:
   orca goal "make this production ready" --pack release-ready --auto --max-cycles 5
   orca progress
   orca unify
+  orca notion sync --all
   orca list
   orca show orca-build
   orca run orca-onboard --print -- "Build a small iOS settings screen"
@@ -277,27 +279,98 @@ write_notion_payload() {
     printf '  "updated_at": "%s"\n' "$(now_utc)"
     printf '}\n'
   } > "$path"
-  if [ -n "${notion_sync_command:-}" ]; then
-    if [ -x "$notion_sync_command" ]; then
-      if "$notion_sync_command" "$path"; then
-        sync_status=0
-      else
-        sync_status=$?
-      fi
-    else
-      if sh -c "$notion_sync_command \"\$1\"" sh "$path"; then
-        sync_status=0
-      else
-        sync_status=$?
-      fi
-    fi
-    if [ "$sync_status" -eq 0 ]; then
-      mv "$path" "$dir/synced/$(basename "$path")"
-      printf '%s\n' "$dir/synced/$(basename "$path")"
-      return 0
-    fi
+  if sync_notion_payload_file "$path" >/dev/null 2>&1; then
+    printf '%s\n' "$dir/synced/$(basename "$path")"
+    return 0
   fi
   printf '%s\n' "$path"
+}
+
+validate_notion_payload_file() {
+  payload_file="$1"
+  [ -f "$payload_file" ] || {
+    printf 'Notion payload not found: %s\n' "$payload_file" >&2
+    return 1
+  }
+  [ -s "$payload_file" ] || {
+    printf 'Notion payload is empty: %s\n' "$payload_file" >&2
+    return 1
+  }
+  if command -v ruby >/dev/null 2>&1; then
+    ruby -rjson -e '
+      data = JSON.parse(File.read(ARGV[0]))
+      raise "missing action" unless data["action"].is_a?(String) && !data["action"].empty?
+      raise "missing payload" unless data.key?("payload")
+    ' "$payload_file" 2>/dev/null || {
+      printf 'Malformed Notion payload: %s\n' "$payload_file" >&2
+      return 1
+    }
+  else
+    grep -q '"action"' "$payload_file" && grep -q '"payload"' "$payload_file" || {
+      printf 'Malformed Notion payload: %s\n' "$payload_file" >&2
+      return 1
+    }
+  fi
+}
+
+sync_notion_payload_file() {
+  payload_file="$1"
+  load_config
+  dir=$(notion_dir)
+  mkdir -p "$dir/outbox" "$dir/synced"
+  validate_notion_payload_file "$payload_file" || return 1
+  [ -n "${notion_sync_command:-}" ] || {
+    printf 'No Notion sync command configured. Set ORCA_NOTION_SYNC_COMMAND or notion_sync_command in %s/config.env.\n' "$(orca_dir)" >&2
+    return 1
+  }
+  if [ -x "$notion_sync_command" ]; then
+    "$notion_sync_command" "$payload_file" || return $?
+  else
+    sh -c "$notion_sync_command \"\$1\"" sh "$payload_file" || return $?
+  fi
+  synced_path="$dir/synced/$(basename "$payload_file")"
+  mv "$payload_file" "$synced_path"
+  printf '%s\n' "$synced_path"
+}
+
+orca_notion_sync() {
+  target="${1:---all}"
+  load_config
+  dir=$(notion_dir)
+  mkdir -p "$dir/outbox" "$dir/synced"
+  synced=0
+  failed=0
+  case "$target" in
+    --all)
+      found=0
+      for payload_file in "$dir"/outbox/*.json; do
+        [ -e "$payload_file" ] || continue
+        found=1
+        if sync_notion_payload_file "$payload_file" >/dev/null; then
+          synced=$((synced + 1))
+        else
+          failed=$((failed + 1))
+        fi
+      done
+      [ "$found" -eq 1 ] || {
+        printf 'notion-sync: no payloads in %s/outbox\n' "$dir"
+        return 0
+      }
+      ;;
+    -h|--help)
+      printf 'Usage: orca notion sync [PAYLOAD|--all]\n'
+      return 0
+      ;;
+    *)
+      if sync_notion_payload_file "$target" >/dev/null; then
+        synced=1
+      else
+        failed=1
+      fi
+      ;;
+  esac
+  printf 'notion-sync: synced=%s failed=%s\n' "$synced" "$failed"
+  [ "$failed" -eq 0 ]
 }
 
 write_state() {
@@ -685,6 +758,15 @@ if [ "$script_name" = "orca" ]; then
         exit 0
       fi
       printf 'Usage: orca backend status\n' >&2
+      exit 1
+      ;;
+    notion)
+      if [ "${1:-}" = "sync" ]; then
+        shift
+        orca_notion_sync "$@"
+        exit $?
+      fi
+      printf 'Usage: orca notion sync [PAYLOAD|--all]\n' >&2
       exit 1
       ;;
   esac

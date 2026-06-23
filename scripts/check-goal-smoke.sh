@@ -44,6 +44,10 @@ assert_goal_artifacts() {
 fallback_root="$tmp/fallback"
 run_goal "$fallback_root" >/dev/null
 assert_goal_artifacts "$fallback_root"
+ORCA_ROOT="$fallback_root" ./bin/orca notion doctor > "$tmp/notion-doctor-fallback.txt"
+need_grep "notion issue board: missing" "$tmp/notion-doctor-fallback.txt"
+need_grep "notion sync command: missing" "$tmp/notion-doctor-fallback.txt"
+need_grep "linear: not configured, still optional" "$tmp/notion-doctor-fallback.txt"
 
 sync_script="$tmp/sync.sh"
 sync_log="$tmp/sync.log"
@@ -65,6 +69,10 @@ synced_count=$(/usr/bin/find "$success_root/notion/synced" -type f | wc -l | tr 
 ORCA_ROOT="$success_root" ./bin/orca backend status > "$tmp/backend-status.txt"
 need_grep "notion outbox: 0 payload(s)" "$tmp/backend-status.txt"
 need_grep "notion synced: " "$tmp/backend-status.txt"
+ORCA_ROOT="$success_root" ORCA_NOTION_SYNC_COMMAND="$sync_script" ./bin/orca notion doctor > "$tmp/notion-doctor-success.txt"
+need_grep "notion issue board: configured" "$tmp/notion-doctor-success.txt"
+need_grep "notion sync command: executable" "$tmp/notion-doctor-success.txt"
+need_grep "notion outbox: 0 payload(s)" "$tmp/notion-doctor-success.txt"
 
 fail_root="$tmp/notion-fail"
 ORCA_ROOT="$fail_root" ./bin/orca backend status >/dev/null

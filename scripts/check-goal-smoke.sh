@@ -161,6 +161,7 @@ ORCA_ROOT="$adapter_root" ./bin/orca notion outbox --json > "$tmp/notion-outbox-
 need_json_field "$tmp/notion-outbox-adapter.json" "outbox_count" "$adapter_outbox_before"
 need_grep '"outbox":\[' "$tmp/notion-outbox-adapter.json"
 first_adapter_payload=$(/usr/bin/find "$adapter_root/notion/outbox" -type f | head -1)
+need_json_field "$first_adapter_payload" "schema_version" "1"
 ORCA_ROOT="$adapter_root" ORCA_NOTION_SYNC_COMMAND="$sync_script" ./bin/orca notion sync --dry-run "$first_adapter_payload" > "$tmp/adapter-dry-run-single.txt"
 need_grep "notion-sync: dry-run valid=1 failed=0" "$tmp/adapter-dry-run-single.txt"
 ORCA_ROOT="$adapter_root" ORCA_NOTION_SYNC_COMMAND="$sync_script" ./bin/orca notion sync --dry-run --json "$first_adapter_payload" > "$tmp/adapter-dry-run-single.json"
@@ -236,6 +237,7 @@ fi
 missing_field_payload="$malformed_root/notion/outbox/missing-field.json"
 cat > "$missing_field_payload" <<EOF
 {
+  "schema_version": 1,
   "action": "goal_unified",
   "canonical_backend": "notion",
   "phase": "handoff",
@@ -247,5 +249,22 @@ if ORCA_ROOT="$malformed_root" ORCA_NOTION_SYNC_COMMAND="$sync_script" ./bin/orc
   fail "expected missing-field dry-run sync to return non-zero"
 fi
 [ -f "$missing_field_payload" ] || fail "expected missing-field payload to remain in outbox"
+
+unsupported_schema_payload="$malformed_root/notion/outbox/unsupported-schema.json"
+cat > "$unsupported_schema_payload" <<EOF
+{
+  "schema_version": 999,
+  "action": "goal_unified",
+  "canonical_backend": "notion",
+  "goal_slug": "make-this-production-ready",
+  "phase": "handoff",
+  "payload": {"ok": true},
+  "updated_at": "2026-06-23T00:00:00Z"
+}
+EOF
+if ORCA_ROOT="$malformed_root" ORCA_NOTION_SYNC_COMMAND="$sync_script" ./bin/orca notion sync --dry-run "$unsupported_schema_payload" >/dev/null 2>&1; then
+  fail "expected unsupported-schema dry-run sync to return non-zero"
+fi
+[ -f "$unsupported_schema_payload" ] || fail "expected unsupported-schema payload to remain in outbox"
 
 printf 'check-goal-smoke: ok\n'

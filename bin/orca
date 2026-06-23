@@ -281,6 +281,7 @@ write_notion_payload() {
   path="$dir/outbox/$(now_utc)-$action-$goal_slug-${phase:-unknown}-${cycles_done:-0}.json"
   {
     printf '{\n'
+    printf '  "schema_version": 1,\n'
     printf '  "action": "%s",\n' "$(json_escape "$action")"
     printf '  "canonical_backend": "%s",\n' "$(json_escape "$backend")"
     printf '  "project_page_id": "%s",\n' "$(json_escape "${notion_project_page_id:-}")"
@@ -313,6 +314,7 @@ validate_notion_payload_file() {
   if command -v ruby >/dev/null 2>&1; then
     ruby -rjson -e '
       data = JSON.parse(File.read(ARGV[0]))
+      raise "unsupported schema_version" unless data["schema_version"] == 1
       %w[action canonical_backend goal_slug phase updated_at].each do |field|
         raise "missing #{field}" unless data[field].is_a?(String) && !data[field].empty?
       end
@@ -322,6 +324,7 @@ validate_notion_payload_file() {
       return 1
     }
   else
+    grep -q '"schema_version"[[:space:]]*:[[:space:]]*1' "$payload_file" &&
     grep -q '"action"' "$payload_file" &&
       grep -q '"canonical_backend"' "$payload_file" &&
       grep -q '"goal_slug"' "$payload_file" &&

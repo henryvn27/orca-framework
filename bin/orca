@@ -10,7 +10,7 @@ usage() {
   cat <<'EOF'
 Usage:
   orca goal <outcome> [--pack NAME] [--auto] [--max-cycles N] [--until blocked|done] [--plan-only]
-  orca goal --packs
+  orca goal --packs [--verbose]
   orca progress
   orca unify
   orca notion sync [--dry-run] [--json] [PAYLOAD|--all]
@@ -33,6 +33,7 @@ Installed shims such as `orca-onboard` and `orca-build` call `orca run <command>
 
 Examples:
   orca goal --packs
+  orca goal --packs --verbose
   orca goal "make this production ready" --pack release-ready
   orca goal "make this production ready" --pack release-ready --plan-only
   orca goal "make this production ready" --pack release-ready --auto --max-cycles 5
@@ -178,6 +179,18 @@ json_escape() {
 
 pack_names() {
   printf '%s\n' 'release-ready app-store-ready startup-mvp security performance notion-hygiene'
+}
+
+print_packs() {
+  verbose="$1"
+  if [ "$verbose" -eq 0 ]; then
+    pack_names
+    return 0
+  fi
+  for goal_pack in $(pack_names); do
+    loops=$(pack_loops "$goal_pack" | tr '\n' ' ' | sed 's/[[:space:]]*$//')
+    printf '%s: %s\n' "$goal_pack" "$loops"
+  done
 }
 
 valid_pack() {
@@ -940,7 +953,14 @@ orca_goal() {
   while [ "$#" -gt 0 ]; do
     case "$1" in
       --packs)
-        pack_names
+        verbose=0
+        if [ "$#" -gt 1 ]; then
+          case "$2" in
+            --verbose) verbose=1 ;;
+            *) printf 'unknown --packs option: %s\n' "$2" >&2; exit 1 ;;
+          esac
+        fi
+        print_packs "$verbose"
         exit 0
         ;;
       --pack)
@@ -999,7 +1019,7 @@ orca_goal() {
   fi
   [ -n "$outcome" ] || {
     printf 'Usage: orca goal <outcome> [--pack NAME] [--auto] [--max-cycles N] [--until blocked|done] [--plan-only]\n' >&2
-    printf '       orca goal --packs\n' >&2
+    printf '       orca goal --packs [--verbose]\n' >&2
     exit 1
   }
   case "$max_cycles" in

@@ -212,6 +212,13 @@ need_json_field "$tmp/notion-sync-malformed-json.json" "valid" "0"
 need_json_field "$tmp/notion-sync-malformed-json.json" "failed" "1"
 need_json_field "$tmp/notion-sync-malformed-json.json" "ok" "false"
 need_grep "Malformed Notion payload" "$tmp/notion-sync-malformed-json.err"
+if ORCA_ROOT="$fallback_root" ./bin/orca notion payload --validate "$tmp/notion-payload-malformed.json" --json > "$tmp/notion-payload-malformed-validate.json" 2> "$tmp/notion-payload-malformed-validate.err"; then
+  fail "expected malformed JSON payload validation to fail"
+fi
+need_json_field "$tmp/notion-payload-malformed-validate.json" "target" "$tmp/notion-payload-malformed.json"
+need_json_field "$tmp/notion-payload-malformed-validate.json" "valid" "false"
+need_json_field "$tmp/notion-payload-malformed-validate.json" "ok" "false"
+need_grep "Malformed Notion payload" "$tmp/notion-payload-malformed-validate.err"
 ORCA_ROOT="$fallback_root" ./bin/orca notion payload --validate "$tmp/notion-payload-example.json" --json > "$tmp/notion-payload-validate.json"
 need_json_field "$tmp/notion-payload-validate.json" "target" "$tmp/notion-payload-example.json"
 need_json_field "$tmp/notion-payload-validate.json" "valid" "true"

@@ -833,7 +833,9 @@ orca_notion_outbox() {
       fi
       printf '"%s"' "$(json_escape "$payload_file")"
     done
-    printf ']}'
+    printf '],'
+    printf '"ok":true'
+    printf '}'
     printf '\n'
     return 0
   fi

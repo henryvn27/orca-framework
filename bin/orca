@@ -1264,6 +1264,10 @@ orca_goal() {
 }
 
 orca_progress() {
+  if [ "$#" -gt 0 ]; then
+    printf 'unknown progress option: %s\n' "$1" >&2
+    exit 1
+  fi
   read_state
   printf 'goal: %s\n' "$goal"
   printf 'phase: %s\n' "$phase"
@@ -1280,6 +1284,10 @@ orca_progress() {
 }
 
 orca_unify() {
+  if [ "$#" -gt 0 ]; then
+    printf 'unknown unify option: %s\n' "$1" >&2
+    exit 1
+  fi
   read_state
   dir=$(orca_dir)
   phase="handoff"
@@ -1475,11 +1483,11 @@ if [ "$script_name" = "orca" ]; then
       exit 0
       ;;
     progress)
-      orca_progress
+      orca_progress "$@"
       exit 0
       ;;
     unify)
-      orca_unify
+      orca_unify "$@"
       exit 0
       ;;
     backend)

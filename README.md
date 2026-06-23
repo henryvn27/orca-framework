@@ -23,23 +23,33 @@ Copy this prompt into Codex or Claude Code:
 ```text
 Install ORCA Framework from https://github.com/henryvn27/orca-framework.
 
-Use the repo's own install docs and scripts. Do not invent a custom install path unless needed.
-
 Steps:
 1. Check that git and a POSIX shell are available.
 2. Clone https://github.com/henryvn27/orca-framework.git into a safe local folder, or use the existing clone if already present.
-3. Run ./scripts/validate-repo.sh from the ORCA repo.
-4. Run ./install/install.sh --mode global unless I ask for a project-local install.
-5. Add $HOME/.orca-framework/bin to my shell PATH if it is not already available.
-6. Run ./install/verify-install.sh --target $HOME/.orca-framework.
-7. Run ./install/doctor.sh --target $HOME/.orca-framework.
-8. Verify that orca goal --packs works from a new shell.
+3. Read README.md, INSTALL.md, and docs/install.md before choosing commands.
+4. Run ./scripts/validate-repo.sh from the ORCA repo before installing.
+5. Install globally by default:
+   ./install/install.sh --mode global
+6. Add $HOME/.orca-framework/bin to my shell PATH if it is not already available.
+7. Verify the install:
+   ./install/verify-install.sh --target $HOME/.orca-framework
+   ./install/doctor.sh --target $HOME/.orca-framework
+8. Open a new shell or reload PATH, then verify:
+   orca goal --packs
+   orca backend status
+
+If I ask for project-local install instead of global install, use:
+./install/install.sh --mode local --target ./.orca-framework
+export PATH="$(pwd)/.orca-framework/bin:$PATH"
+./install/verify-install.sh --target ./.orca-framework
+./install/doctor.sh --target ./.orca-framework
 
 Rules:
 - Preserve any unrelated dirty Git work.
 - Do not delete an existing ORCA install unless I approve it.
+- Do not invent a custom install process if the repo scripts work.
 - If a command fails, stop and show the exact failing command plus the shortest useful error.
-- Finish with installed path, PATH change made or still needed, and verification results.
+- Finish with installed path, PATH change made or still needed, verification results, and the first ORCA command I should run.
 ```
 
 Autonomous mode is bounded:

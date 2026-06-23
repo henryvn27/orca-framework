@@ -19,6 +19,19 @@ need_grep() {
   grep -q "$pattern" "$file" || fail "missing pattern '$pattern' in $file"
 }
 
+need_json_field() {
+  file="$1"
+  field="$2"
+  expected="$3"
+  command -v ruby >/dev/null 2>&1 || fail "ruby is required for JSON contract checks"
+  ruby -rjson -e '
+    data = JSON.parse(File.read(ARGV.fetch(0)))
+    actual = data.fetch(ARGV.fetch(1)).to_s
+    expected = ARGV.fetch(2)
+    abort("#{ARGV[1]} expected #{expected}, got #{actual}") unless actual == expected
+  ' "$file" "$field" "$expected" || fail "JSON field mismatch: $field in $file"
+}
+
 tmp="${TMPDIR:-/tmp}/orca-goal-smoke.$$"
 trap 'rm -rf "$tmp"' EXIT INT TERM HUP
 mkdir -p "$tmp"
@@ -45,6 +58,10 @@ fallback_root="$tmp/fallback"
 run_goal "$fallback_root" >/dev/null
 assert_goal_artifacts "$fallback_root"
 ORCA_ROOT="$fallback_root" ./bin/orca backend status --json > "$tmp/backend-status-fallback.json"
+need_json_field "$tmp/backend-status-fallback.json" "active_canonical" "markdown"
+need_json_field "$tmp/backend-status-fallback.json" "notion_configured" "false"
+need_json_field "$tmp/backend-status-fallback.json" "notion_status" "markdown_fallback"
+need_json_field "$tmp/backend-status-fallback.json" "linear_configured" "false"
 need_grep '"notion_configured":false' "$tmp/backend-status-fallback.json"
 need_grep '"notion_status":"markdown_fallback"' "$tmp/backend-status-fallback.json"
 need_grep '"linear_configured":false' "$tmp/backend-status-fallback.json"
@@ -53,6 +70,9 @@ need_grep "notion issue board: missing" "$tmp/notion-doctor-fallback.txt"
 need_grep "notion sync command: missing" "$tmp/notion-doctor-fallback.txt"
 need_grep "linear: not configured, still optional" "$tmp/notion-doctor-fallback.txt"
 ORCA_ROOT="$fallback_root" ./bin/orca notion doctor --json > "$tmp/notion-doctor-fallback.json"
+need_json_field "$tmp/notion-doctor-fallback.json" "notion_issue_board_configured" "false"
+need_json_field "$tmp/notion-doctor-fallback.json" "notion_sync_command_status" "missing"
+need_json_field "$tmp/notion-doctor-fallback.json" "ready" "false"
 need_grep '"notion_issue_board_configured":false' "$tmp/notion-doctor-fallback.json"
 need_grep '"notion_sync_command_status":"missing"' "$tmp/notion-doctor-fallback.json"
 need_grep '"ready":false' "$tmp/notion-doctor-fallback.json"
@@ -84,6 +104,10 @@ ORCA_ROOT="$success_root" ./bin/orca backend status > "$tmp/backend-status.txt"
 need_grep "notion outbox: 0 payload(s)" "$tmp/backend-status.txt"
 need_grep "notion synced: " "$tmp/backend-status.txt"
 ORCA_ROOT="$success_root" ./bin/orca backend status --json > "$tmp/backend-status-success.json"
+need_json_field "$tmp/backend-status-success.json" "active_canonical" "notion"
+need_json_field "$tmp/backend-status-success.json" "notion_configured" "true"
+need_json_field "$tmp/backend-status-success.json" "notion_sync_status" "outbox_mirror_only"
+need_json_field "$tmp/backend-status-success.json" "notion_outbox_count" "0"
 need_grep '"notion_configured":true' "$tmp/backend-status-success.json"
 need_grep '"notion_sync_status":"outbox_mirror_only"' "$tmp/backend-status-success.json"
 need_grep '"notion_outbox_count":0' "$tmp/backend-status-success.json"
@@ -92,6 +116,9 @@ need_grep "notion issue board: configured" "$tmp/notion-doctor-success.txt"
 need_grep "notion sync command: executable" "$tmp/notion-doctor-success.txt"
 need_grep "notion outbox: 0 payload(s)" "$tmp/notion-doctor-success.txt"
 ORCA_ROOT="$success_root" ORCA_NOTION_SYNC_COMMAND="$sync_script" ./bin/orca notion doctor --json > "$tmp/notion-doctor-success.json"
+need_json_field "$tmp/notion-doctor-success.json" "notion_issue_board_configured" "true"
+need_json_field "$tmp/notion-doctor-success.json" "notion_sync_command_status" "executable"
+need_json_field "$tmp/notion-doctor-success.json" "ready" "true"
 need_grep '"notion_issue_board_configured":true' "$tmp/notion-doctor-success.json"
 need_grep '"notion_sync_command_status":"executable"' "$tmp/notion-doctor-success.json"
 need_grep '"ready":true' "$tmp/notion-doctor-success.json"

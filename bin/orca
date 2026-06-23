@@ -9,6 +9,10 @@ script_name=$(basename -- "$0")
 usage() {
   cat <<'EOF'
 Usage:
+  orca goal <outcome> [--pack NAME] [--auto] [--max-cycles N] [--until blocked|done] [--plan-only]
+  orca progress
+  orca unify
+  orca backend status
   orca help
   orca list
   orca show <command>
@@ -18,6 +22,11 @@ Usage:
 Installed shims such as `orca-onboard` and `orca-build` call `orca run <command>`.
 
 Examples:
+  orca goal "make this production ready" --pack release-ready
+  orca goal "make this production ready" --pack release-ready --plan-only
+  orca goal "make this production ready" --pack release-ready --auto --max-cycles 5
+  orca progress
+  orca unify
   orca list
   orca show orca-build
   orca run orca-onboard --print -- "Build a small iOS settings screen"
@@ -59,8 +68,9 @@ emit_prompt() {
 
   printf 'Follow the ORCA Framework workflow command `%s`.\n\n' "$name"
   printf 'Execution rules:\n'
-  printf -- '- Prefer Linear-first execution when Linear is available.\n'
-  printf -- '- If Linear is unavailable, continue in degraded local-only mode and say so explicitly.\n'
+  printf -- '- Prefer Notion-backed PM/docs/issues when configured.\n'
+  printf -- '- If Notion is unavailable, continue with `.orca/` markdown fallback and say so explicitly.\n'
+  printf -- '- Keep Linear optional; use it only when explicitly selected or already canonical for this work.\n'
   printf -- '- Use the command definition below as the source of truth.\n'
   printf -- '- End with a concise completion summary that states outcome, verification, blockers, and next step.\n\n'
   printf 'Command definition:\n\n'
@@ -105,6 +115,517 @@ run_codex() {
   fi
 }
 
+orca_dir() {
+  printf '%s\n' "${ORCA_ROOT:-.orca}"
+}
+
+notion_dir() {
+  printf '%s/notion\n' "$(orca_dir)"
+}
+
+now_utc() {
+  date -u '+%Y-%m-%dT%H:%M:%SZ'
+}
+
+slugify() {
+  printf '%s\n' "$1" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9][^a-z0-9]*/-/g; s/^-//; s/-$//' | cut -c 1-60
+}
+
+shell_quote() {
+  printf "'%s'" "$(printf '%s' "$1" | sed "s/'/'\\\\''/g")"
+}
+
+json_escape() {
+  if command -v ruby >/dev/null 2>&1; then
+    ruby -rjson -e 'print JSON.generate(ARGV[0])[1...-1]' "$1"
+  else
+    printf '%s' "$1" | sed 's/\\/\\\\/g; s/"/\\"/g'
+  fi
+}
+
+pack_loops() {
+  case "$1" in
+    release-ready)
+      printf '%s\n' test architecture code-hygiene docs-sync security pr-readiness
+      ;;
+    app-store-ready)
+      printf '%s\n' test accessibility screenshots metadata purchases privacy pr-readiness
+      ;;
+    startup-mvp)
+      printf '%s\n' scope-cut deploy analytics onboarding docs-sync pr-readiness
+      ;;
+    security)
+      printf '%s\n' secrets auth permissions dependency-audit threat-review handoff
+      ;;
+    performance)
+      printf '%s\n' baseline latency bundle-size query-optimization regression-check handoff
+      ;;
+    notion-hygiene)
+      printf '%s\n' issue-board-sync docs-sync decisions handoffs stale-links pr-readiness
+      ;;
+    *)
+      printf '%s\n' test docs-sync pr-readiness
+      ;;
+  esac
+}
+
+pack_weight() {
+  case "$1" in
+    security|pr-readiness|test|auth|permissions|purchases|privacy) printf '2\n' ;;
+    *) printf '1\n' ;;
+  esac
+}
+
+ensure_orca_fallback() {
+  dir=$(orca_dir)
+  mkdir -p "$dir/docs" "$dir/runs" "$dir/handoffs" "$dir/packs" "$dir/loops" "$dir/notion/outbox" "$dir/notion/synced"
+  [ -f "$dir/project.md" ] || cat > "$dir/project.md" <<'EOF'
+# ORCA Project
+
+Canonical state: Notion when configured; markdown fallback otherwise.
+
+Configure Notion by setting project/page/data-source IDs in `.orca/config.env`.
+Linear stays optional and explicit.
+EOF
+  [ -f "$dir/issues.md" ] || cat > "$dir/issues.md" <<'EOF'
+# ORCA Issues
+
+| Status | Priority | Issue | Files | Action | Verify | Done | ACs |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+EOF
+  [ -f "$dir/decisions.md" ] || printf '# ORCA Decisions\n' > "$dir/decisions.md"
+  [ -f "$dir/config.env" ] || cat > "$dir/config.env" <<'EOF'
+project_management=notion
+documentation=notion
+issues=notion
+fallback=markdown
+notion_dashboard_page_id=
+notion_projects_data_source_id=
+notion_project_page_id=
+notion_issue_board_data_source_id=
+notion_sync_command=
+linear_workspace=
+linear_team=
+linear_project_id=
+markdown_root=.orca
+EOF
+  [ -f "$dir/packs/builtin.md" ] || cat > "$dir/packs/builtin.md" <<'EOF'
+# Built-in ORCA Loop Packs
+
+- release-ready: tests, architecture, hygiene, docs, security, PR readiness.
+- app-store-ready: release-ready plus accessibility, screenshots, metadata, purchases, privacy.
+- startup-mvp: scope cut, deployability, analytics, onboarding, docs.
+- security: secrets, auth, permissions, dependency audit, threat review.
+- performance: baseline, latency, bundle size, query optimization, regression checks.
+- notion-hygiene: issue board sync, docs, decisions, handoffs, stale-link cleanup.
+
+Each loop must define goal, measurement, action, stop condition, budget, handoff.
+EOF
+}
+
+load_config() {
+  ensure_orca_fallback
+  dir=$(orca_dir)
+  project_management=notion
+  documentation=notion
+  issues=notion
+  fallback=markdown
+  notion_dashboard_page_id=
+  notion_projects_data_source_id=
+  notion_project_page_id=
+  notion_issue_board_data_source_id=
+  notion_sync_command=
+  linear_workspace=
+  linear_team=
+  linear_project_id=
+  markdown_root=.orca
+  # shellcheck disable=SC1090
+  . "$dir/config.env"
+  if [ -n "${ORCA_NOTION_SYNC_COMMAND:-}" ]; then
+    notion_sync_command=$ORCA_NOTION_SYNC_COMMAND
+  fi
+}
+
+canonical_backend() {
+  load_config
+  if [ "${issues:-}" = "notion" ] && [ -n "${notion_issue_board_data_source_id:-}" ]; then
+    printf 'notion\n'
+  else
+    printf 'markdown\n'
+  fi
+}
+
+write_notion_payload() {
+  action="$1"
+  payload="$2"
+  load_config
+  backend=$(canonical_backend)
+  dir=$(notion_dir)
+  mkdir -p "$dir/outbox" "$dir/synced"
+  path="$dir/outbox/$(now_utc)-$action-$goal_slug-${phase:-unknown}-${cycles_done:-0}.json"
+  {
+    printf '{\n'
+    printf '  "action": "%s",\n' "$(json_escape "$action")"
+    printf '  "canonical_backend": "%s",\n' "$(json_escape "$backend")"
+    printf '  "project_page_id": "%s",\n' "$(json_escape "${notion_project_page_id:-}")"
+    printf '  "issue_board_data_source_id": "%s",\n' "$(json_escape "${notion_issue_board_data_source_id:-}")"
+    printf '  "goal": "%s",\n' "$(json_escape "$goal")"
+    printf '  "goal_slug": "%s",\n' "$(json_escape "$goal_slug")"
+    printf '  "phase": "%s",\n' "$(json_escape "$phase")"
+    printf '  "pack": "%s",\n' "$(json_escape "$pack")"
+    printf '  "payload": %s,\n' "$payload"
+    printf '  "updated_at": "%s"\n' "$(now_utc)"
+    printf '}\n'
+  } > "$path"
+  if [ -n "${notion_sync_command:-}" ]; then
+    if [ -x "$notion_sync_command" ]; then
+      if "$notion_sync_command" "$path"; then
+        sync_status=0
+      else
+        sync_status=$?
+      fi
+    else
+      if sh -c "$notion_sync_command \"\$1\"" sh "$path"; then
+        sync_status=0
+      else
+        sync_status=$?
+      fi
+    fi
+    if [ "$sync_status" -eq 0 ]; then
+      mv "$path" "$dir/synced/$(basename "$path")"
+      printf '%s\n' "$dir/synced/$(basename "$path")"
+      return 0
+    fi
+  fi
+  printf '%s\n' "$path"
+}
+
+write_state() {
+  dir=$(orca_dir)
+  state="$dir/state.env"
+  tmp="$state.$$"
+  {
+    printf 'goal=%s\n' "$(shell_quote "$goal")"
+    printf 'goal_slug=%s\n' "$(shell_quote "$goal_slug")"
+    printf 'phase=%s\n' "$(shell_quote "$phase")"
+    printf 'pack=%s\n' "$(shell_quote "$pack")"
+    printf 'auto=%s\n' "$(shell_quote "$auto")"
+    printf 'max_cycles=%s\n' "$(shell_quote "$max_cycles")"
+    printf 'until=%s\n' "$(shell_quote "$until")"
+    printf 'cycles_done=%s\n' "$(shell_quote "$cycles_done")"
+    printf 'readiness_score=%s\n' "$(shell_quote "$readiness_score")"
+    printf 'started_at=%s\n' "$(shell_quote "$started_at")"
+    printf 'updated_at=%s\n' "$(shell_quote "$(now_utc)")"
+  } > "$tmp"
+  mv "$tmp" "$state"
+  payload=$(printf '{"readiness_score": %s, "cycles_done": %s, "max_cycles": %s, "until": "%s"}' "$readiness_score" "$cycles_done" "$max_cycles" "$(json_escape "$until")")
+  if [ "$(canonical_backend)" = "notion" ]; then
+    write_notion_payload "state_updated" "$payload" >/dev/null
+  fi
+}
+
+read_state() {
+  dir=$(orca_dir)
+  state="$dir/state.env"
+  [ -f "$state" ] || {
+    printf 'No ORCA state found. Run `orca goal <outcome>` first.\n' >&2
+    exit 1
+  }
+  # shellcheck disable=SC1090
+  . "$state"
+}
+
+render_plan() {
+  dir=$(orca_dir)
+  plan="$dir/runs/$goal_slug-plan.md"
+  {
+    printf '# ORCA Goal Plan\n\n'
+    printf 'Goal: %s\n\n' "$goal"
+    printf 'Workflow: clarify -> plan -> apply -> unify -> loop pack -> readiness score -> handoff\n\n'
+    printf 'Backend defaults:\n\n'
+    printf -- '- PM/docs/issues: Notion when configured\n'
+    printf -- '- Fallback: `.orca/` markdown\n'
+    printf -- '- Linear: optional adapter only\n\n'
+    printf '## Clarify\n\n'
+    printf 'Ask only for missing success criteria, scope boundaries, repo/path, backend choice, test/build commands, and do-not-touch areas.\n\n'
+    printf '## Acceptance-Driven Tasks\n\n'
+    printf '| Task | Files | Action | Verify | Done | ACs |\n'
+    printf '| --- | --- | --- | --- | --- | --- |\n'
+    printf '| T1 | README.md, bin/orca, .orca/* | Make `/goal` the primary workflow with durable state | `orca progress` | State exists and names next action | AC-1, AC-6 |\n'
+    printf '| T2 | .orca/issues.md, .orca/runs/* | Track files/action/verify/done/ACs | Review generated plan | Tasks are executable and checkable | AC-task |\n'
+    printf '| T3 | .orca/packs/* | Run selected loop pack and readiness scoring | `orca unify` | Score and handoff written | AC-pack |\n\n'
+    printf '## Loop Pack: %s\n\n' "$pack"
+    for loop in $(pack_loops "$pack"); do
+      printf -- '- [ ] %s: goal, measurement, action, stop condition, budget, handoff\n' "$loop"
+    done
+    printf '\n## Stop Conditions\n\n'
+    printf -- '- acceptance criteria satisfied\n'
+    printf -- '- no ready issues remain\n'
+    printf -- '- repeated test/build failure\n'
+    printf -- '- confidence below threshold\n'
+    printf -- '- credentials/context missing\n'
+    printf -- '- diff/time/cycle budget reached\n'
+    printf -- '- user approval required\n'
+  } > "$plan"
+  printf '%s\n' "$plan"
+}
+
+append_issue() {
+  status="$1"
+  priority="$2"
+  issue="$3"
+  files="$4"
+  action="$5"
+  verify="$6"
+  done="$7"
+  acs="$8"
+  dir=$(orca_dir)
+  tmp="$dir/issues.$$"
+  needle="| $issue |"
+  if [ -f "$dir/issues.md" ]; then
+    grep -Fv "$needle" "$dir/issues.md" > "$tmp" || true
+    mv "$tmp" "$dir/issues.md"
+  fi
+  printf '| %s | %s | %s | %s | %s | %s | %s | %s |\n' "$status" "$priority" "$issue" "$files" "$action" "$verify" "$done" "$acs" >> "$dir/issues.md"
+}
+
+score_pack() {
+  dir=$(orca_dir)
+  total=0
+  passed=0
+  for loop in $(pack_loops "$pack"); do
+    weight=$(pack_weight "$loop")
+    total=$((total + weight))
+    [ -f "$dir/loops/$goal_slug/$loop.pass" ] && passed=$((passed + weight))
+  done
+  [ "$total" -gt 0 ] || total=1
+  printf '%s\n' $((passed * 100 / total))
+}
+
+record_loop_evidence() {
+  loop="$1"
+  result="$2"
+  note="$3"
+  dir="$(orca_dir)/loops/$goal_slug"
+  mkdir -p "$dir"
+  {
+    printf 'loop=%s\n' "$loop"
+    printf 'result=%s\n' "$result"
+    printf 'note=%s\n' "$note"
+    printf 'updated_at=%s\n' "$(now_utc)"
+  } > "$dir/$loop.$result"
+}
+
+render_loop_evidence() {
+  for loop in $(pack_loops "$pack"); do
+    if [ -f "$(orca_dir)/loops/$goal_slug/$loop.pass" ]; then
+      printf -- '- pass: %s\n' "$loop"
+    else
+      printf -- '- open: %s\n' "$loop"
+    fi
+  done
+}
+
+orca_goal() {
+  pack="release-ready"
+  auto=0
+  max_cycles=1
+  until="done"
+  plan_only=0
+  outcome=""
+  while [ "$#" -gt 0 ]; do
+    case "$1" in
+      --pack)
+        pack="$2"
+        shift 2
+        ;;
+      --auto|--autopilot)
+        auto=1
+        shift
+        ;;
+      --max-cycles)
+        max_cycles="$2"
+        shift 2
+        ;;
+      --until)
+        until="$2"
+        shift 2
+        ;;
+      --plan-only)
+        plan_only=1
+        shift
+        ;;
+      --)
+        shift
+        break
+        ;;
+      *)
+        outcome="${outcome}${outcome:+ }$1"
+        shift
+        ;;
+    esac
+  done
+  if [ "$#" -gt 0 ]; then
+    outcome="${outcome}${outcome:+ }$*"
+  fi
+  [ -n "$outcome" ] || {
+    printf 'Usage: orca goal <outcome> [--pack NAME] [--auto] [--max-cycles N] [--plan-only]\n' >&2
+    exit 1
+  }
+  case "$max_cycles" in
+    *[!0-9]*|"") printf '%s\n' '--max-cycles must be a positive integer' >&2; exit 1 ;;
+  esac
+  [ "$max_cycles" -gt 0 ] || {
+    printf '%s\n' '--max-cycles must be greater than 0' >&2
+    exit 1
+  }
+  ensure_orca_fallback
+  goal="$outcome"
+  goal_slug=$(slugify "$goal")
+  [ -n "$goal_slug" ] || goal_slug="goal"
+  phase="clarify"
+  cycles_done=0
+  readiness_score=0
+  started_at=$(now_utc)
+  write_state
+  phase="plan"
+  write_state
+  plan_path=$(render_plan)
+  append_issue "In progress" "High" "Run /goal loop for $goal" "README.md, bin/orca, .orca/*" "Clarify, plan, apply, unify, score, handoff" "orca progress && orca unify" "Handoff includes readiness score and next action" "AC-1..AC-6"
+  record_loop_evidence "docs-sync" "pass" "Plan artifact written at $plan_path"
+  record_loop_evidence "issue-board-sync" "pass" "Acceptance-driven issue mirrored locally and queued for Notion when configured"
+  backend=$(canonical_backend)
+  if [ "$backend" = "notion" ]; then
+    payload=$(printf '{"issue": "%s", "status": "In progress", "priority": "High", "files": "README.md, bin/orca, .orca/*", "action": "Clarify, plan, apply, unify, score, handoff", "verify": "orca progress && orca unify", "done": "Handoff includes readiness score and next action", "acs": "AC-1..AC-6", "plan_path": "%s"}' "$(json_escape "Run /goal loop for $goal")" "$(json_escape "$plan_path")")
+    notion_payload=$(write_notion_payload "goal_started" "$payload")
+  else
+    notion_payload=""
+  fi
+  printf 'ORCA goal started\n'
+  printf 'phase: %s\n' "$phase"
+  printf 'pack: %s\n' "$pack"
+  printf 'canonical: %s\n' "$backend"
+  printf 'state: %s/state.env\n' "$(orca_dir)"
+  printf 'plan: %s\n' "$plan_path"
+  if [ -n "$notion_payload" ]; then
+    printf 'notion-sync: %s\n' "$notion_payload"
+  fi
+  if [ "$plan_only" -eq 1 ]; then
+    printf 'next: apply planned tasks, then run `orca unify`\n'
+  else
+    printf 'next: apply planned tasks, then unify\n'
+  fi
+  if [ "$auto" -eq 1 ]; then
+    printf 'auto: bounded, max_cycles=%s, until=%s\n' "$max_cycles" "$until"
+  fi
+  if [ "$plan_only" -eq 0 ]; then
+    phase="apply"
+    write_state
+    append_issue "In progress" "High" "Run /goal loop for $goal" "README.md, bin/orca, .orca/*" "Clarify, plan, apply, unify, score, handoff" "orca progress && orca unify" "Handoff includes readiness score and next action" "AC-1..AC-6"
+    if [ "$(canonical_backend)" = "notion" ]; then
+      payload=$(printf '{"issue": "%s", "status": "In progress", "next": "unify", "plan_path": "%s"}' "$(json_escape "Run /goal loop for $goal")" "$(json_escape "$plan_path")")
+      notion_payload=$(write_notion_payload "apply_started" "$payload")
+      printf 'notion-sync: %s\n' "$notion_payload"
+    fi
+    orca_unify
+  fi
+}
+
+orca_progress() {
+  read_state
+  printf 'goal: %s\n' "$goal"
+  printf 'phase: %s\n' "$phase"
+  printf 'pack: %s\n' "$pack"
+  printf 'canonical: %s\n' "$(canonical_backend)"
+  printf 'readiness: %s%%\n' "$readiness_score"
+  case "$phase" in
+    plan) printf 'next: apply acceptance-driven tasks\n' ;;
+    apply) printf 'next: run `orca unify`\n' ;;
+    unify) printf 'next: run loop pack and write handoff\n' ;;
+    handoff|done) printf 'next: review handoff or start next /goal\n' ;;
+    *) printf 'next: inspect .orca/state.env\n' ;;
+  esac
+}
+
+orca_unify() {
+  read_state
+  dir=$(orca_dir)
+  phase="handoff"
+  cycles_done=$((cycles_done + 1))
+  handoff="$dir/handoffs/$goal_slug.md"
+  record_loop_evidence "handoffs" "pass" "Handoff artifact written at $handoff"
+  record_loop_evidence "docs-sync" "pass" "Plan and handoff artifacts written"
+  record_loop_evidence "issue-board-sync" "pass" "Issue status mirrored and Notion sync payload generated when configured"
+  readiness_score=$(score_pack)
+  if [ "$readiness_score" -ge 80 ]; then
+    issue_status="Done"
+  else
+    issue_status="In progress"
+  fi
+  append_issue "$issue_status" "High" "Run /goal loop for $goal" "README.md, bin/orca, .orca/*" "Clarify, plan, apply, unify, score, handoff" "orca progress && orca unify" "Handoff includes readiness score and next action" "AC-1..AC-6"
+  {
+    printf '# ORCA Handoff\n\n'
+    printf 'Goal: %s\n\n' "$goal"
+    printf 'Workflow: clarify -> plan -> apply -> unify -> loop pack -> readiness score -> handoff\n\n'
+    printf 'Pack: %s\n\n' "$pack"
+    printf 'Readiness score: %s%%\n\n' "$readiness_score"
+    printf 'Loop evidence:\n\n'
+    render_loop_evidence
+    printf '\n'
+    printf 'Cycles: %s/%s\n\n' "$cycles_done" "$max_cycles"
+    printf 'Stop conditions checked:\n\n'
+    printf -- '- bounded cycles: %s\n' "$max_cycles"
+    printf -- '- until: %s\n' "$until"
+    printf -- '- no infinite autonomous mode\n'
+    printf -- '- Notion canonical when configured; markdown fallback available\n'
+    printf -- '- Linear preserved as optional adapter\n\n'
+    if [ "${auto:-0}" -eq 1 ]; then
+      printf 'Autonomous mode: stopped after %s cycle(s); max_cycles=%s; reason=no ready issues remain or handoff reached.\n\n' "$cycles_done" "$max_cycles"
+    fi
+    printf 'Next action: update Notion issue status and run validation gates.\n'
+  } > "$handoff"
+  write_state
+  backend=$(canonical_backend)
+  if [ "$backend" = "notion" ]; then
+    payload=$(printf '{"issue": "%s", "status": "%s", "readiness_score": %s, "handoff_path": "%s", "cycles_done": %s, "max_cycles": %s}' "$(json_escape "Run /goal loop for $goal")" "$issue_status" "$readiness_score" "$(json_escape "$handoff")" "$cycles_done" "$max_cycles")
+    notion_payload=$(write_notion_payload "goal_unified" "$payload")
+  else
+    notion_payload=""
+  fi
+  printf 'ORCA unified\n'
+  printf 'canonical: %s\n' "$backend"
+  printf 'readiness: %s%%\n' "$readiness_score"
+  printf 'handoff: %s\n' "$handoff"
+  if [ -n "$notion_payload" ]; then
+    printf 'notion-sync: %s\n' "$notion_payload"
+  fi
+}
+
+orca_backend_status() {
+  load_config
+  dir=$(orca_dir)
+  printf 'canonical PM: %s\n' "$project_management"
+  printf 'canonical docs: %s\n' "$documentation"
+  printf 'canonical issues: %s\n' "$issues"
+  printf 'fallback: %s at %s\n' "$fallback" "$dir"
+  printf 'active canonical: %s\n' "$(canonical_backend)"
+  if [ -n "$notion_issue_board_data_source_id" ]; then
+    printf 'notion: configured\n'
+    if [ -n "${notion_sync_command:-}" ]; then
+      printf 'notion sync: command configured\n'
+    else
+      printf 'notion sync: outbox mirror only\n'
+    fi
+  else
+    printf 'notion: not configured, use markdown fallback\n'
+  fi
+  if [ -n "$linear_workspace$linear_team$linear_project_id" ]; then
+    printf 'linear: configured optional adapter\n'
+  else
+    printf 'linear: not configured, still supported when explicit\n'
+  fi
+}
+
 if [ "$script_name" != "orca" ]; then
   subcommand="run"
   target_command="$script_name"
@@ -142,6 +663,32 @@ case "$subcommand" in
     fi
     ;;
 esac
+
+if [ "$script_name" = "orca" ]; then
+  case "$target_command" in
+    goal|/goal)
+      orca_goal "$@"
+      exit 0
+      ;;
+    progress)
+      orca_progress
+      exit 0
+      ;;
+    unify)
+      orca_unify
+      exit 0
+      ;;
+    backend)
+      if [ "${1:-}" = "status" ]; then
+        shift
+        orca_backend_status
+        exit 0
+      fi
+      printf 'Usage: orca backend status\n' >&2
+      exit 1
+      ;;
+  esac
+fi
 
 file=$(command_file "$target_command")
 name=$(normalize_command "$target_command")

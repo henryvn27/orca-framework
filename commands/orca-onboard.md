@@ -6,11 +6,11 @@ Run adaptive onboarding to understand a product, feature, or project before writ
 
 ## When To Use
 
-Use at the start of a new project, significant feature, or unclear Linear issue.
+Use at the start of a new project, significant feature, unclear Notion issue, or markdown fallback task.
 
 ## Required Inputs
 
-- Initial user request, Linear issue description, or opt-out work item
+- Initial user request, Notion issue description, `.orca/` task, or explicit Linear issue
 
 ## Optional Inputs
 
@@ -19,17 +19,11 @@ Use at the start of a new project, significant feature, or unclear Linear issue.
 - Existing repo path
 - Deadline or release target
 
-## Linear Context
+## Backend Context
 
-- Expects: issue title, description, comments, labels, state, project, and related issues
-- Reads: ambiguity, user requests, constraints, previous agent questions
-- Posts: intake summary, unresolved questions, recommended workflow, recommended labels and state
-- Trigger: `Triage`, `needs-triage`, `needs-spec`, or delegated unclear issue
-- Human approval: not required unless changing priority, owner, or project scope
-
-## Opt-Out Context
-
-Use the chosen work item or document as the source prompt and write the intake summary there.
+- Notion mode: read/write the project page and Issue Board as canonical state.
+- Markdown mode: use `.orca/` files as canonical fallback.
+- Linear mode: use Linear only when explicitly selected.
 
 ## Workflow
 
@@ -41,7 +35,7 @@ Use the chosen work item or document as the source prompt and write the intake s
 4. Ask follow-up questions one at a time or in small groups only where the answers would materially change the first spec.
 5. Stop when more questions would not materially improve the first spec.
 6. Produce intake summary, operator preference summary, unresolved questions, recommended workflow, and draft spec skeleton.
-7. Sync the result to Linear or the opt-out record.
+7. Sync the result to Notion, `.orca/`, or explicit Linear record.
 
 ## First-Pass Interview
 
@@ -69,7 +63,9 @@ For new projects, first runs, or vague requests, the default first pass should u
 - `templates/intake.md`
 - optional `templates/user-guidance-profile.md` when a durable preference is explicit
 - Draft `templates/spec.md` skeleton
-- Linear intake comment when Linear-first mode is active
+- Notion issue update when Notion mode is active
+- Markdown intake update when `.orca/` fallback is active
+- Linear intake comment when Linear mode is explicitly active
 - host-native captured answers when the harness provides a structured question surface
 
 ## Failure Cases

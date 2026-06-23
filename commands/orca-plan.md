@@ -14,22 +14,19 @@ Use after `orca-spec` and before `orca-build`.
 
 ## Optional Inputs
 
-- Linear issue ID or opt-out work item
+- Notion project page or Issue Board item
+- `.orca/` markdown issue/task
+- Linear issue ID when Linear is explicitly selected
 - Discovery notes
 - Test commands
 - Release target
 
-## Linear Context
+## Backend Context
 
-- Expects: issue ID, spec comment or artifact, constraints, labels, state, related links
-- Reads: approved scope, non-goals, verification expectations, risk labels
-- Posts: implementation plan, approval request, verification gates, recommended `Ready for Build` state
-- Trigger: `Spec Ready`, `needs-plan`
-- Human approval: required before build for product-changing or risk-bearing work
-
-## Opt-Out Context
-
-Write the plan to the selected artifact and record approval status in the chosen work item.
+- Notion mode: read/write the project page and Issue Board as canonical state.
+- Markdown mode: read/write `.orca/project.md`, `.orca/issues.md`, and `.orca/runs/`.
+- Linear mode: use Linear only when explicitly selected; keep Linear ID, URL, and status as optional metadata.
+- Human approval: required before build for product-changing or risk-bearing work.
 
 ## Workflow
 
@@ -41,7 +38,7 @@ Write the plan to the selected artifact and record approval status in the chosen
 6. Identify review and QA gates.
 7. If the planning or execution discipline clearly benefits from the official Superpowers path, recommend `orca-superpowers` explicitly instead of describing a local ORCA clone of that workflow.
 8. Name the next recommended execution phase explicitly.
-9. Post a plan comment or artifact suitable for approval.
+9. Post a plan comment or artifact suitable for approval in the selected backend.
 
 ## Project Breakdown Rules
 
@@ -59,7 +56,7 @@ Do not turn a whole project into one vague implementation bucket.
 
 - `templates/plan.md`
 - `templates/approval-request.md` when risk requires an approval gate
-- `templates/linear-plan-comment.md` when Linear-first mode is active
+- `templates/linear-plan-comment.md` when Linear mode is explicitly active
 
 ## Failure Cases
 

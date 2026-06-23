@@ -227,6 +227,13 @@ ORCA_ROOT="$fallback_root" ./bin/orca notion payload --example | ORCA_ROOT="$fal
 need_json_field "$tmp/notion-payload-validate-stdin.json" "target" "-"
 need_json_field "$tmp/notion-payload-validate-stdin.json" "valid" "true"
 need_json_field "$tmp/notion-payload-validate-stdin.json" "ok" "true"
+if printf '{not json}\n' | ORCA_ROOT="$fallback_root" ./bin/orca notion payload --validate - --json > "$tmp/notion-payload-malformed-stdin.json" 2> "$tmp/notion-payload-malformed-stdin.err"; then
+  fail "expected malformed stdin JSON payload validation to fail"
+fi
+need_json_field "$tmp/notion-payload-malformed-stdin.json" "target" "-"
+need_json_field "$tmp/notion-payload-malformed-stdin.json" "valid" "false"
+need_json_field "$tmp/notion-payload-malformed-stdin.json" "ok" "false"
+need_grep "Malformed Notion payload" "$tmp/notion-payload-malformed-stdin.err"
 adapter_fixture="scripts/fixtures/notion/goal-event-valid.json"
 ORCA_ROOT="$fallback_root" ./bin/orca notion adapter --check "$adapter_fixture" > "$tmp/notion-adapter-check.txt"
 need_grep "notion-adapter: action=create" "$tmp/notion-adapter-check.txt"

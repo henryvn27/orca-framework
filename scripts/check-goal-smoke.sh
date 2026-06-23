@@ -162,6 +162,7 @@ need_json_field "$tmp/notion-outbox-adapter.json" "outbox_count" "$adapter_outbo
 need_grep '"outbox":\[' "$tmp/notion-outbox-adapter.json"
 first_adapter_payload=$(/usr/bin/find "$adapter_root/notion/outbox" -type f | head -1)
 need_json_field "$first_adapter_payload" "schema_version" "1"
+need_json_field "$first_adapter_payload" "payload_type" "goal_event"
 ORCA_ROOT="$adapter_root" ORCA_NOTION_SYNC_COMMAND="$sync_script" ./bin/orca notion sync --dry-run "$first_adapter_payload" > "$tmp/adapter-dry-run-single.txt"
 need_grep "notion-sync: dry-run valid=1 failed=0" "$tmp/adapter-dry-run-single.txt"
 ORCA_ROOT="$adapter_root" ORCA_NOTION_SYNC_COMMAND="$sync_script" ./bin/orca notion sync --dry-run --json "$first_adapter_payload" > "$tmp/adapter-dry-run-single.json"
@@ -238,6 +239,7 @@ missing_field_payload="$malformed_root/notion/outbox/missing-field.json"
 cat > "$missing_field_payload" <<EOF
 {
   "schema_version": 1,
+  "payload_type": "goal_event",
   "action": "goal_unified",
   "canonical_backend": "notion",
   "phase": "handoff",
@@ -254,6 +256,7 @@ unsupported_schema_payload="$malformed_root/notion/outbox/unsupported-schema.jso
 cat > "$unsupported_schema_payload" <<EOF
 {
   "schema_version": 999,
+  "payload_type": "goal_event",
   "action": "goal_unified",
   "canonical_backend": "notion",
   "goal_slug": "make-this-production-ready",
@@ -266,5 +269,23 @@ if ORCA_ROOT="$malformed_root" ORCA_NOTION_SYNC_COMMAND="$sync_script" ./bin/orc
   fail "expected unsupported-schema dry-run sync to return non-zero"
 fi
 [ -f "$unsupported_schema_payload" ] || fail "expected unsupported-schema payload to remain in outbox"
+
+unsupported_type_payload="$malformed_root/notion/outbox/unsupported-type.json"
+cat > "$unsupported_type_payload" <<EOF
+{
+  "schema_version": 1,
+  "payload_type": "unknown",
+  "action": "goal_unified",
+  "canonical_backend": "notion",
+  "goal_slug": "make-this-production-ready",
+  "phase": "handoff",
+  "payload": {"ok": true},
+  "updated_at": "2026-06-23T00:00:00Z"
+}
+EOF
+if ORCA_ROOT="$malformed_root" ORCA_NOTION_SYNC_COMMAND="$sync_script" ./bin/orca notion sync --dry-run "$unsupported_type_payload" >/dev/null 2>&1; then
+  fail "expected unsupported-type dry-run sync to return non-zero"
+fi
+[ -f "$unsupported_type_payload" ] || fail "expected unsupported-type payload to remain in outbox"
 
 printf 'check-goal-smoke: ok\n'

@@ -1468,6 +1468,12 @@ case "$subcommand" in
       shift
     fi
     ;;
+  -*)
+    if [ "$script_name" = "orca" ]; then
+      printf 'unknown top-level option: %s\n' "$subcommand" >&2
+      exit 1
+    fi
+    ;;
   *)
     if [ "$script_name" = "orca" ]; then
       target_command="$subcommand"

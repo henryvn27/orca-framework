@@ -55,6 +55,7 @@ scripts/fixtures/notion/goal-event-valid.json
 scripts/fixtures/notion/goal-event-missing-data-source.json
 scripts/fixtures/notion/goal-event-unsupported-schema.json
 scripts/fixtures/notion/goal-event-unsupported-type.json
+scripts/fixtures/notion/adapter-doctor-token-missing.json
 "
 
 required_dirs="
@@ -123,6 +124,15 @@ done
 if command -v ruby >/dev/null 2>&1; then
   ruby -rjson -e 'ARGV.each { |path| JSON.parse(File.read(path)) }' scripts/fixtures/notion/*.json ||
     fail "malformed Notion fixture JSON"
+  ruby -rjson -e '
+    data = JSON.parse(File.read("scripts/fixtures/notion/adapter-doctor-token-missing.json"))
+    abort("missing backend fixture object") unless data["backend"].is_a?(Hash)
+    abort("missing adapter fixture object") unless data["adapter"].is_a?(Hash)
+    abort("expected doctor fixture ok=false") unless data["ok"] == false
+    abort("expected doctor fixture backend ready=true") unless data["backend"]["ready"] == true
+    abort("expected doctor fixture token_present=false") unless data["adapter"]["token_present"] == false
+    abort("expected doctor fixture live_ready=false") unless data["adapter"]["live_ready"] == false
+  ' || fail "invalid Notion adapter doctor fixture contract"
 fi
 
 ./scripts/check-notion-adapter-smoke.sh >/dev/null ||

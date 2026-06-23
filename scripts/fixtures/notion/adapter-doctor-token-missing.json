@@ -1,0 +1,21 @@
+{
+  "backend": {
+    "notion_issue_board_configured": true,
+    "notion_project_page_configured": false,
+    "notion_sync_command_status": "executable",
+    "notion_outbox_count": 0,
+    "notion_synced_count": 1,
+    "linear_configured": false,
+    "ready": true
+  },
+  "adapter": {
+    "action": "create",
+    "title": "Run /goal loop for make this production ready",
+    "data_source_id": "issue-board-123",
+    "match_property": "Issue",
+    "token_present": false,
+    "live_ready": false,
+    "ok": true
+  },
+  "ok": false
+}

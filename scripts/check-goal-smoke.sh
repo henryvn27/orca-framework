@@ -62,6 +62,9 @@ assert_goal_artifacts "$success_root"
 [ -s "$sync_log" ] || fail "sync command did not run"
 synced_count=$(/usr/bin/find "$success_root/notion/synced" -type f | wc -l | tr -d ' ')
 [ "$synced_count" -gt 0 ] || fail "expected synced Notion payloads"
+ORCA_ROOT="$success_root" ./bin/orca backend status > "$tmp/backend-status.txt"
+need_grep "notion outbox: 0 payload(s)" "$tmp/backend-status.txt"
+need_grep "notion synced: " "$tmp/backend-status.txt"
 
 fail_root="$tmp/notion-fail"
 ORCA_ROOT="$fail_root" ./bin/orca backend status >/dev/null
@@ -70,6 +73,9 @@ ORCA_ROOT="$fail_root" ORCA_NOTION_SYNC_COMMAND=/usr/bin/false ./bin/orca /goal 
 assert_goal_artifacts "$fail_root"
 outbox_count=$(/usr/bin/find "$fail_root/notion/outbox" -type f | wc -l | tr -d ' ')
 [ "$outbox_count" -gt 0 ] || fail "expected failed sync payloads to remain in outbox"
+ORCA_ROOT="$fail_root" ./bin/orca backend status > "$tmp/backend-status-fail.txt"
+need_grep "notion outbox: " "$tmp/backend-status-fail.txt"
+need_grep "notion synced: 0 payload(s)" "$tmp/backend-status-fail.txt"
 
 adapter_log="$tmp/adapter.log"
 cat > "$sync_script" <<EOF

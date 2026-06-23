@@ -125,6 +125,15 @@ notion_dir() {
   printf '%s/notion\n' "$(orca_dir)"
 }
 
+count_json_files() {
+  dir="$1"
+  [ -d "$dir" ] || {
+    printf '0\n'
+    return 0
+  }
+  /usr/bin/find "$dir" -type f -name '*.json' | wc -l | tr -d ' '
+}
+
 now_utc() {
   date -u '+%Y-%m-%dT%H:%M:%SZ'
 }
@@ -677,6 +686,7 @@ orca_unify() {
 orca_backend_status() {
   load_config
   dir=$(orca_dir)
+  notion_state_dir=$(notion_dir)
   printf 'canonical PM: %s\n' "$project_management"
   printf 'canonical docs: %s\n' "$documentation"
   printf 'canonical issues: %s\n' "$issues"
@@ -689,6 +699,8 @@ orca_backend_status() {
     else
       printf 'notion sync: outbox mirror only\n'
     fi
+    printf 'notion outbox: %s payload(s)\n' "$(count_json_files "$notion_state_dir/outbox")"
+    printf 'notion synced: %s payload(s)\n' "$(count_json_files "$notion_state_dir/synced")"
   else
     printf 'notion: not configured, use markdown fallback\n'
   fi

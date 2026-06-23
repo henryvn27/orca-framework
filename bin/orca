@@ -650,12 +650,20 @@ orca_notion_adapter() {
         printf '{"ok":false,"error":"PAYLOAD is required","target":""}\n'
         return 1
       fi
+      if ! validate_notion_payload_file "$1" >/dev/null 2>/dev/null; then
+        printf '{"ok":false,"error":"Malformed Notion payload","target":"%s"}\n' "$(json_escape "$1")"
+        return 1
+      fi
       "$adapter" --json-summary "$1"
       ;;
     --doctor)
       shift
       if [ "$#" -ne 1 ] || [ "${1#--}" != "$1" ]; then
         printf '{"backend":null,"adapter":null,"ok":false,"error":"PAYLOAD is required","target":""}\n'
+        return 1
+      fi
+      if ! validate_notion_payload_file "$1" >/dev/null 2>/dev/null; then
+        printf '{"backend":null,"adapter":null,"ok":false,"error":"Malformed Notion payload","target":"%s"}\n' "$(json_escape "$1")"
         return 1
       fi
       command -v ruby >/dev/null 2>&1 || {

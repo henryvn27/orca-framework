@@ -74,7 +74,7 @@ orca notion adapter --json-check .orca/notion/outbox/payload.json
 orca notion adapter --doctor .orca/notion/outbox/payload.json
 ```
 
-Stable adapter fixtures live in `scripts/fixtures/notion/` for contract tests and integration examples.
+Stable adapter fixtures live in `scripts/fixtures/notion/` for contract tests and integration examples. `scripts/fixtures/notion/adapter-doctor-token-missing.json` mirrors the `--doctor` token-missing readiness case shown below.
 Use `--doctor` when you need one read-only JSON preflight that combines backend readiness with adapter readiness. Its top-level `ok` means the payload is valid, ORCA's Notion backend is configured, and the adapter has live Notion sync readiness. A payload can pass `--json-check` while `--doctor` still reports `ok: false` when config or `NOTION_TOKEN` is missing.
 
 Example `--doctor` output when ORCA's backend config is ready but live Notion sync is not:

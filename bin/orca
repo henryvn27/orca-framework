@@ -174,6 +174,17 @@ json_escape() {
   fi
 }
 
+pack_names() {
+  printf '%s\n' 'release-ready app-store-ready startup-mvp security performance notion-hygiene'
+}
+
+valid_pack() {
+  case "$1" in
+    release-ready|app-store-ready|startup-mvp|security|performance|notion-hygiene) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
 pack_loops() {
   case "$1" in
     release-ready)
@@ -995,6 +1006,11 @@ orca_goal() {
     blocked|done) ;;
     *) printf '%s\n' '--until must be blocked or done' >&2; exit 1 ;;
   esac
+  valid_pack "$pack" || {
+    printf 'unknown --pack: %s\n' "$pack" >&2
+    printf 'valid packs: %s\n' "$(pack_names)" >&2
+    exit 1
+  }
   ensure_orca_fallback
   goal="$outcome"
   goal_slug=$(slugify "$goal")

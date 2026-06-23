@@ -41,6 +41,8 @@ When those values exist, `orca goal`, `orca progress`, and `orca unify` treat No
 Run queued Notion payloads explicitly:
 
 ```sh
+orca notion outbox
+orca notion outbox --json
 orca notion sync --dry-run --all
 orca notion sync --dry-run --json --all
 ORCA_NOTION_SYNC_COMMAND=/path/to/notion-adapter orca notion sync --all

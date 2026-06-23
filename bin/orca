@@ -13,6 +13,7 @@ Usage:
   orca progress
   orca unify
   orca notion sync [--dry-run] [--json] [PAYLOAD|--all]
+  orca notion outbox [--json]
   orca notion doctor [--strict] [--json]
   orca backend status [--json]
   orca help
@@ -30,6 +31,7 @@ Examples:
   orca progress
   orca unify
   orca notion sync --dry-run --json --all
+  orca notion outbox --json
   orca notion sync --all
   orca notion doctor [--strict] [--json]
   orca list
@@ -443,6 +445,59 @@ orca_notion_sync() {
     printf 'notion-sync: synced=%s failed=%s\n' "$synced" "$failed"
   fi
   [ "$failed" -eq 0 ]
+}
+
+orca_notion_outbox() {
+  json=0
+  while [ "$#" -gt 0 ]; do
+    case "$1" in
+      --json)
+        json=1
+        ;;
+      -h|--help)
+        printf 'Usage: orca notion outbox [--json]\n'
+        return 0
+        ;;
+      *)
+        printf 'orca: unknown notion outbox option: %s\n' "$1" >&2
+        return 2
+        ;;
+    esac
+    shift
+  done
+
+  load_config
+  dir=$(notion_dir)
+  mkdir -p "$dir/outbox" "$dir/synced"
+  outbox_count=$(count_json_files "$dir/outbox")
+  synced_count=$(count_json_files "$dir/synced")
+  if [ "$json" -eq 1 ]; then
+    printf '{'
+    printf '"notion_dir":"%s",' "$(json_escape "$dir")"
+    printf '"outbox_count":%s,' "$outbox_count"
+    printf '"synced_count":%s,' "$synced_count"
+    printf '"outbox":['
+    first=1
+    for payload_file in "$dir"/outbox/*.json; do
+      [ -e "$payload_file" ] || continue
+      if [ "$first" -eq 1 ]; then
+        first=0
+      else
+        printf ','
+      fi
+      printf '"%s"' "$(json_escape "$payload_file")"
+    done
+    printf ']}'
+    printf '\n'
+    return 0
+  fi
+
+  printf 'notion outbox: %s payload(s)\n' "$outbox_count"
+  printf 'notion synced: %s payload(s)\n' "$synced_count"
+  for payload_file in "$dir"/outbox/*.json; do
+    [ -e "$payload_file" ] || continue
+    printf '%s\n' "$payload_file"
+  done
 }
 
 orca_notion_doctor() {
@@ -1002,7 +1057,12 @@ if [ "$script_name" = "orca" ]; then
         orca_notion_doctor "$@"
         exit $?
       fi
-      printf 'Usage: orca notion sync [--dry-run] [--json] [PAYLOAD|--all]\n       orca notion doctor [--strict] [--json]\n' >&2
+      if [ "${1:-}" = "outbox" ]; then
+        shift
+        orca_notion_outbox "$@"
+        exit $?
+      fi
+      printf 'Usage: orca notion sync [--dry-run] [--json] [PAYLOAD|--all]\n       orca notion outbox [--json]\n       orca notion doctor [--strict] [--json]\n' >&2
       exit 1
       ;;
   esac

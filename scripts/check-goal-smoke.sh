@@ -57,6 +57,11 @@ assert_goal_artifacts() {
 fallback_root="$tmp/fallback"
 run_goal "$fallback_root" >/dev/null
 assert_goal_artifacts "$fallback_root"
+ORCA_ROOT="$fallback_root" ./bin/orca notion outbox > "$tmp/notion-outbox-fallback.txt"
+need_grep "notion outbox: 0 payload(s)" "$tmp/notion-outbox-fallback.txt"
+ORCA_ROOT="$fallback_root" ./bin/orca notion outbox --json > "$tmp/notion-outbox-fallback.json"
+need_json_field "$tmp/notion-outbox-fallback.json" "outbox_count" "0"
+need_json_field "$tmp/notion-outbox-fallback.json" "synced_count" "0"
 ORCA_ROOT="$fallback_root" ./bin/orca backend status --json > "$tmp/backend-status-fallback.json"
 need_json_field "$tmp/backend-status-fallback.json" "active_canonical" "markdown"
 need_json_field "$tmp/backend-status-fallback.json" "notion_configured" "false"
@@ -150,6 +155,11 @@ sed -i.bak 's/notion_issue_board_data_source_id=/notion_issue_board_data_source_
 ORCA_ROOT="$adapter_root" ./bin/orca /goal "make this production ready" --pack release-ready >/dev/null
 adapter_outbox_before=$(/usr/bin/find "$adapter_root/notion/outbox" -type f | wc -l | tr -d ' ')
 [ "$adapter_outbox_before" -gt 0 ] || fail "expected adapter success setup to create outbox payloads"
+ORCA_ROOT="$adapter_root" ./bin/orca notion outbox > "$tmp/notion-outbox-adapter.txt"
+need_grep "notion outbox: " "$tmp/notion-outbox-adapter.txt"
+ORCA_ROOT="$adapter_root" ./bin/orca notion outbox --json > "$tmp/notion-outbox-adapter.json"
+need_json_field "$tmp/notion-outbox-adapter.json" "outbox_count" "$adapter_outbox_before"
+need_grep '"outbox":\[' "$tmp/notion-outbox-adapter.json"
 first_adapter_payload=$(/usr/bin/find "$adapter_root/notion/outbox" -type f | head -1)
 ORCA_ROOT="$adapter_root" ORCA_NOTION_SYNC_COMMAND="$sync_script" ./bin/orca notion sync --dry-run "$first_adapter_payload" > "$tmp/adapter-dry-run-single.txt"
 need_grep "notion-sync: dry-run valid=1 failed=0" "$tmp/adapter-dry-run-single.txt"

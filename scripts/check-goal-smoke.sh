@@ -154,6 +154,16 @@ ORCA_ROOT="$fallback_root" ./bin/orca notion outbox --json > "$tmp/notion-outbox
 need_json_field "$tmp/notion-outbox-fallback.json" "outbox_count" "0"
 need_json_field "$tmp/notion-outbox-fallback.json" "synced_count" "0"
 need_json_field "$tmp/notion-outbox-fallback.json" "ok" "true"
+if ORCA_ROOT="$fallback_root" ./bin/orca notion outbox --json --bad > "$tmp/notion-outbox-bad-json-first.json" 2>&1; then
+  fail "expected notion outbox --json --bad to fail"
+fi
+need_json_field "$tmp/notion-outbox-bad-json-first.json" "ok" "false"
+need_json_field "$tmp/notion-outbox-bad-json-first.json" "error" "unknown notion outbox option: --bad"
+if ORCA_ROOT="$fallback_root" ./bin/orca notion outbox --bad --json > "$tmp/notion-outbox-bad-json-last.json" 2>&1; then
+  fail "expected notion outbox --bad --json to fail"
+fi
+need_json_field "$tmp/notion-outbox-bad-json-last.json" "ok" "false"
+need_json_field "$tmp/notion-outbox-bad-json-last.json" "error" "unknown notion outbox option: --bad"
 ORCA_ROOT="$fallback_root" ./bin/orca notion sync --dry-run --json --all > "$tmp/notion-sync-empty-json.json"
 need_json_field "$tmp/notion-sync-empty-json.json" "target" "--all"
 need_json_field "$tmp/notion-sync-empty-json.json" "dry_run" "true"
@@ -330,6 +340,16 @@ need_json_field "$tmp/backend-status-fallback.json" "notion_configured" "false"
 need_json_field "$tmp/backend-status-fallback.json" "notion_status" "markdown_fallback"
 need_json_field "$tmp/backend-status-fallback.json" "linear_configured" "false"
 need_json_field "$tmp/backend-status-fallback.json" "ok" "true"
+if ORCA_ROOT="$fallback_root" ./bin/orca backend status --json --bad > "$tmp/backend-status-bad-json-first.json" 2>&1; then
+  fail "expected backend status --json --bad to fail"
+fi
+need_json_field "$tmp/backend-status-bad-json-first.json" "ok" "false"
+need_json_field "$tmp/backend-status-bad-json-first.json" "error" "unknown backend status option: --bad"
+if ORCA_ROOT="$fallback_root" ./bin/orca backend status --bad --json > "$tmp/backend-status-bad-json-last.json" 2>&1; then
+  fail "expected backend status --bad --json to fail"
+fi
+need_json_field "$tmp/backend-status-bad-json-last.json" "ok" "false"
+need_json_field "$tmp/backend-status-bad-json-last.json" "error" "unknown backend status option: --bad"
 need_grep '"notion_configured":false' "$tmp/backend-status-fallback.json"
 need_grep '"notion_status":"markdown_fallback"' "$tmp/backend-status-fallback.json"
 need_grep '"linear_configured":false' "$tmp/backend-status-fallback.json"
@@ -342,6 +362,18 @@ need_json_field "$tmp/notion-doctor-fallback.json" "notion_issue_board_configure
 need_json_field "$tmp/notion-doctor-fallback.json" "notion_sync_command_status" "missing"
 need_json_field "$tmp/notion-doctor-fallback.json" "ready" "false"
 need_json_field "$tmp/notion-doctor-fallback.json" "ok" "false"
+if ORCA_ROOT="$fallback_root" ./bin/orca notion doctor --json --bad > "$tmp/notion-doctor-bad-json-first.json" 2>&1; then
+  fail "expected notion doctor --json --bad to fail"
+fi
+need_json_field "$tmp/notion-doctor-bad-json-first.json" "ok" "false"
+need_json_field "$tmp/notion-doctor-bad-json-first.json" "ready" "false"
+need_json_field "$tmp/notion-doctor-bad-json-first.json" "error" "unknown notion doctor option: --bad"
+if ORCA_ROOT="$fallback_root" ./bin/orca notion doctor --bad --json > "$tmp/notion-doctor-bad-json-last.json" 2>&1; then
+  fail "expected notion doctor --bad --json to fail"
+fi
+need_json_field "$tmp/notion-doctor-bad-json-last.json" "ok" "false"
+need_json_field "$tmp/notion-doctor-bad-json-last.json" "ready" "false"
+need_json_field "$tmp/notion-doctor-bad-json-last.json" "error" "unknown notion doctor option: --bad"
 need_grep '"notion_issue_board_configured":false' "$tmp/notion-doctor-fallback.json"
 need_grep '"notion_sync_command_status":"missing"' "$tmp/notion-doctor-fallback.json"
 need_grep '"ready":false' "$tmp/notion-doctor-fallback.json"

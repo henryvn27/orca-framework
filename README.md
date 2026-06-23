@@ -53,6 +53,20 @@ orca notion sync .orca/notion/outbox/2026-06-22T12:00:00Z-goal_unified-example-h
 
 Dry-run validates queued payloads without calling the adapter or moving files. Add `--json` when an agent or CI gate needs a machine-readable sync summary. Use `orca notion payload --example` to print a valid adapter payload example, and `orca notion payload --validate PATH [--json]` to check one payload without sync semantics. Payload validation also accepts stdin with `PATH` set to `-`. Payloads must include `schema_version: 1`, `payload_type: goal_event`, `action`, `canonical_backend`, `goal_slug`, `phase`, object-shaped `payload`, and `updated_at`. The adapter command receives one argument: the JSON payload path. ORCA moves a payload to `.orca/notion/synced/` only after the adapter exits `0`; missing config, adapter failure, and malformed payloads leave files in `.orca/notion/outbox/`.
 
+ORCA includes an optional Notion API adapter:
+
+```sh
+export NOTION_TOKEN=<secret>
+export ORCA_NOTION_SYNC_COMMAND="$(pwd)/scripts/orca-notion-sync-adapter.sh"
+orca notion sync --all
+```
+
+The adapter reads `issue_board_data_source_id` from each payload, or `ORCA_NOTION_DATA_SOURCE_ID` when you need an override. It defaults to issue-board properties named `Issue` and `Status`; set `ORCA_NOTION_TITLE_PROPERTY` or `ORCA_NOTION_STATUS_PROPERTY` for a different board schema. Test the request body without network access:
+
+```sh
+ORCA_NOTION_ADAPTER_DRY_RUN=1 scripts/orca-notion-sync-adapter.sh .orca/notion/outbox/payload.json
+```
+
 If Notion is unavailable, ORCA uses a local markdown fallback:
 
 ```text

@@ -468,16 +468,22 @@ orca_notion_payload() {
     --validate)
       shift
       json=0
-      [ "$#" -gt 0 ] || {
-        printf 'Usage: orca notion payload --validate PATH [--json]\n' >&2
+      for arg in "$@"; do
+        [ "$arg" = "--json" ] && json=1
+      done
+      if [ "$#" -eq 0 ] || [ "${1#--}" != "$1" ]; then
+        if [ "$json" -eq 1 ]; then
+          printf '{"target":"","valid":false,"ok":false,"error":"PATH is required"}\n'
+        else
+          printf 'Usage: orca notion payload --validate PATH [--json]\n' >&2
+        fi
         return 1
-      }
+      fi
       target=$1
       shift
       while [ "$#" -gt 0 ]; do
         case "$1" in
           --json)
-            json=1
             ;;
           *)
             printf 'orca: unknown notion payload option: %s\n' "$1" >&2

@@ -12,7 +12,7 @@ Usage:
   orca goal <outcome> [--pack NAME] [--auto] [--max-cycles N] [--until blocked|done] [--plan-only]
   orca progress
   orca unify
-  orca notion sync [--dry-run] [PAYLOAD|--all]
+  orca notion sync [--dry-run] [--json] [PAYLOAD|--all]
   orca notion doctor [--strict] [--json]
   orca backend status [--json]
   orca help
@@ -29,7 +29,7 @@ Examples:
   orca goal "make this production ready" --pack release-ready --auto --max-cycles 5
   orca progress
   orca unify
-  orca notion sync --dry-run --all
+  orca notion sync --dry-run --json --all
   orca notion sync --all
   orca notion doctor [--strict] [--json]
   orca list
@@ -151,7 +151,7 @@ shell_quote() {
 
 json_escape() {
   if command -v ruby >/dev/null 2>&1; then
-    ruby -rjson -e 'print JSON.generate(ARGV[0])[1...-1]' "$1"
+    ruby -rjson -e 'print JSON.generate(ARGV[0])[1...-1]' -- "$1"
   else
     printf '%s' "$1" | sed 's/\\/\\\\/g; s/"/\\"/g'
   fi
@@ -347,17 +347,21 @@ sync_notion_payload_file() {
 
 orca_notion_sync() {
   dry_run=0
+  json=0
   target=--all
   while [ "$#" -gt 0 ]; do
     case "$1" in
       --dry-run)
         dry_run=1
         ;;
+      --json)
+        json=1
+        ;;
       --all)
         target=--all
         ;;
       -h|--help)
-        printf 'Usage: orca notion sync [--dry-run] [PAYLOAD|--all]\n'
+        printf 'Usage: orca notion sync [--dry-run] [--json] [PAYLOAD|--all]\n'
         return 0
         ;;
       *)
@@ -390,7 +394,11 @@ orca_notion_sync() {
         fi
       done
       [ "$found" -eq 1 ] || {
-        printf 'notion-sync: no payloads in %s/outbox\n' "$dir"
+        if [ "$json" -eq 1 ]; then
+          printf '{"dry_run":%s,"target":"--all","valid":0,"synced":0,"failed":0,"ok":true}\n' "$([ "$dry_run" -eq 1 ] && printf true || printf false)"
+        else
+          printf 'notion-sync: no payloads in %s/outbox\n' "$dir"
+        fi
         return 0
       }
       ;;
@@ -408,7 +416,28 @@ orca_notion_sync() {
       fi
       ;;
   esac
-  if [ "$dry_run" -eq 1 ]; then
+  if [ "$failed" -eq 0 ]; then
+    ok=true
+  else
+    ok=false
+  fi
+  if [ "$json" -eq 1 ]; then
+    printf '{'
+    if [ "$dry_run" -eq 1 ]; then
+      printf '"dry_run":true,'
+      printf '"target":"%s",' "$(json_escape "$target")"
+      printf '"valid":%s,' "$synced"
+      printf '"synced":0,'
+    else
+      printf '"dry_run":false,'
+      printf '"target":"%s",' "$(json_escape "$target")"
+      printf '"valid":0,'
+      printf '"synced":%s,' "$synced"
+    fi
+    printf '"failed":%s,' "$failed"
+    printf '"ok":%s' "$ok"
+    printf '}\n'
+  elif [ "$dry_run" -eq 1 ]; then
     printf 'notion-sync: dry-run valid=%s failed=%s\n' "$synced" "$failed"
   else
     printf 'notion-sync: synced=%s failed=%s\n' "$synced" "$failed"
@@ -973,7 +1002,7 @@ if [ "$script_name" = "orca" ]; then
         orca_notion_doctor "$@"
         exit $?
       fi
-      printf 'Usage: orca notion sync [--dry-run] [PAYLOAD|--all]\n       orca notion doctor [--strict] [--json]\n' >&2
+      printf 'Usage: orca notion sync [--dry-run] [--json] [PAYLOAD|--all]\n       orca notion doctor [--strict] [--json]\n' >&2
       exit 1
       ;;
   esac

@@ -42,11 +42,12 @@ Run queued Notion payloads explicitly:
 
 ```sh
 orca notion sync --dry-run --all
+orca notion sync --dry-run --json --all
 ORCA_NOTION_SYNC_COMMAND=/path/to/notion-adapter orca notion sync --all
 orca notion sync .orca/notion/outbox/2026-06-22T12:00:00Z-goal_unified-example-handoff-1.json
 ```
 
-Dry-run validates queued payloads without calling the adapter or moving files. The adapter command receives one argument: the JSON payload path. ORCA moves a payload to `.orca/notion/synced/` only after the adapter exits `0`; missing config, adapter failure, and malformed payloads leave files in `.orca/notion/outbox/`.
+Dry-run validates queued payloads without calling the adapter or moving files. Add `--json` when an agent or CI gate needs a machine-readable sync summary. The adapter command receives one argument: the JSON payload path. ORCA moves a payload to `.orca/notion/synced/` only after the adapter exits `0`; missing config, adapter failure, and malformed payloads leave files in `.orca/notion/outbox/`.
 
 If Notion is unavailable, ORCA uses a local markdown fallback:
 

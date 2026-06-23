@@ -36,6 +36,19 @@ tmp="${TMPDIR:-/tmp}/orca-goal-smoke.$$"
 trap 'rm -rf "$tmp"' EXIT INT TERM HUP
 mkdir -p "$tmp"
 
+if ./bin/orca --bad > "$tmp/top-level-bad-option.txt" 2>&1; then
+  fail "expected unknown top-level option to return non-zero"
+fi
+need_grep "unknown top-level option: --bad" "$tmp/top-level-bad-option.txt"
+
+if ./bin/orca --json > "$tmp/top-level-json-option.txt" 2>&1; then
+  fail "expected unsupported top-level --json option to return non-zero"
+fi
+need_grep "unknown top-level option: --json" "$tmp/top-level-json-option.txt"
+
+./bin/orca --help > "$tmp/top-level-help.txt"
+need_grep "orca goal <outcome>" "$tmp/top-level-help.txt"
+
 run_goal() {
   root_dir="$1"
   shift

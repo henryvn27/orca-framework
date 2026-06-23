@@ -18,6 +18,7 @@ Usage:
   orca notion payload --validate PATH [--json]
   orca notion adapter --check PAYLOAD
   orca notion adapter --json-check PAYLOAD
+  orca notion adapter --doctor PAYLOAD
   orca notion adapter --dry-run PAYLOAD
   orca notion doctor [--strict] [--json]
   orca backend status [--json]
@@ -41,6 +42,7 @@ Examples:
   orca notion payload --validate .orca/notion/outbox/payload.json
   orca notion adapter --check .orca/notion/outbox/payload.json
   orca notion adapter --json-check .orca/notion/outbox/payload.json
+  orca notion adapter --doctor .orca/notion/outbox/payload.json
   orca notion sync --all
   orca notion doctor [--strict] [--json]
   orca list
@@ -465,7 +467,7 @@ orca_notion_adapter() {
     return 1
   }
   [ "$#" -gt 0 ] || {
-    printf 'Usage: orca notion adapter --check PAYLOAD | --json-check PAYLOAD | --dry-run PAYLOAD\n' >&2
+    printf 'Usage: orca notion adapter --check PAYLOAD | --json-check PAYLOAD | --doctor PAYLOAD | --dry-run PAYLOAD\n' >&2
     return 1
   }
   case "$1" in
@@ -485,6 +487,34 @@ orca_notion_adapter() {
       }
       "$adapter" --json-summary "$1"
       ;;
+    --doctor)
+      shift
+      [ "$#" -eq 1 ] || {
+        printf 'Usage: orca notion adapter --doctor PAYLOAD\n' >&2
+        return 1
+      }
+      command -v ruby >/dev/null 2>&1 || {
+        printf 'Ruby is required for adapter doctor JSON.\n' >&2
+        return 1
+      }
+      backend_json=$(mktemp "${TMPDIR:-/tmp}/orca-notion-backend-doctor.XXXXXX")
+      adapter_json=$(mktemp "${TMPDIR:-/tmp}/orca-notion-adapter-doctor.XXXXXX")
+      orca_notion_doctor --json > "$backend_json"
+      "$adapter" --json-summary "$1" > "$adapter_json" || {
+        status=$?
+        rm -f "$backend_json" "$adapter_json"
+        return "$status"
+      }
+      ruby -rjson - "$backend_json" "$adapter_json" <<'RUBY'
+backend = JSON.parse(File.read(ARGV.fetch(0)))
+adapter = JSON.parse(File.read(ARGV.fetch(1)))
+ok = backend.fetch("ready", false) && adapter.fetch("ok", false) && adapter.fetch("live_ready", false)
+puts JSON.generate({ "backend" => backend, "adapter" => adapter, "ok" => ok })
+RUBY
+      status=$?
+      rm -f "$backend_json" "$adapter_json"
+      return "$status"
+      ;;
     --dry-run)
       shift
       [ "$#" -eq 1 ] || {
@@ -494,10 +524,10 @@ orca_notion_adapter() {
       "$adapter" --dry-run "$1"
       ;;
     -h|--help)
-      printf 'Usage: orca notion adapter --check PAYLOAD | --json-check PAYLOAD | --dry-run PAYLOAD\n'
+      printf 'Usage: orca notion adapter --check PAYLOAD | --json-check PAYLOAD | --doctor PAYLOAD | --dry-run PAYLOAD\n'
       ;;
     *)
-      printf 'Usage: orca notion adapter --check PAYLOAD | --json-check PAYLOAD | --dry-run PAYLOAD\n' >&2
+      printf 'Usage: orca notion adapter --check PAYLOAD | --json-check PAYLOAD | --doctor PAYLOAD | --dry-run PAYLOAD\n' >&2
       return 1
       ;;
   esac
@@ -1228,7 +1258,7 @@ if [ "$script_name" = "orca" ]; then
         orca_notion_adapter "$@"
         exit $?
       fi
-      printf 'Usage: orca notion sync [--dry-run] [--json] [PAYLOAD|--all]\n       orca notion outbox [--json]\n       orca notion payload --example | --validate PATH [--json]\n       orca notion adapter --check PAYLOAD | --json-check PAYLOAD | --dry-run PAYLOAD\n       orca notion doctor [--strict] [--json]\n' >&2
+      printf 'Usage: orca notion sync [--dry-run] [--json] [PAYLOAD|--all]\n       orca notion outbox [--json]\n       orca notion payload --example | --validate PATH [--json]\n       orca notion adapter --check PAYLOAD | --json-check PAYLOAD | --doctor PAYLOAD | --dry-run PAYLOAD\n       orca notion doctor [--strict] [--json]\n' >&2
       exit 1
       ;;
   esac

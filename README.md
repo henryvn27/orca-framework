@@ -47,6 +47,7 @@ orca notion payload --example
 orca notion payload --validate .orca/notion/outbox/2026-06-22T12:00:00Z-goal_unified-example-handoff-1.json
 orca notion adapter --check .orca/notion/outbox/2026-06-22T12:00:00Z-goal_unified-example-handoff-1.json
 orca notion adapter --json-check .orca/notion/outbox/2026-06-22T12:00:00Z-goal_unified-example-handoff-1.json
+orca notion adapter --doctor .orca/notion/outbox/2026-06-22T12:00:00Z-goal_unified-example-handoff-1.json
 orca notion adapter --dry-run .orca/notion/outbox/2026-06-22T12:00:00Z-goal_unified-example-handoff-1.json
 orca notion sync --dry-run --all
 orca notion sync --dry-run --json --all
@@ -70,9 +71,11 @@ The adapter reads `issue_board_data_source_id` from each payload, or `ORCA_NOTIO
 orca notion adapter --dry-run .orca/notion/outbox/payload.json
 orca notion adapter --check .orca/notion/outbox/payload.json
 orca notion adapter --json-check .orca/notion/outbox/payload.json
+orca notion adapter --doctor .orca/notion/outbox/payload.json
 ```
 
 Stable adapter fixtures live in `scripts/fixtures/notion/` for contract tests and integration examples.
+Use `--doctor` when you need one read-only JSON preflight that combines backend readiness with adapter readiness.
 
 If Notion is unavailable, ORCA uses a local markdown fallback:
 

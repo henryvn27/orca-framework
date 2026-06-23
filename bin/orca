@@ -1391,6 +1391,10 @@ if [ "$script_name" = "orca" ]; then
       exit 0
       ;;
     backend)
+      if [ "${1:-}" = "--help" ] || [ "${1:-}" = "-h" ] || [ "${1:-}" = "help" ]; then
+        printf 'Usage: orca backend status [--json]\n'
+        exit 0
+      fi
       if [ "${1:-}" = "status" ]; then
         shift
         orca_backend_status "$@"
@@ -1400,6 +1404,10 @@ if [ "$script_name" = "orca" ]; then
       exit 1
       ;;
     notion)
+      if [ "${1:-}" = "--help" ] || [ "${1:-}" = "-h" ] || [ "${1:-}" = "help" ]; then
+        printf 'Usage: orca notion sync [--dry-run] [--json] [PAYLOAD|--all]\n       orca notion outbox [--json]\n       orca notion handoff --issue TITLE [--status STATUS] [--note TEXT]\n       orca notion payload --example | --validate PATH [--json]\n       orca notion adapter --check PAYLOAD | --json-check PAYLOAD | --doctor PAYLOAD | --dry-run PAYLOAD\n       orca notion doctor [--strict] [--json]\n'
+        exit 0
+      fi
       if [ "${1:-}" = "sync" ]; then
         shift
         orca_notion_sync "$@"

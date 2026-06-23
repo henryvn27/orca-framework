@@ -69,7 +69,11 @@ Check current backend state:
 
 ```sh
 orca backend status
+orca backend status --json
+orca notion doctor --json
 ```
+
+Use text output for humans and JSON output for agents, CI, or release gates that need stable backend readiness fields without scraping prose.
 
 ## Tasks
 

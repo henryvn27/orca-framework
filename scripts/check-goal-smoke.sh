@@ -153,6 +153,12 @@ need_grep "orca backend status" "$tmp/backend-help-alias.txt"
 ORCA_ROOT="$fallback_root" ./bin/orca notion outbox --json > "$tmp/notion-outbox-fallback.json"
 need_json_field "$tmp/notion-outbox-fallback.json" "outbox_count" "0"
 need_json_field "$tmp/notion-outbox-fallback.json" "synced_count" "0"
+ORCA_ROOT="$fallback_root" ./bin/orca notion sync --dry-run --json --all > "$tmp/notion-sync-empty-json.json"
+need_json_field "$tmp/notion-sync-empty-json.json" "target" "--all"
+need_json_field "$tmp/notion-sync-empty-json.json" "dry_run" "true"
+need_json_field "$tmp/notion-sync-empty-json.json" "valid" "0"
+need_json_field "$tmp/notion-sync-empty-json.json" "failed" "0"
+need_json_field "$tmp/notion-sync-empty-json.json" "ok" "true"
 fallback_outbox_before=$(/usr/bin/find "$fallback_root/notion/outbox" -type f 2>/dev/null | wc -l | tr -d ' ')
 handoff_root="$tmp/notion-handoff"
 handoff_payload=$(ORCA_ROOT="$handoff_root" ./bin/orca notion handoff --issue "Update Notion issue after PR merge" --status Done --note "Live Notion unavailable")

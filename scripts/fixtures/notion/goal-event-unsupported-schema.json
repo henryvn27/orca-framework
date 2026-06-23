@@ -1,0 +1,17 @@
+{
+  "schema_version": 999,
+  "payload_type": "goal_event",
+  "action": "goal_unified",
+  "canonical_backend": "notion",
+  "project_page_id": "",
+  "issue_board_data_source_id": "collection://issue-board-123",
+  "goal": "make this production ready",
+  "goal_slug": "make-this-production-ready",
+  "phase": "handoff",
+  "pack": "release-ready",
+  "payload": {
+    "issue": "Run /goal loop for make this production ready",
+    "status": "Done"
+  },
+  "updated_at": "2026-06-23T00:00:00Z"
+}

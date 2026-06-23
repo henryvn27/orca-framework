@@ -270,6 +270,7 @@ need_json_field "$tmp/backend-status-fallback.json" "active_canonical" "markdown
 need_json_field "$tmp/backend-status-fallback.json" "notion_configured" "false"
 need_json_field "$tmp/backend-status-fallback.json" "notion_status" "markdown_fallback"
 need_json_field "$tmp/backend-status-fallback.json" "linear_configured" "false"
+need_json_field "$tmp/backend-status-fallback.json" "ok" "true"
 need_grep '"notion_configured":false' "$tmp/backend-status-fallback.json"
 need_grep '"notion_status":"markdown_fallback"' "$tmp/backend-status-fallback.json"
 need_grep '"linear_configured":false' "$tmp/backend-status-fallback.json"

@@ -57,6 +57,19 @@ assert_goal_artifacts() {
 fallback_root="$tmp/fallback"
 run_goal "$fallback_root" >/dev/null
 assert_goal_artifacts "$fallback_root"
+
+plan_only_root="$tmp/plan-only"
+run_goal "$plan_only_root" --plan-only > "$tmp/plan-only.txt"
+need_grep "phase: plan" "$tmp/plan-only.txt"
+need_grep "next: apply planned tasks, then run \`orca unify\`" "$tmp/plan-only.txt"
+need_file "$plan_only_root/state.env"
+need_file "$plan_only_root/runs/make-this-production-ready-plan.md"
+need_grep "phase='plan'" "$plan_only_root/state.env"
+need_grep "cycles_done='0'" "$plan_only_root/state.env"
+need_grep "readiness_score='0'" "$plan_only_root/state.env"
+[ ! -f "$plan_only_root/handoffs/make-this-production-ready.md" ] ||
+  fail "plan-only should not create handoff"
+
 ORCA_ROOT="$fallback_root" ./bin/orca notion outbox > "$tmp/notion-outbox-fallback.txt"
 need_grep "notion outbox: 0 payload(s)" "$tmp/notion-outbox-fallback.txt"
 ORCA_ROOT="$fallback_root" ./bin/orca notion outbox --json > "$tmp/notion-outbox-fallback.json"

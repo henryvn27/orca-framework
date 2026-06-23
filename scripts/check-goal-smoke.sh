@@ -150,6 +150,17 @@ sed -i.bak 's/notion_issue_board_data_source_id=/notion_issue_board_data_source_
 ORCA_ROOT="$adapter_root" ./bin/orca /goal "make this production ready" --pack release-ready >/dev/null
 adapter_outbox_before=$(/usr/bin/find "$adapter_root/notion/outbox" -type f | wc -l | tr -d ' ')
 [ "$adapter_outbox_before" -gt 0 ] || fail "expected adapter success setup to create outbox payloads"
+first_adapter_payload=$(/usr/bin/find "$adapter_root/notion/outbox" -type f | head -1)
+ORCA_ROOT="$adapter_root" ORCA_NOTION_SYNC_COMMAND="$sync_script" ./bin/orca notion sync --dry-run "$first_adapter_payload" > "$tmp/adapter-dry-run-single.txt"
+need_grep "notion-sync: dry-run valid=1 failed=0" "$tmp/adapter-dry-run-single.txt"
+[ ! -s "$adapter_log" ] || fail "dry-run single payload should not call adapter"
+adapter_outbox_after_dry_single=$(/usr/bin/find "$adapter_root/notion/outbox" -type f | wc -l | tr -d ' ')
+[ "$adapter_outbox_after_dry_single" -eq "$adapter_outbox_before" ] || fail "dry-run single payload should not move outbox payloads"
+ORCA_ROOT="$adapter_root" ORCA_NOTION_SYNC_COMMAND="$sync_script" ./bin/orca notion sync --dry-run --all > "$tmp/adapter-dry-run-all.txt"
+need_grep "notion-sync: dry-run valid=" "$tmp/adapter-dry-run-all.txt"
+[ ! -s "$adapter_log" ] || fail "dry-run all should not call adapter"
+adapter_outbox_after_dry_all=$(/usr/bin/find "$adapter_root/notion/outbox" -type f | wc -l | tr -d ' ')
+[ "$adapter_outbox_after_dry_all" -eq "$adapter_outbox_before" ] || fail "dry-run all should not move outbox payloads"
 ORCA_ROOT="$adapter_root" ORCA_NOTION_SYNC_COMMAND="$sync_script" ./bin/orca notion sync --all >/dev/null
 [ -s "$adapter_log" ] || fail "adapter sync command did not receive payloads"
 adapter_outbox_after=$(/usr/bin/find "$adapter_root/notion/outbox" -type f | wc -l | tr -d ' ')
@@ -182,6 +193,10 @@ ORCA_ROOT="$malformed_root" ./bin/orca backend status >/dev/null
 mkdir -p "$malformed_root/notion/outbox"
 malformed_payload="$malformed_root/notion/outbox/bad.json"
 printf '{bad json\n' > "$malformed_payload"
+if ORCA_ROOT="$malformed_root" ORCA_NOTION_SYNC_COMMAND="$sync_script" ./bin/orca notion sync --dry-run "$malformed_payload" >/dev/null 2>&1; then
+  fail "expected malformed dry-run sync to return non-zero"
+fi
+[ -f "$malformed_payload" ] || fail "expected malformed dry-run payload to remain in outbox"
 if ORCA_ROOT="$malformed_root" ORCA_NOTION_SYNC_COMMAND="$sync_script" ./bin/orca notion sync "$malformed_payload" >/dev/null 2>&1; then
   fail "expected malformed payload sync to return non-zero"
 fi

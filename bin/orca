@@ -12,7 +12,7 @@ Usage:
   orca goal <outcome> [--pack NAME] [--auto] [--max-cycles N] [--until blocked|done] [--plan-only]
   orca progress
   orca unify
-  orca notion sync [PAYLOAD|--all]
+  orca notion sync [--dry-run] [PAYLOAD|--all]
   orca notion doctor [--strict] [--json]
   orca backend status [--json]
   orca help
@@ -29,6 +29,7 @@ Examples:
   orca goal "make this production ready" --pack release-ready --auto --max-cycles 5
   orca progress
   orca unify
+  orca notion sync --dry-run --all
   orca notion sync --all
   orca notion doctor [--strict] [--json]
   orca list
@@ -345,7 +346,26 @@ sync_notion_payload_file() {
 }
 
 orca_notion_sync() {
-  target="${1:---all}"
+  dry_run=0
+  target=--all
+  while [ "$#" -gt 0 ]; do
+    case "$1" in
+      --dry-run)
+        dry_run=1
+        ;;
+      --all)
+        target=--all
+        ;;
+      -h|--help)
+        printf 'Usage: orca notion sync [--dry-run] [PAYLOAD|--all]\n'
+        return 0
+        ;;
+      *)
+        target="$1"
+        ;;
+    esac
+    shift
+  done
   load_config
   dir=$(notion_dir)
   mkdir -p "$dir/outbox" "$dir/synced"
@@ -357,7 +377,13 @@ orca_notion_sync() {
       for payload_file in "$dir"/outbox/*.json; do
         [ -e "$payload_file" ] || continue
         found=1
-        if sync_notion_payload_file "$payload_file" >/dev/null; then
+        if [ "$dry_run" -eq 1 ]; then
+          if validate_notion_payload_file "$payload_file" >/dev/null; then
+            synced=$((synced + 1))
+          else
+            failed=$((failed + 1))
+          fi
+        elif sync_notion_payload_file "$payload_file" >/dev/null; then
           synced=$((synced + 1))
         else
           failed=$((failed + 1))
@@ -368,19 +394,25 @@ orca_notion_sync() {
         return 0
       }
       ;;
-    -h|--help)
-      printf 'Usage: orca notion sync [PAYLOAD|--all]\n'
-      return 0
-      ;;
     *)
-      if sync_notion_payload_file "$target" >/dev/null; then
+      if [ "$dry_run" -eq 1 ]; then
+        if validate_notion_payload_file "$target" >/dev/null; then
+          synced=1
+        else
+          failed=1
+        fi
+      elif sync_notion_payload_file "$target" >/dev/null; then
         synced=1
       else
         failed=1
       fi
       ;;
   esac
-  printf 'notion-sync: synced=%s failed=%s\n' "$synced" "$failed"
+  if [ "$dry_run" -eq 1 ]; then
+    printf 'notion-sync: dry-run valid=%s failed=%s\n' "$synced" "$failed"
+  else
+    printf 'notion-sync: synced=%s failed=%s\n' "$synced" "$failed"
+  fi
   [ "$failed" -eq 0 ]
 }
 
@@ -941,7 +973,7 @@ if [ "$script_name" = "orca" ]; then
         orca_notion_doctor "$@"
         exit $?
       fi
-      printf 'Usage: orca notion sync [PAYLOAD|--all]\n       orca notion doctor [--strict] [--json]\n' >&2
+      printf 'Usage: orca notion sync [--dry-run] [PAYLOAD|--all]\n       orca notion doctor [--strict] [--json]\n' >&2
       exit 1
       ;;
   esac

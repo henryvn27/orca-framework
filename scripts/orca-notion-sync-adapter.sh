@@ -3,7 +3,7 @@ set -eu
 
 usage() {
   cat <<'EOF'
-Usage: orca-notion-sync-adapter.sh [--dry-run] PAYLOAD.json
+Usage: orca-notion-sync-adapter.sh [--dry-run] [--summary] PAYLOAD.json
 
 Environment:
   NOTION_TOKEN                      Required outside dry-run.
@@ -18,10 +18,16 @@ EOF
 }
 
 dry_run="${ORCA_NOTION_ADAPTER_DRY_RUN:-0}"
+summary=0
 
 while [ "$#" -gt 0 ]; do
   case "$1" in
     --dry-run)
+      dry_run=1
+      shift
+      ;;
+    --summary|--check)
+      summary=1
       dry_run=1
       shift
       ;;
@@ -168,7 +174,20 @@ File.write(update_path, JSON.generate(update))
 RUBY
 
 if [ "$dry_run" = "1" ]; then
-  cat "$plan_file"
+  if [ "$summary" -eq 1 ]; then
+    ruby -rjson - "$plan_file" <<'RUBY'
+plan = JSON.parse(File.read(ARGV.fetch(0)))
+token_present = !ENV.fetch("NOTION_TOKEN", ENV.fetch("ORCA_NOTION_TOKEN", "")).empty?
+puts "notion-adapter: action=#{plan.fetch("action")}"
+puts "notion-adapter: title=#{plan.fetch("match").fetch("title")}"
+puts "notion-adapter: data_source_id=#{plan.fetch("data_source_id")}"
+puts "notion-adapter: match_property=#{plan.fetch("match").fetch("property")}"
+puts "notion-adapter: token_present=#{token_present}"
+puts "notion-adapter: live_ready=#{token_present}"
+RUBY
+  else
+    cat "$plan_file"
+  fi
   exit 0
 fi
 

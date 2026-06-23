@@ -48,8 +48,15 @@ ORCA_ROOT="$fallback_root" ./bin/orca notion doctor > "$tmp/notion-doctor-fallba
 need_grep "notion issue board: missing" "$tmp/notion-doctor-fallback.txt"
 need_grep "notion sync command: missing" "$tmp/notion-doctor-fallback.txt"
 need_grep "linear: not configured, still optional" "$tmp/notion-doctor-fallback.txt"
+ORCA_ROOT="$fallback_root" ./bin/orca notion doctor --json > "$tmp/notion-doctor-fallback.json"
+need_grep '"notion_issue_board_configured":false' "$tmp/notion-doctor-fallback.json"
+need_grep '"notion_sync_command_status":"missing"' "$tmp/notion-doctor-fallback.json"
+need_grep '"ready":false' "$tmp/notion-doctor-fallback.json"
 if ORCA_ROOT="$fallback_root" ./bin/orca notion doctor --strict >/dev/null 2>&1; then
   fail "expected strict doctor to fail without Notion config"
+fi
+if ORCA_ROOT="$fallback_root" ./bin/orca notion doctor --strict --json >/dev/null 2>&1; then
+  fail "expected strict JSON doctor to fail without Notion config"
 fi
 
 sync_script="$tmp/sync.sh"
@@ -76,7 +83,12 @@ ORCA_ROOT="$success_root" ORCA_NOTION_SYNC_COMMAND="$sync_script" ./bin/orca not
 need_grep "notion issue board: configured" "$tmp/notion-doctor-success.txt"
 need_grep "notion sync command: executable" "$tmp/notion-doctor-success.txt"
 need_grep "notion outbox: 0 payload(s)" "$tmp/notion-doctor-success.txt"
+ORCA_ROOT="$success_root" ORCA_NOTION_SYNC_COMMAND="$sync_script" ./bin/orca notion doctor --json > "$tmp/notion-doctor-success.json"
+need_grep '"notion_issue_board_configured":true' "$tmp/notion-doctor-success.json"
+need_grep '"notion_sync_command_status":"executable"' "$tmp/notion-doctor-success.json"
+need_grep '"ready":true' "$tmp/notion-doctor-success.json"
 ORCA_ROOT="$success_root" ORCA_NOTION_SYNC_COMMAND="$sync_script" ./bin/orca notion doctor --strict >/dev/null
+ORCA_ROOT="$success_root" ORCA_NOTION_SYNC_COMMAND="$sync_script" ./bin/orca notion doctor --strict --json >/dev/null
 
 fail_root="$tmp/notion-fail"
 ORCA_ROOT="$fail_root" ./bin/orca backend status >/dev/null

@@ -13,7 +13,7 @@ Usage:
   orca progress
   orca unify
   orca notion sync [PAYLOAD|--all]
-  orca notion doctor [--strict]
+  orca notion doctor [--strict] [--json]
   orca backend status
   orca help
   orca list
@@ -30,7 +30,7 @@ Examples:
   orca progress
   orca unify
   orca notion sync --all
-  orca notion doctor [--strict]
+  orca notion doctor [--strict] [--json]
   orca list
   orca show orca-build
   orca run orca-onboard --print -- "Build a small iOS settings screen"
@@ -386,13 +386,17 @@ orca_notion_sync() {
 
 orca_notion_doctor() {
   strict=0
+  json=0
   while [ "$#" -gt 0 ]; do
     case "$1" in
       --strict)
         strict=1
         ;;
+      --json)
+        json=1
+        ;;
       -h|--help)
-        printf 'Usage: orca notion doctor [--strict]\n'
+        printf 'Usage: orca notion doctor [--strict] [--json]\n'
         return 0
         ;;
       *)
@@ -406,34 +410,74 @@ orca_notion_doctor() {
   load_config
   failed=0
   dir=$(notion_dir)
-  printf 'notion issue board: '
   if [ -n "${notion_issue_board_data_source_id:-}" ]; then
-    printf 'configured\n'
+    issue_board_configured=true
   else
-    printf 'missing\n'
+    issue_board_configured=false
     failed=1
   fi
-  printf 'notion project page: '
   if [ -n "${notion_project_page_id:-}" ]; then
-    printf 'configured\n'
+    project_page_configured=true
   else
-    printf 'missing\n'
+    project_page_configured=false
   fi
-  printf 'notion sync command: '
   if [ -z "${notion_sync_command:-}" ]; then
-    printf 'missing\n'
+    sync_command_status=missing
     failed=1
   elif [ -x "$notion_sync_command" ]; then
-    printf 'executable\n'
+    sync_command_status=executable
   else
-    printf 'configured shell command\n'
+    sync_command_status=configured_shell_command
   fi
-  printf 'notion outbox: %s payload(s)\n' "$(count_json_files "$dir/outbox")"
-  printf 'notion synced: %s payload(s)\n' "$(count_json_files "$dir/synced")"
+  outbox_count=$(count_json_files "$dir/outbox")
+  synced_count=$(count_json_files "$dir/synced")
   if [ -n "$linear_workspace$linear_team$linear_project_id" ]; then
-    printf 'linear: configured optional adapter\n'
+    linear_configured=true
   else
-    printf 'linear: not configured, still optional\n'
+    linear_configured=false
+  fi
+  if [ "$failed" -eq 0 ]; then
+    ready=true
+  else
+    ready=false
+  fi
+
+  if [ "$json" -eq 1 ]; then
+    printf '{'
+    printf '"notion_issue_board_configured":%s,' "$issue_board_configured"
+    printf '"notion_project_page_configured":%s,' "$project_page_configured"
+    printf '"notion_sync_command_status":"%s",' "$sync_command_status"
+    printf '"notion_outbox_count":%s,' "$outbox_count"
+    printf '"notion_synced_count":%s,' "$synced_count"
+    printf '"linear_configured":%s,' "$linear_configured"
+    printf '"ready":%s' "$ready"
+    printf '}\n'
+  else
+    printf 'notion issue board: '
+    if [ "$issue_board_configured" = true ]; then
+      printf 'configured\n'
+    else
+      printf 'missing\n'
+    fi
+    printf 'notion project page: '
+    if [ "$project_page_configured" = true ]; then
+      printf 'configured\n'
+    else
+      printf 'missing\n'
+    fi
+    printf 'notion sync command: '
+    case "$sync_command_status" in
+      missing) printf 'missing\n' ;;
+      executable) printf 'executable\n' ;;
+      configured_shell_command) printf 'configured shell command\n' ;;
+    esac
+    printf 'notion outbox: %s payload(s)\n' "$outbox_count"
+    printf 'notion synced: %s payload(s)\n' "$synced_count"
+    if [ "$linear_configured" = true ]; then
+      printf 'linear: configured optional adapter\n'
+    else
+      printf 'linear: not configured, still optional\n'
+    fi
   fi
   [ "$strict" -eq 0 ] || [ "$failed" -eq 0 ]
 }
@@ -839,7 +883,7 @@ if [ "$script_name" = "orca" ]; then
         orca_notion_doctor "$@"
         exit $?
       fi
-      printf 'Usage: orca notion sync [PAYLOAD|--all]\n       orca notion doctor [--strict]\n' >&2
+      printf 'Usage: orca notion sync [PAYLOAD|--all]\n       orca notion doctor [--strict] [--json]\n' >&2
       exit 1
       ;;
   esac

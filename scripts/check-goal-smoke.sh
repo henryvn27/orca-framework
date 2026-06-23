@@ -261,6 +261,16 @@ need_json_field "$tmp/notion-adapter-json-check.json" "data_source_id" "issue-bo
 need_json_field "$tmp/notion-adapter-json-check.json" "token_present" "false"
 need_json_field "$tmp/notion-adapter-json-check.json" "live_ready" "false"
 need_json_field "$tmp/notion-adapter-json-check.json" "ok" "true"
+if ORCA_ROOT="$fallback_root" ./bin/orca notion adapter --json-check > "$tmp/notion-adapter-json-check-missing.json" 2>&1; then
+  fail "expected adapter json-check without PAYLOAD to fail"
+fi
+need_json_field "$tmp/notion-adapter-json-check-missing.json" "ok" "false"
+need_json_field "$tmp/notion-adapter-json-check-missing.json" "error" "PAYLOAD is required"
+if ORCA_ROOT="$fallback_root" ./bin/orca notion adapter --json-check --doctor > "$tmp/notion-adapter-json-check-option.json" 2>&1; then
+  fail "expected adapter json-check with option-shaped PAYLOAD to fail"
+fi
+need_json_field "$tmp/notion-adapter-json-check-option.json" "ok" "false"
+need_json_field "$tmp/notion-adapter-json-check-option.json" "error" "PAYLOAD is required"
 ORCA_ROOT="$fallback_root" ./bin/orca notion adapter --help > "$tmp/notion-adapter-help.txt"
 need_grep "json-check validates payload shape and adapter plan readiness" "$tmp/notion-adapter-help.txt"
 need_grep "doctor combines backend readiness, adapter readiness, and live sync readiness as top-level ok" "$tmp/notion-adapter-help.txt"
@@ -272,6 +282,16 @@ need_grep '"notion_issue_board_configured":false' "$tmp/notion-adapter-doctor.js
 need_grep '"notion_sync_command_status":"missing"' "$tmp/notion-adapter-doctor.json"
 need_grep '"token_present":false' "$tmp/notion-adapter-doctor.json"
 need_grep '"live_ready":false' "$tmp/notion-adapter-doctor.json"
+if ORCA_ROOT="$fallback_root" ./bin/orca notion adapter --doctor > "$tmp/notion-adapter-doctor-missing.json" 2>&1; then
+  fail "expected adapter doctor without PAYLOAD to fail"
+fi
+need_json_field "$tmp/notion-adapter-doctor-missing.json" "ok" "false"
+need_json_field "$tmp/notion-adapter-doctor-missing.json" "error" "PAYLOAD is required"
+if ORCA_ROOT="$fallback_root" ./bin/orca notion adapter --doctor --json-check > "$tmp/notion-adapter-doctor-option.json" 2>&1; then
+  fail "expected adapter doctor with option-shaped PAYLOAD to fail"
+fi
+need_json_field "$tmp/notion-adapter-doctor-option.json" "ok" "false"
+need_json_field "$tmp/notion-adapter-doctor-option.json" "error" "PAYLOAD is required"
 ORCA_ROOT="$fallback_root" ./bin/orca notion adapter --dry-run "$adapter_fixture" > "$tmp/notion-adapter-dry-run.json"
 need_json_field "$tmp/notion-adapter-dry-run.json" "action" "create"
 need_json_field "$tmp/notion-adapter-dry-run.json" "data_source_id" "issue-board-123"

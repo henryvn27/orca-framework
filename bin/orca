@@ -646,18 +646,18 @@ orca_notion_adapter() {
       ;;
     --json-check|--json-summary)
       shift
-      [ "$#" -eq 1 ] || {
-        printf 'Usage: orca notion adapter --json-check PAYLOAD\n' >&2
+      if [ "$#" -ne 1 ] || [ "${1#--}" != "$1" ]; then
+        printf '{"ok":false,"error":"PAYLOAD is required","target":""}\n'
         return 1
-      }
+      fi
       "$adapter" --json-summary "$1"
       ;;
     --doctor)
       shift
-      [ "$#" -eq 1 ] || {
-        printf 'Usage: orca notion adapter --doctor PAYLOAD\n' >&2
+      if [ "$#" -ne 1 ] || [ "${1#--}" != "$1" ]; then
+        printf '{"backend":null,"adapter":null,"ok":false,"error":"PAYLOAD is required","target":""}\n'
         return 1
-      }
+      fi
       command -v ruby >/dev/null 2>&1 || {
         printf 'Ruby is required for adapter doctor JSON.\n' >&2
         return 1

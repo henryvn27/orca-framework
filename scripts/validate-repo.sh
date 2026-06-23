@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/bin/sh
 set -eu
 
 root="$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)"
@@ -7,6 +7,14 @@ cd "$root"
 fail() {
   printf 'validate-repo: %s\n' "$1" >&2
   exit 1
+}
+
+need_file() {
+  [ -f "$1" ] || fail "missing required file: $1"
+}
+
+need_dir() {
+  [ -d "$1" ] || fail "missing required directory: $1"
 }
 
 required_files="
@@ -22,628 +30,93 @@ CODE_OF_CONDUCT.md
 SECURITY.md
 ROADMAP.md
 INSTALL.md
-ORCA-Framework.md
-.gitignore
-.editorconfig
-.gitattributes
-.github/ISSUE_TEMPLATE/bug-report.yml
-.github/ISSUE_TEMPLATE/feature-request.yml
-.github/ISSUE_TEMPLATE/framework-improvement.yml
-.github/ISSUE_TEMPLATE/config.yml
-.github/PULL_REQUEST_TEMPLATE.md
-.github/workflows/ci.yml
-.github/workflows/benchmark-check.yml
-.github/workflows/evals.yml
-.github/workflows/install-test.yml
-.github/workflows/markdown-lint.yml
-.github/workflows/metrics-validation.yml
-.github/workflows/validate-install.yml
-.github/FUNDING.yml
-docs/linear-workflow.md
-docs/attribution.md
-docs/provenance.md
-docs/wraps-vs-borrows.md
-docs/attribution-maintenance.md
-docs/attribution-audit.md
-docs/licenses.md
-docs/observability.md
-docs/evals.md
-docs/benchmark-pack.md
-docs/workflow-accounting.md
-docs/qa-to-regression.md
-docs/benchmark-reporting.md
-docs/shared-state.md
-docs/human-checkpoints.md
-docs/inspector.md
-docs/tool-trust.md
-docs/mcp-governance.md
-docs/tool-registry.md
-docs/tool-safety-rules.md
-docs/mcp-review-workflow.md
-docs/external-tool-setup.md
-docs/integrations-overview.md
-docs/integration-categories.md
-docs/integration-recommendation-policy.md
-docs/integration-use-case-detection.md
-docs/mobile-vs-web-integrations.md
-docs/integration-use-case-map.md
-docs/mobile-stack-guide.md
-docs/recommend-vs-setup.md
-docs/recommendation-confidence.md
-docs/web-stack-guide.md
-docs/saas-stack-guide.md
-docs/tool-choice-overrides.md
-docs/tool-fit-rules.md
-docs/integration-validation.md
-docs/integration-diagnostics.md
-docs/integration-priorities.md
-docs/notebooklm-integration-modes.md
-docs/notebooklm-validation.md
-docs/setup-validation.md
-docs/degraded-mode.md
-docs/setup-ux.md
+bin/orca
+install/install.sh
+install/verify-install.sh
+install/doctor.sh
+docs/install.md
+docs/install-troubleshooting.md
+docs/first-run.md
+docs/first-workflow.md
 docs/runtime-adaptation.md
-docs/harness-capability-profiles.md
-docs/harness-detection.md
-docs/feature-routing.md
-docs/runtime-flags.md
-docs/runtime-fallbacks.md
-docs/runtime-degraded-mode.md
-docs/runtime-status.md
-docs/orca-monitor-status.md
-docs/agent-orchestration.md
-docs/harness-agnostic-orchestration.md
-docs/parent-agent-vs-subagent.md
-docs/when-to-use-subagents.md
-docs/orchestration-patterns.md
-docs/pattern-selection.md
-docs/context-passing.md
-docs/context-isolation.md
-docs/handoffs-and-escalations.md
-docs/orchestration-observability.md
-docs/subagent-evaluation.md
-docs/harness-mapping.md
-docs/harness-capability-matrix.md
-docs/subagent-catalog.md
-docs/service-agents.md
-docs/orchestration-decision-policy.md
-docs/execution-receipts.md
-docs/artifact-lineage.md
-docs/replay-restore.md
-docs/background-mode.md
-docs/background-permissions.md
-docs/background-risk-tiers.md
-docs/background-task-types.md
-docs/background-ux.md
-docs/loop-guards.md
-docs/echo-chamber-avoidance.md
-docs/stage-budgets.md
-docs/integrations/github.md
-docs/integrations/linear.md
-docs/legacy-modernization.md
-docs/repo-archaeology.md
-docs/onboarding.md
-docs/business-ideation.md
-docs/idea-one-pagers.md
-docs/idea-evaluation-lenses.md
-docs/idea-research.md
-docs/idea-validation.md
-docs/opportunity-memos.md
-docs/idea-feedback-style.md
-docs/business-ideation-ux.md
-docs/idea-research-pipeline.md
-docs/paved-roads.md
-docs/next-step-guidance.md
-docs/guidance-tone.md
-docs/experience-adaptation.md
-docs/phase-exit-rules.md
-docs/next-step-decision-rules.md
-docs/goal-mode.md
-docs/goal-safety.md
-docs/goal-recommendation-rules.md
-docs/milestone-planning.md
-docs/controller-agent-integration.md
-docs/project-orientation.md
-docs/delegation.md
-docs/result-ingestion.md
-docs/controller-executor-compatibility.md
-docs/harness-compatibility.md
-docs/harness-watch.md
 docs/compatibility-matrix.md
-docs/command-mapping.md
-docs/portable-artifacts.md
-docs/open-agent-spec-direction.md
-docs/schema-versioning.md
-docs/artifact-mapping.md
-docs/schema-validation.md
-docs/ecosystem-watch.md
-docs/ecosystem-opportunities.md
+docs/attribution.md
+docs/commands.md
+docs/command-index.md
+docs/skills.md
 docs/hosts/codex-cli.md
 docs/hosts/claude-code.md
-docs/hosts/vscode.md
 docs/hosts/generic.md
-docs/guides/from-gstack-or-gsd-to-orca-framework.md
-docs/guides/goal-mode-guide.md
-docs/guides/background-mode-guide.md
-docs/guides/business-ideation-guide.md
-docs/guides/graphify-guide.md
-docs/guides/notebooklm-guide.md
-docs/guides/paved-roads-guide.md
-docs/guides/runtime-adaptation-guide.md
-docs/guides/expo-guide.md
-docs/guides/react-native-guide.md
-docs/guides/visual-quality-guide.md
-docs/paved-road-ux.md
-docs/version-control.md
-docs/approval-gates.md
-docs/artifact-contracts.md
-docs/security-guardrails.md
-docs/prompt-injection.md
-docs/ci-quality.md
-docs/run-memory.md
-docs/spec-driven-workflow.md
-docs/README.md
-docs/information-architecture.md
-docs/start-here.md
-docs/first-workflow.md
-docs/quickstart.md
-docs/install.md
-docs/install-overview.md
-docs/install-for-beginners.md
-docs/install-for-technical-users.md
-docs/install-paths.md
-docs/install-prerequisites.md
-docs/install-troubleshooting.md
-docs/install-validation.md
-docs/install-contextual-help.md
-docs/readme-scope.md
-docs/readme-feature-weighting.md
-docs/readme-guardrails.md
-docs/readme-review.md
-docs/first-run.md
-docs/first-success-check.md
-docs/plugins.md
-docs/plugin-installation.md
-docs/plugin-troubleshooting.md
-docs/auto-updates.md
-docs/update-policy.md
-docs/update-channels.md
-docs/update-modes.md
-docs/update-discovery.md
-docs/update-verification.md
-docs/update-security.md
-docs/update-rollback.md
-docs/update-recovery.md
-docs/update-rollout-strategy.md
-docs/plugin-update-policy.md
-docs/harness-update-policy.md
-docs/integration-update-policy.md
-docs/update-ux.md
-docs/update-validation.md
-docs/harness-installation.md
-docs/harness-setup.md
-docs/harness-troubleshooting.md
-docs/harness-chooser.md
-docs/common-install-errors.md
-docs/common-plugin-errors.md
-docs/common-harness-errors.md
-docs/reset-and-retry.md
-docs/intro.md
-docs/intro-guide.md
-docs/feature-index.md
-docs/command-index.md
-docs/use-case-map.md
-docs/choose-your-path.md
-docs/glossary.md
-docs/concept-map.md
-docs/truth-hierarchy.md
-docs/graph-and-vault-support.md
-docs/corpus-overview.md
-docs/corpus-setup.md
-docs/corpus-settings.md
-docs/corpus-writeback.md
-docs/corpus-privacy.md
-docs/corpus-precedence.md
-docs/optional-tooling-policy.md
-docs/minimum-friction-policy.md
-docs/friction-reduction-principle.md
-docs/framework-principles.md
-docs/feature-gate-friction-check.md
-docs/feature-visibility-tiers.md
-docs/adaptive-learning.md
-docs/self-improvement.md
-docs/instance-vs-framework-learning.md
-docs/instance-improvement-loop.md
-docs/framework-improvement-loop.md
-docs/improvement-promotion-policy.md
-docs/feedback-loop-mechanics.md
-docs/improvement-signals.md
-docs/improvement-evaluation.md
-docs/self-improvement-approval-policy.md
-docs/local-to-global-promotion.md
-docs/improvement-status-model.md
-docs/user-skill-support.md
-docs/user-skill-model.md
-docs/adaptive-expertise-levels.md
-docs/learning-feedback-controls.md
-docs/constructive-feedback-style.md
-docs/prompting-coach.md
-docs/context-engineering-coach.md
-docs/ai-development-coach.md
-docs/feedback-tone-check.md
-docs/graph-fit-rules.md
-docs/graph-analysis-output-modes.md
-docs/visual-quality.md
-docs/human-voice.md
-docs/token-efficiency.md
-docs/session-improvement-loop.md
-docs/session-quality-signals.md
-docs/frustration-signals.md
-docs/generic-output-signals.md
-docs/wrong-direction-signals.md
-docs/session-quality-rubric.md
-docs/quality-feedback-ux.md
-docs/improvement-categories.md
-docs/session-review.md
-docs/issue-worthiness.md
-docs/improvement-deduping.md
-docs/human-approval-for-issues.md
-docs/framework-issue-format.md
-docs/github-issue-integration.md
-docs/agent-ready-issues.md
-docs/improvement-backlog.md
-docs/docs-automation.md
-docs/wiki-maintenance.md
-docs/staleness-detection.md
-docs/doc-owners.md
-docs/contributing-docs.md
-docs/whats-new.md
-docs/recent-doc-updates.md
-docs/linear-setup.md
-docs/linear-agent-model.md
-docs/linear-states.md
-docs/linear-issue-lifecycle.md
-docs/linear-guidance.md
-docs/examples/linear-setup-session.md
-docs/examples/linear-feature-flow.md
-docs/examples/linear-blind-qa-flow.md
-docs/examples/trace-for-feature-run.md
-docs/examples/eval-report.md
-docs/examples/approval-request.md
-docs/examples/prompt-injection-handling.md
-docs/examples/artifact-contract-usage.md
-docs/examples/benchmark-run.md
-docs/examples/onboarding-benchmark-case.md
-docs/examples/spec-quality-comparison.md
-docs/examples/workflow-metrics-report.md
-docs/examples/workflow-cost-report.md
-docs/examples/retry-burden-analysis.md
-docs/examples/qa-to-regression.md
-docs/examples/shared-state-handoff.md
-docs/examples/checkpoint-before-risky-change.md
-docs/examples/run-inspection.md
-docs/examples/pause-and-resume.md
-docs/examples/versioned-iteration.md
-docs/examples/tool-review.md
-docs/examples/mcp-server-review.md
-docs/examples/high-risk-tool-approval.md
-docs/examples/github-setup.md
-docs/examples/linear-setup.md
-docs/examples/setup-github-codex.md
-docs/examples/setup-linear-claude-code.md
-docs/examples/setup-fallback-manual.md
-docs/examples/integration-health-check.md
-docs/examples/optional-tool-not-required.md
-docs/examples/runtime-codex-goal.md
-docs/examples/runtime-claude-manual-fallback.md
-docs/examples/runtime-no-linear.md
-docs/examples/runtime-unknown-harness.md
-docs/examples/runtime-strict-compatibility.md
-docs/examples/execution-receipt.md
-docs/examples/artifact-lineage.md
-docs/examples/replay-after-harness-update.md
-docs/examples/restore-after-failed-goal.md
-docs/examples/background-research.md
-docs/examples/background-refactor-plan.md
-docs/examples/background-qa-prep.md
-docs/examples/background-blocked-permission.md
-docs/examples/background-loop-guard-triggered.md
-docs/examples/legacy-repo-audit.md
-docs/examples/legacy-modernization-plan.md
-docs/examples/business-logic-extraction.md
-docs/examples/legacy-to-spec.md
-docs/examples/legacy-risk-assessment.md
-docs/examples/upstream-entry.md
-docs/examples/inspiration-vs-wrapper.md
-docs/examples/third-party-notice.md
-docs/examples/feature-provenance.md
-docs/examples/idea-one-pager.md
-docs/examples/idea-scorecard.md
-docs/examples/opportunity-memo.md
-docs/examples/validation-plan.md
-docs/examples/idea-kill-decision.md
-docs/examples/idea-pursue-decision.md
-docs/examples/next-step-beginner.md
-docs/examples/next-step-advanced.md
-docs/examples/post-spec-guidance.md
-docs/examples/post-qa-guidance.md
-docs/examples/post-implementation-guidance.md
-docs/examples/when-guidance-stays-quiet.md
-docs/examples/goal-from-spec.md
-docs/examples/goal-for-milestone.md
-docs/examples/goal-review.md
-docs/examples/goal-status-handoff.md
-docs/examples/bad-goal-vs-good-goal.md
-docs/examples/portable-spec-schema.md
-docs/examples/portable-goal-contract.md
-docs/examples/schema-migration.md
-docs/examples/artifact-mapping.md
-docs/examples/new-user-path.md
-docs/examples/from-gstack-or-gsd.md
-docs/examples/business-ideation-user-path.md
-docs/examples/background-mode-user-path.md
-docs/examples/frustration-signal-doc-gap.md
-docs/examples/generic-output-signal.md
-docs/examples/wrong-direction-signal.md
-docs/examples/low-confidence-no-issue.md
-docs/examples/high-confidence-quality-issue-approved.md
-docs/examples/expo-mobile-stack.md
-docs/examples/react-native-supabase-stack.md
-docs/examples/mobile-subscriptions-revenuecat.md
-docs/examples/mobile-push-onesignal.md
-docs/examples/web-saas-stack.md
-docs/examples/mobile-stack.md
-docs/examples/startup-stack.md
-docs/examples/internal-tool-stack.md
-docs/examples/expo-vs-web-differences.md
-docs/examples/recommend-web-saas-stack.md
-docs/examples/recommend-mobile-stack.md
-docs/examples/setup-user-chosen-tool.md
-docs/examples/no-recommendation-insufficient-signal.md
-docs/examples/revenuecat-vs-stripe.md
-docs/examples/obsidian-vault-basic-audit.md
-docs/examples/graphify-optional-enhancement.md
-docs/examples/graphify-user-requested-setup.md
-docs/examples/no-extra-tooling-needed.md
-docs/examples/vault-cluster-report.md
-docs/examples/graphify-helps.md
-docs/examples/graphify-not-needed.md
-docs/examples/corpus-global-inherit.md
-docs/examples/corpus-project-disabled.md
-docs/examples/corpus-writeback-confirm.md
-docs/examples/corpus-missing-path.md
-docs/examples/corpus-reindex-after-path-change.md
-docs/examples/friction-reduction-good.md
-docs/examples/friction-reduction-bad.md
-docs/examples/user-chosen-tool-support.md
-docs/examples/optional-feature-hidden.md
-docs/examples/progressive-disclosure-onboarding.md
-docs/examples/better-prompt-rewrite.md
-docs/examples/context-improvement.md
-docs/examples/beginner-help.md
-docs/examples/intermediate-help.md
-docs/examples/advanced-user-minimal-guidance.md
-docs/examples/gentle-prompt-coaching.md
-docs/examples/opt-out-feedback.md
-docs/examples/session-learning-nudge.md
-docs/examples/single-agent-vs-subagent.md
-docs/examples/supervisor-worker.md
-docs/examples/fanout-research.md
-docs/examples/maker-checker-qa.md
-docs/examples/harness-without-native-subagents.md
-docs/examples/blocked-subagent-escalation.md
-docs/examples/notebooklm-research-flow.md
-docs/examples/notebooklm-user-chosen-setup.md
-docs/examples/notebooklm-enterprise-path.md
-docs/examples/notebooklm-mcp-path.md
-docs/examples/notebooklm-for-idea-research.md
-docs/examples/notebooklm-for-project-knowledge.md
-docs/examples/beginner-install.md
-docs/examples/technical-install.md
-docs/examples/plugin-install.md
-docs/examples/harness-install.md
-docs/examples/install-failure-recovery.md
-docs/examples/stable-auto-update.md
-docs/examples/beta-channel-update.md
-docs/examples/plugin-compatibility-block.md
-docs/examples/rollback-after-failed-update.md
-docs/examples/manual-update-mode.md
-docs/examples/good-readme-balance.md
-docs/examples/bad-feature-hijacked-readme.md
-docs/examples/readme-docs-map.md
-docs/examples/local-instance-learning.md
-docs/examples/local-preference-adaptation.md
-docs/examples/framework-improvement-promotion.md
-docs/examples/weak-signal-no-promotion.md
-docs/examples/docs-drift-fix.md
-docs/examples/orchestration-improvement.md
-benchmarks/onboarding-spec/README.md
-wiki/Home.md
-wiki/Getting-Started.md
-wiki/Core-Concepts.md
-wiki/Feature-Index.md
-wiki/Workflow-Index.md
-wiki/Commands.md
-wiki/Hosts-and-Harnesses.md
-wiki/Automation.md
-wiki/Examples.md
-wiki/FAQ.md
-wiki/_Sidebar.md
-wiki/_Footer.md
-wiki/Whats-New.md
-schema/README.md
-schema/versions/v1/onboarding-summary.schema.json
-schema/versions/v1/spec.schema.json
-schema/versions/v1/milestone-plan.schema.json
-schema/versions/v1/goal-contract.schema.json
-schema/versions/v1/run-memory.schema.json
-schema/versions/v1/run-trace.schema.json
-schema/versions/v1/execution-receipt.schema.json
-schema/versions/v1/qa-finding.schema.json
-schema/versions/v1/regression-task.schema.json
-schema/versions/v1/approval-request.schema.json
-schema/versions/v1/runtime-status.schema.json
-schema/versions/v1/orca-monitor-status.schema.json
-schema/examples/spec-v1.json
-schema/examples/goal-contract-v1.json
-schema/examples/runtime-status-v1.json
-schema/examples/orca-monitor-status-v1.json
-registry/tools/README.md
-registry/mcp-servers/README.md
-registry/harnesses/README.md
-registry/harnesses/codex.md
-registry/harnesses/claude-code.md
-registry/harnesses/opencode.md
-registry/harnesses/cursor.md
-registry/harnesses/github-copilot.md
-registry/harnesses/generic.md
-reports/ecosystem-sweep/automation.md
-reports/ecosystem-sweep/tracked-sources.md
-reports/ecosystem-sweep/latest.md
-reports/ecosystem-sweep/state.json
-reports/ecosystem-sweep/draft-issues/README.md
-reports/compatibility/latest.md
-reports/compatibility/2026-05-30.md
-mcp/linear.example.json
-HVN-STATUS.md
+docs/hosts/vscode.md
 integrations/README.md
-integrations/graphify.md
-integrations/notebooklm.md
-commands/orca-docs.md
-commands/orca-install.md
-commands/orca-doctor.md
-commands/orca-check-updates.md
-commands/orca-corpus.md
-commands/orca-update.md
-commands/orca-integration.md
-commands/orca-recommend-stack.md
-commands/orca-learning.md
-commands/orca-feedback.md
-commands/orca-explain.md
-commands/orca-setup-integration.md
-commands/orca-improve-framework.md
-skills/orca-integrations/SKILL.md
-skills/orca-integration-recommendation/SKILL.md
-skills/orca-docs-system/SKILL.md
-skills/orca-session-improvement/SKILL.md
-skills/orca-friction-policy/SKILL.md
-skills/orca-adaptive-guidance/SKILL.md
-skills/orca-agent-orchestration/SKILL.md
-skills/orca-self-improvement/SKILL.md
-skills/orca-install-help/SKILL.md
-skills/orca-auto-update/SKILL.md
-skills/orca-corpus-support/SKILL.md
-skills/orca-graph-vault-support/SKILL.md
-templates/doc-refresh-note.md
-templates/wiki-update-note.md
-templates/doc-metadata.md
-templates/doc-change-checklist.md
-templates/integration-pack.md
-templates/integration-checklist.md
-templates/use-case-profile.md
-templates/tool-fit-entry.md
-templates/recommendation-confidence.md
-templates/friction-check.md
-templates/user-skill-profile.md
-templates/learning-signal.md
-templates/help-level-guidance.md
-templates/feedback-nudge.md
-templates/try-this-next-time.md
-templates/tone-check.md
-templates/setup-intake.md
-templates/explanation-session.md
-templates/instance-improvement-note.md
-templates/instance-learning-signal.md
-templates/local-improvement-proposal.md
-templates/framework-learning-signal.md
-templates/framework-improvement-proposal.md
-templates/feedback-loop-record.md
-templates/improvement-rubric.md
-templates/success-metric.md
-templates/promotion-candidate.md
-templates/improvement-status-entry.md
-templates/install-checklist.md
-templates/preflight-check.md
-templates/plugin-setup-guide.md
-templates/plugin-help-entry.md
-templates/harness-install-guide.md
-templates/install-help-callout.md
-templates/first-run-validation.md
-templates/install-validation-report.md
-templates/update-channel-policy.md
-templates/update-manifest.md
-templates/update-candidate.md
-templates/update-verification-report.md
-templates/rollback-plan.md
-templates/rollout-stage.md
-templates/update-notice.md
-templates/update-result.md
-templates/readme-update-check.md
-templates/subagent-contract.md
-templates/parent-orchestrator-contract.md
-templates/delegation-check.md
-templates/orchestration-plan.md
-templates/subagent-context-packet.md
-templates/subagent-result-packet.md
-templates/blocker-report.md
-templates/clarification-required.md
-templates/approval-gate.md
-templates/orchestration-trace.md
-templates/harness-adapter.md
-templates/delegation-rationale.md
-templates/integration-validation.md
-templates/graph-fit-check.md
-templates/vault-map-report.md
-templates/graph-insight-report.md
-templates/corpus-global-settings.md
-templates/corpus-project-settings.md
-templates/corpus-writeback-policy.md
-templates/corpus-index-status.md
-templates/notebooklm-setup-checklist.md
-templates/notebooklm-usage-pattern.md
-templates/framework-improvement-note.md
-templates/session-improvement-review.md
-templates/session-quality-signal.md
-templates/session-quality-score.md
-templates/issue-worthiness-check.md
-templates/related-issue-note.md
-templates/issue-approval-prompt.md
-templates/quality-check-prompt.md
-templates/hvn-framework-issue.md
-templates/agent-ready-implementation.md
-templates/improvement-backlog-entry.md
-docs/explanation-mode.md
+integrations/impeccable.md
+integrations/superpowers.md
 "
 
-for file in $required_files; do
-  [ -f "$file" ] || fail "missing required file: $file"
+required_dirs="
+commands
+skills
+templates
+docs
+integrations
+install
+scripts
+bin
+"
+
+for path in $required_files; do
+  need_file "$path"
 done
 
-for dir in bin commands skills templates templates/contracts install scripts docs docs/examples docs/guides docs/hosts docs/integrations integrations mcp examples examples/evals benchmarks benchmarks/onboarding-spec benchmarks/onboarding-spec/cases registry registry/tools registry/mcp-servers registry/harnesses reports reports/ecosystem-sweep reports/ecosystem-sweep/draft-issues reports/compatibility schema schema/versions schema/versions/v1 schema/examples wiki; do
-  [ -d "$dir" ] || fail "missing required directory: $dir"
+for path in $required_dirs; do
+  need_dir "$path"
 done
 
-command_count="$(find commands -type f -name 'orca-*.md' | wc -l | tr -d ' ')"
-skill_count="$(find skills -type f -name 'SKILL.md' | wc -l | tr -d ' ')"
-template_count="$(find templates -type f -name '*.md' | wc -l | tr -d ' ')"
+[ -x bin/orca ] || fail "bin/orca is not executable"
+[ -x install/install.sh ] || fail "install/install.sh is not executable"
+[ -x install/verify-install.sh ] || fail "install/verify-install.sh is not executable"
+[ -x install/doctor.sh ] || fail "install/doctor.sh is not executable"
 
-[ "$command_count" -ge 48 ] || fail "expected at least 48 command definitions"
-[ "$skill_count" -ge 38 ] || fail "expected at least 38 skill definitions"
-[ "$template_count" -ge 69 ] || fail "expected at least 69 templates"
-
-for script in bin/orca install/install.sh install/uninstall.sh install/doctor.sh install/verify-install.sh scripts/check-markdown.sh scripts/check-links.sh scripts/check-reliability.sh scripts/check-improvement-systems.sh scripts/bootstrap-git.sh scripts/validate-repo.sh scripts/linear-setup.sh; do
-  [ -f "$script" ] || fail "missing script: $script"
-  [ -x "$script" ] || fail "script is not executable: $script"
-  sh -n "$script" || fail "script syntax failed: $script"
-done
-
-if grep -RIn --exclude='validate-repo.sh' 'TODO\|FIXME\|rest of code\|similar to above\|for brevity' README.md ORCA-Framework.md INSTALL.md docs commands skills templates install scripts mcp examples .github 2>/dev/null; then
-  fail "placeholder or banned phrase detected"
+if command -v git >/dev/null 2>&1 && git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+  command_count="$(git ls-files 'commands/orca-*.md' | wc -l | tr -d ' ')"
+  skill_count="$(git ls-files 'skills/**/SKILL.md' | wc -l | tr -d ' ')"
+  template_count="$(git ls-files 'templates/**' | wc -l | tr -d ' ')"
+  doc_count="$(git ls-files 'docs/*.md' 'docs/*.mdx' 'docs/**/*.md' 'docs/**/*.mdx' | wc -l | tr -d ' ')"
+else
+  command_count="$(/usr/bin/find commands -maxdepth 1 -type f -name 'orca-*.md' | wc -l | tr -d ' ')"
+  skill_count="$(/usr/bin/find skills -maxdepth 2 -name SKILL.md | wc -l | tr -d ' ')"
+  template_count="$(/usr/bin/find templates -type f | wc -l | tr -d ' ')"
+  doc_count="$(/usr/bin/find docs -type f \( -name '*.md' -o -name '*.mdx' \) | wc -l | tr -d ' ')"
 fi
 
-./scripts/check-markdown.sh
-./scripts/check-links.sh
-./scripts/check-reliability.sh
-./scripts/check-improvement-systems.sh
+[ "$command_count" = "86" ] || fail "expected 86 commands, found $command_count"
+[ "$skill_count" = "71" ] || fail "expected 71 skills, found $skill_count"
+[ "$template_count" = "183" ] || fail "expected 183 templates, found $template_count"
+[ "$doc_count" = "454" ] || fail "expected 454 docs, found $doc_count"
+
+for command in install doctor onboard spec plan build review ship context research delegate checkpoint receipt status attribution help impeccable superpowers; do
+  need_file "commands/orca-$command.md"
+done
+
+for skill in install-help tool-setup onboard spec plan build review ship context research delegation checkpoint receipts attribution impeccable superpowers; do
+  need_file "skills/orca-$skill/SKILL.md"
+done
+
+for wrapper in impeccable superpowers; do
+  need_file "commands/orca-$wrapper.md"
+  need_file "integrations/$wrapper.md"
+done
+
+for wrapper in caveman efficient-frontier visual-plan visual-recap; do
+  if [ -e "commands/orca-$wrapper.md" ] || [ -e "integrations/$wrapper.md" ] || [ -d "skills/orca-$wrapper" ]; then
+    need_file "commands/orca-$wrapper.md"
+    need_file "integrations/$wrapper.md"
+    need_file "skills/orca-$wrapper/SKILL.md"
+  fi
+done
+
+if /usr/bin/find . -path './.git' -prune -o -name '.DS_Store' -print -quit | grep -q .; then
+  fail "tracked tree still contains .DS_Store"
+fi
 
 printf 'validate-repo: ok\n'

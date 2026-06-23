@@ -14,6 +14,7 @@ Usage:
   orca unify
   orca notion sync [--dry-run] [--json] [PAYLOAD|--all]
   orca notion outbox [--json]
+  orca notion payload --example
   orca notion doctor [--strict] [--json]
   orca backend status [--json]
   orca help
@@ -32,6 +33,7 @@ Examples:
   orca unify
   orca notion sync --dry-run --json --all
   orca notion outbox --json
+  orca notion payload --example
   orca notion sync --all
   orca notion doctor [--strict] [--json]
   orca list
@@ -358,6 +360,39 @@ sync_notion_payload_file() {
   synced_path="$dir/synced/$(basename "$payload_file")"
   mv "$payload_file" "$synced_path"
   printf '%s\n' "$synced_path"
+}
+
+orca_notion_payload() {
+  [ "${1:-}" = "--example" ] || {
+    printf 'Usage: orca notion payload --example\n' >&2
+    return 1
+  }
+  shift
+  [ "$#" -eq 0 ] || {
+    printf 'Usage: orca notion payload --example\n' >&2
+    return 1
+  }
+  printf '{\n'
+  printf '  "schema_version": 1,\n'
+  printf '  "payload_type": "goal_event",\n'
+  printf '  "action": "goal_unified",\n'
+  printf '  "canonical_backend": "notion",\n'
+  printf '  "project_page_id": "",\n'
+  printf '  "issue_board_data_source_id": "",\n'
+  printf '  "goal": "make this production ready",\n'
+  printf '  "goal_slug": "make-this-production-ready",\n'
+  printf '  "phase": "handoff",\n'
+  printf '  "pack": "release-ready",\n'
+  printf '  "payload": {\n'
+  printf '    "issue": "Run /goal loop for make this production ready",\n'
+  printf '    "status": "Done",\n'
+  printf '    "readiness_score": 100,\n'
+  printf '    "handoff_path": ".orca/handoffs/make-this-production-ready.md",\n'
+  printf '    "cycles_done": 1,\n'
+  printf '    "max_cycles": 1\n'
+  printf '  },\n'
+  printf '  "updated_at": "%s"\n' "$(now_utc)"
+  printf '}\n'
 }
 
 orca_notion_sync() {
@@ -1075,7 +1110,12 @@ if [ "$script_name" = "orca" ]; then
         orca_notion_outbox "$@"
         exit $?
       fi
-      printf 'Usage: orca notion sync [--dry-run] [--json] [PAYLOAD|--all]\n       orca notion outbox [--json]\n       orca notion doctor [--strict] [--json]\n' >&2
+      if [ "${1:-}" = "payload" ]; then
+        shift
+        orca_notion_payload "$@"
+        exit $?
+      fi
+      printf 'Usage: orca notion sync [--dry-run] [--json] [PAYLOAD|--all]\n       orca notion outbox [--json]\n       orca notion payload --example\n       orca notion doctor [--strict] [--json]\n' >&2
       exit 1
       ;;
   esac

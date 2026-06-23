@@ -111,6 +111,13 @@ if ORCA_ROOT="$tmp/missing-until-next-option" ./bin/orca /goal "make this produc
 fi
 need_grep "until requires a value" "$tmp/missing-until-next-option.txt"
 
+if ORCA_ROOT="$tmp/bad-pack" ./bin/orca /goal "make this production ready" --pack release-reddy > "$tmp/bad-pack.txt" 2>&1; then
+  fail "expected unknown --pack value to return non-zero"
+fi
+need_grep "unknown --pack: release-reddy" "$tmp/bad-pack.txt"
+need_grep "valid packs: release-ready app-store-ready startup-mvp security performance notion-hygiene" "$tmp/bad-pack.txt"
+[ ! -f "$tmp/bad-pack/state.env" ] || fail "invalid pack should not write state"
+
 ORCA_ROOT="$fallback_root" ./bin/orca notion outbox > "$tmp/notion-outbox-fallback.txt"
 need_grep "notion outbox: 0 payload(s)" "$tmp/notion-outbox-fallback.txt"
 ORCA_ROOT="$fallback_root" ./bin/orca notion outbox --json > "$tmp/notion-outbox-fallback.json"

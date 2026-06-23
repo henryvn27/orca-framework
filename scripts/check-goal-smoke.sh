@@ -232,6 +232,13 @@ ORCA_ROOT="$fallback_root" ./bin/orca notion payload --validate "$tmp/notion-pay
 need_json_field "$tmp/notion-payload-validate.json" "target" "$tmp/notion-payload-example.json"
 need_json_field "$tmp/notion-payload-validate.json" "valid" "true"
 need_json_field "$tmp/notion-payload-validate.json" "ok" "true"
+if ORCA_ROOT="$fallback_root" ./bin/orca notion payload --validate --json > "$tmp/notion-payload-missing-path.json" 2>&1; then
+  fail "expected payload validation without PATH before --json to fail"
+fi
+need_json_field "$tmp/notion-payload-missing-path.json" "target" ""
+need_json_field "$tmp/notion-payload-missing-path.json" "valid" "false"
+need_json_field "$tmp/notion-payload-missing-path.json" "ok" "false"
+need_json_field "$tmp/notion-payload-missing-path.json" "error" "PATH is required"
 ORCA_ROOT="$fallback_root" ./bin/orca notion payload --example | ORCA_ROOT="$fallback_root" ./bin/orca notion payload --validate - --json > "$tmp/notion-payload-validate-stdin.json"
 need_json_field "$tmp/notion-payload-validate-stdin.json" "target" "-"
 need_json_field "$tmp/notion-payload-validate-stdin.json" "valid" "true"

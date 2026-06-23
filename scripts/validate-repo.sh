@@ -80,6 +80,7 @@ done
 [ -x install/install.sh ] || fail "install/install.sh is not executable"
 [ -x install/verify-install.sh ] || fail "install/verify-install.sh is not executable"
 [ -x install/doctor.sh ] || fail "install/doctor.sh is not executable"
+[ -x scripts/check-notion-adapter-smoke.sh ] || fail "scripts/check-notion-adapter-smoke.sh is not executable"
 
 if command -v git >/dev/null 2>&1 && git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
   command_count="$(git ls-files 'commands/orca-*.md' | wc -l | tr -d ' ')"
@@ -123,6 +124,9 @@ if command -v ruby >/dev/null 2>&1; then
   ruby -rjson -e 'ARGV.each { |path| JSON.parse(File.read(path)) }' scripts/fixtures/notion/*.json ||
     fail "malformed Notion fixture JSON"
 fi
+
+./scripts/check-notion-adapter-smoke.sh >/dev/null ||
+  fail "Notion adapter smoke failed"
 
 if /usr/bin/find . -path './.git' -prune -o -name '.DS_Store' -print -quit | grep -q .; then
   fail "tracked tree still contains .DS_Store"

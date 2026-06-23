@@ -88,6 +88,7 @@ need_grep_file "Install ORCA in this environment" README.md
 need_grep_file "https://github.com/henryvn27/orca-framework" README.md
 need_grep_file "orca goal --packs" README.md
 need_grep_file "orca goal --packs --verbose" README.md
+need_grep_file "orca notion handoff --issue" README.md
 
 [ -x bin/orca ] || fail "bin/orca is not executable"
 [ -x install/install.sh ] || fail "install/install.sh is not executable"

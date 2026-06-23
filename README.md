@@ -113,6 +113,15 @@ If Notion is unavailable, ORCA uses a local markdown fallback:
   notion/
 ```
 
+When live Notion or the Notion MCP is unavailable, queue a tracker handoff locally:
+
+```sh
+orca notion handoff --issue "Update Notion issue after PR merge" --status Done --note "Live Notion unavailable; sync later."
+orca notion outbox
+```
+
+This writes a valid payload to `.orca/notion/outbox/` without calling the live adapter. Sync it later with `orca notion sync --all` once Notion config and credentials are available.
+
 Linear is still supported, but only when explicitly selected or configured as an adapter. It is not the default source of truth.
 
 Check current backend state:

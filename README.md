@@ -68,6 +68,8 @@ ORCA_NOTION_ADAPTER_DRY_RUN=1 scripts/orca-notion-sync-adapter.sh .orca/notion/o
 scripts/orca-notion-sync-adapter.sh --summary .orca/notion/outbox/payload.json
 ```
 
+Stable adapter fixtures live in `scripts/fixtures/notion/` for contract tests and integration examples.
+
 If Notion is unavailable, ORCA uses a local markdown fallback:
 
 ```text

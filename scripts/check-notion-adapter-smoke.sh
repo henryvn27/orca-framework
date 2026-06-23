@@ -25,13 +25,15 @@ tmp="${TMPDIR:-/tmp}/orca-notion-adapter-smoke.$$"
 trap 'rm -rf "$tmp"' EXIT INT TERM HUP
 mkdir -p "$tmp"
 
-payload="$tmp/payload.json"
-./bin/orca notion payload --example > "$payload"
-ruby -rjson -e '
-  data = JSON.parse(File.read(ARGV.fetch(0)))
-  data["issue_board_data_source_id"] = "collection://issue-board-123"
-  File.write(ARGV.fetch(0), JSON.pretty_generate(data))
-' "$payload"
+fixture_dir="$root/scripts/fixtures/notion"
+payload="$fixture_dir/goal-event-valid.json"
+missing_id="$fixture_dir/goal-event-missing-data-source.json"
+unsupported_schema="$fixture_dir/goal-event-unsupported-schema.json"
+unsupported_type="$fixture_dir/goal-event-unsupported-type.json"
+
+for fixture in "$payload" "$missing_id" "$unsupported_schema" "$unsupported_type"; do
+  [ -f "$fixture" ] || fail "missing fixture: $fixture"
+done
 
 ORCA_NOTION_ADAPTER_DRY_RUN=1 ./scripts/orca-notion-sync-adapter.sh "$payload" > "$tmp/plan-create.json"
 need_json_field "$tmp/plan-create.json" 'data.fetch("action")' "create"
@@ -75,10 +77,16 @@ if ORCA_NOTION_DATA_SOURCE_ID=override-456 NOTION_TOKEN= ./scripts/orca-notion-s
   fail "expected live adapter without token to fail"
 fi
 
-missing_id="$tmp/missing-id.json"
-./bin/orca notion payload --example > "$missing_id"
 if ORCA_NOTION_ADAPTER_DRY_RUN=1 ./scripts/orca-notion-sync-adapter.sh "$missing_id" >/dev/null 2>&1; then
   fail "expected missing issue board data source id to fail"
+fi
+
+if ORCA_NOTION_ADAPTER_DRY_RUN=1 ./scripts/orca-notion-sync-adapter.sh "$unsupported_schema" >/dev/null 2>&1; then
+  fail "expected unsupported schema fixture to fail"
+fi
+
+if ORCA_NOTION_ADAPTER_DRY_RUN=1 ./scripts/orca-notion-sync-adapter.sh "$unsupported_type" >/dev/null 2>&1; then
+  fail "expected unsupported type fixture to fail"
 fi
 
 bad="$tmp/bad.json"

@@ -7,11 +7,13 @@ Usage: orca-notion-sync-adapter.sh [--dry-run] PAYLOAD.json
 
 Environment:
   NOTION_TOKEN                      Required outside dry-run.
-  NOTION_VERSION                    Defaults to 2025-09-03.
+  NOTION_VERSION                    Defaults to 2026-03-11.
   ORCA_NOTION_DATA_SOURCE_ID         Overrides payload issue_board_data_source_id.
   ORCA_NOTION_TITLE_PROPERTY         Defaults to Issue.
   ORCA_NOTION_STATUS_PROPERTY        Defaults to Status.
-  ORCA_NOTION_ADAPTER_DRY_RUN=1      Print request JSON, no network.
+  ORCA_NOTION_MATCH_PROPERTY         Defaults to title property.
+  ORCA_NOTION_EXISTING_PAGE_ID       Dry-run/live override to force update path.
+  ORCA_NOTION_ADAPTER_DRY_RUN=1      Print request plan JSON, no network.
 EOF
 }
 
@@ -53,13 +55,15 @@ command -v ruby >/dev/null 2>&1 || {
   exit 1
 }
 
-request_file=$(mktemp "${TMPDIR:-/tmp}/orca-notion-request.XXXXXX")
+plan_file=$(mktemp "${TMPDIR:-/tmp}/orca-notion-plan.XXXXXX")
+query_file=$(mktemp "${TMPDIR:-/tmp}/orca-notion-query.XXXXXX")
+create_file=$(mktemp "${TMPDIR:-/tmp}/orca-notion-create.XXXXXX")
+update_file=$(mktemp "${TMPDIR:-/tmp}/orca-notion-update.XXXXXX")
 response_file=$(mktemp "${TMPDIR:-/tmp}/orca-notion-response.XXXXXX")
-trap 'rm -f "$request_file" "$response_file"' EXIT INT TERM HUP
+trap 'rm -f "$plan_file" "$query_file" "$create_file" "$update_file" "$response_file"' EXIT INT TERM HUP
 
-ruby -rjson - "$payload_file" "$request_file" <<'RUBY'
-payload_path = ARGV.fetch(0)
-request_path = ARGV.fetch(1)
+ruby -rjson - "$payload_file" "$plan_file" "$query_file" "$create_file" "$update_file" <<'RUBY'
+payload_path, plan_path, query_path, create_path, update_path = ARGV
 payload = JSON.parse(File.read(payload_path))
 
 abort("notion-adapter: unsupported schema_version") unless payload["schema_version"] == 1
@@ -73,6 +77,8 @@ abort("notion-adapter: missing issue board data source id") if data_source_id.em
 
 title_property = ENV.fetch("ORCA_NOTION_TITLE_PROPERTY", "Issue")
 status_property = ENV.fetch("ORCA_NOTION_STATUS_PROPERTY", "Status")
+match_property = ENV.fetch("ORCA_NOTION_MATCH_PROPERTY", title_property)
+existing_page_id = ENV["ORCA_NOTION_EXISTING_PAGE_ID"].to_s
 
 body_payload = payload["payload"]
 title = body_payload["issue"].to_s
@@ -98,16 +104,26 @@ summary = [
   "Handoff: #{body_payload["handoff_path"]}"
 ].reject { |line| line.end_with?(": ") }
 
-request = {
-  "parent" => {"data_source_id" => data_source_id},
-  "properties" => {
-    title_property => {
-      "title" => [{"type" => "text", "text" => {"content" => title[0, 2000]}}]
-    },
-    status_property => {
-      "status" => {"name" => status}
-    }
+properties = {
+  title_property => {
+    "title" => [{"type" => "text", "text" => {"content" => title[0, 2000]}}]
   },
+  status_property => {
+    "status" => {"name" => status}
+  }
+}
+
+query = {
+  "page_size" => 1,
+  "filter" => {
+    "property" => match_property,
+    "title" => {"equals" => title}
+  }
+}
+
+create = {
+  "parent" => {"data_source_id" => data_source_id},
+  "properties" => properties,
   "children" => [
     {
       "object" => "block",
@@ -121,11 +137,38 @@ request = {
   ]
 }
 
-File.write(request_path, JSON.pretty_generate(request))
+update = {"properties" => properties}
+action = existing_page_id.empty? ? "create" : "update"
+
+plan = {
+  "action" => action,
+  "data_source_id" => data_source_id,
+  "match" => {
+    "property" => match_property,
+    "title" => title,
+    "query" => query
+  },
+  "existing_page_id" => existing_page_id,
+  "create" => {
+    "method" => "POST",
+    "url" => "https://api.notion.com/v1/pages",
+    "body" => create
+  },
+  "update" => {
+    "method" => "PATCH",
+    "url" => existing_page_id.empty? ? "" : "https://api.notion.com/v1/pages/#{existing_page_id}",
+    "body" => update
+  }
+}
+
+File.write(plan_path, JSON.pretty_generate(plan))
+File.write(query_path, JSON.generate(query))
+File.write(create_path, JSON.generate(create))
+File.write(update_path, JSON.generate(update))
 RUBY
 
 if [ "$dry_run" = "1" ]; then
-  cat "$request_file"
+  cat "$plan_file"
   exit 0
 fi
 
@@ -135,23 +178,61 @@ token="${NOTION_TOKEN:-${ORCA_NOTION_TOKEN:-}}"
   exit 1
 }
 
-notion_version="${NOTION_VERSION:-2025-09-03}"
-status=$(curl -sS -o "$response_file" -w '%{http_code}' \
-  -X POST 'https://api.notion.com/v1/pages' \
-  -H "Authorization: Bearer $token" \
-  -H "Content-Type: application/json" \
-  -H "Notion-Version: $notion_version" \
-  --data-binary "@$request_file")
+notion_version="${NOTION_VERSION:-2026-03-11}"
+data_source_id=$(ruby -rjson -e 'puts JSON.parse(File.read(ARGV.fetch(0))).fetch("data_source_id")' "$plan_file")
+existing_page_id="${ORCA_NOTION_EXISTING_PAGE_ID:-}"
+
+if [ -z "$existing_page_id" ]; then
+  query_status=$(curl -sS -o "$response_file" -w '%{http_code}' \
+    -X POST "https://api.notion.com/v1/data_sources/$data_source_id/query" \
+    -H "Authorization: Bearer $token" \
+    -H "Content-Type: application/json" \
+    -H "Notion-Version: $notion_version" \
+    --data-binary "@$query_file")
+  case "$query_status" in
+    2??)
+      existing_page_id=$(ruby -rjson -e '
+        data = JSON.parse(File.read(ARGV.fetch(0)))
+        result = data.fetch("results", []).first
+        puts(result ? result["id"].to_s : "")
+      ' "$response_file")
+      ;;
+    *)
+      printf 'notion-adapter: Notion query failed with HTTP %s\n' "$query_status" >&2
+      cat "$response_file" >&2
+      exit 1
+      ;;
+  esac
+fi
+
+if [ -n "$existing_page_id" ]; then
+  status=$(curl -sS -o "$response_file" -w '%{http_code}' \
+    -X PATCH "https://api.notion.com/v1/pages/$existing_page_id" \
+    -H "Authorization: Bearer $token" \
+    -H "Content-Type: application/json" \
+    -H "Notion-Version: $notion_version" \
+    --data-binary "@$update_file")
+  verb=updated
+else
+  status=$(curl -sS -o "$response_file" -w '%{http_code}' \
+    -X POST 'https://api.notion.com/v1/pages' \
+    -H "Authorization: Bearer $token" \
+    -H "Content-Type: application/json" \
+    -H "Notion-Version: $notion_version" \
+    --data-binary "@$create_file")
+  verb=created
+fi
 
 case "$status" in
   2??)
     ruby -rjson -e '
+      verb = ARGV.fetch(1)
       data = JSON.parse(File.read(ARGV.fetch(0)))
-      puts "notion-adapter: created #{data["url"] || data["id"] || "page"}"
-    ' "$response_file"
+      puts "notion-adapter: #{verb} #{data["url"] || data["id"] || "page"}"
+    ' "$response_file" "$verb"
     ;;
   *)
-    printf 'notion-adapter: Notion API failed with HTTP %s\n' "$status" >&2
+    printf 'notion-adapter: Notion write failed with HTTP %s\n' "$status" >&2
     cat "$response_file" >&2
     exit 1
     ;;

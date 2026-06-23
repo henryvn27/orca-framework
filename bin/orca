@@ -966,6 +966,10 @@ orca_goal() {
     printf '%s\n' '--max-cycles must be greater than 0' >&2
     exit 1
   }
+  case "$until" in
+    blocked|done) ;;
+    *) printf '%s\n' '--until must be blocked or done' >&2; exit 1 ;;
+  esac
   ensure_orca_fallback
   goal="$outcome"
   goal_slug=$(slugify "$goal")

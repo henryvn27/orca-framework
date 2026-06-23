@@ -923,6 +923,13 @@ orca_goal() {
   while [ "$#" -gt 0 ]; do
     case "$1" in
       --pack)
+        [ "$#" -ge 2 ] || {
+          printf '%s\n' '--pack requires a value' >&2
+          exit 1
+        }
+        case "$2" in
+          --*) printf '%s\n' '--pack requires a value' >&2; exit 1 ;;
+        esac
         pack="$2"
         shift 2
         ;;
@@ -931,10 +938,24 @@ orca_goal() {
         shift
         ;;
       --max-cycles)
+        [ "$#" -ge 2 ] || {
+          printf '%s\n' '--max-cycles requires a value' >&2
+          exit 1
+        }
+        case "$2" in
+          --*) printf '%s\n' '--max-cycles requires a value' >&2; exit 1 ;;
+        esac
         max_cycles="$2"
         shift 2
         ;;
       --until)
+        [ "$#" -ge 2 ] || {
+          printf '%s\n' '--until requires a value' >&2
+          exit 1
+        }
+        case "$2" in
+          --*) printf '%s\n' '--until requires a value' >&2; exit 1 ;;
+        esac
         until="$2"
         shift 2
         ;;
@@ -956,7 +977,7 @@ orca_goal() {
     outcome="${outcome}${outcome:+ }$*"
   fi
   [ -n "$outcome" ] || {
-    printf 'Usage: orca goal <outcome> [--pack NAME] [--auto] [--max-cycles N] [--plan-only]\n' >&2
+    printf 'Usage: orca goal <outcome> [--pack NAME] [--auto] [--max-cycles N] [--until blocked|done] [--plan-only]\n' >&2
     exit 1
   }
   case "$max_cycles" in

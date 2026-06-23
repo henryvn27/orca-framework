@@ -59,6 +59,18 @@ ORCA_NOTION_DATA_SOURCE_ID=override-456 ORCA_NOTION_ADAPTER_DRY_RUN=1 ./scripts/
 need_json_field "$tmp/override-plan.json" 'data.fetch("data_source_id")' "override-456"
 need_json_field "$tmp/override-plan.json" 'data.fetch("create").fetch("body").fetch("parent").fetch("data_source_id")' "override-456"
 
+ORCA_NOTION_ADAPTER_DRY_RUN=1 ./scripts/orca-notion-sync-adapter.sh --summary "$payload" > "$tmp/summary-no-token.txt"
+grep -q "notion-adapter: action=create" "$tmp/summary-no-token.txt" || fail "summary missing action"
+grep -q "notion-adapter: title=Run /goal loop for make this production ready" "$tmp/summary-no-token.txt" || fail "summary missing title"
+grep -q "notion-adapter: data_source_id=issue-board-123" "$tmp/summary-no-token.txt" || fail "summary missing data source"
+grep -q "notion-adapter: match_property=Issue" "$tmp/summary-no-token.txt" || fail "summary missing match property"
+grep -q "notion-adapter: token_present=false" "$tmp/summary-no-token.txt" || fail "summary missing false token state"
+grep -q "notion-adapter: live_ready=false" "$tmp/summary-no-token.txt" || fail "summary missing false live readiness"
+
+NOTION_TOKEN=test-token ./scripts/orca-notion-sync-adapter.sh --summary "$payload" > "$tmp/summary-token.txt"
+grep -q "notion-adapter: token_present=true" "$tmp/summary-token.txt" || fail "summary missing true token state"
+grep -q "notion-adapter: live_ready=true" "$tmp/summary-token.txt" || fail "summary missing true live readiness"
+
 if ORCA_NOTION_DATA_SOURCE_ID=override-456 NOTION_TOKEN= ./scripts/orca-notion-sync-adapter.sh "$payload" >/dev/null 2>&1; then
   fail "expected live adapter without token to fail"
 fi
@@ -71,6 +83,9 @@ fi
 
 bad="$tmp/bad.json"
 printf '{bad json\n' > "$bad"
+if ORCA_NOTION_ADAPTER_DRY_RUN=1 ./scripts/orca-notion-sync-adapter.sh --summary "$bad" >/dev/null 2>&1; then
+  fail "expected malformed payload summary to fail"
+fi
 if ORCA_NOTION_ADAPTER_DRY_RUN=1 ./scripts/orca-notion-sync-adapter.sh "$bad" >/dev/null 2>&1; then
   fail "expected malformed payload to fail"
 fi

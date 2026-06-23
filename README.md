@@ -65,6 +65,7 @@ The adapter reads `issue_board_data_source_id` from each payload, or `ORCA_NOTIO
 
 ```sh
 ORCA_NOTION_ADAPTER_DRY_RUN=1 scripts/orca-notion-sync-adapter.sh .orca/notion/outbox/payload.json
+scripts/orca-notion-sync-adapter.sh --summary .orca/notion/outbox/payload.json
 ```
 
 If Notion is unavailable, ORCA uses a local markdown fallback:

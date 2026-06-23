@@ -68,6 +68,18 @@ ORCA_ROOT="$slash_packs_root" ./bin/orca /goal --packs > "$tmp/slash-packs-list.
 need_grep "release-ready app-store-ready startup-mvp security performance notion-hygiene" "$tmp/slash-packs-list.txt"
 [ ! -e "$slash_packs_root/state.env" ] || fail "/goal --packs should not write state"
 
+packs_verbose_root="$tmp/packs-verbose"
+ORCA_ROOT="$packs_verbose_root" ./bin/orca goal --packs --verbose > "$tmp/packs-verbose.txt"
+need_grep "release-ready: test architecture code-hygiene docs-sync security pr-readiness" "$tmp/packs-verbose.txt"
+need_grep "app-store-ready: test accessibility screenshots metadata purchases privacy pr-readiness" "$tmp/packs-verbose.txt"
+need_grep "notion-hygiene: issue-board-sync docs-sync decisions handoffs stale-links pr-readiness" "$tmp/packs-verbose.txt"
+[ ! -e "$packs_verbose_root/state.env" ] || fail "goal --packs --verbose should not write state"
+
+slash_packs_verbose_root="$tmp/slash-packs-verbose"
+ORCA_ROOT="$slash_packs_verbose_root" ./bin/orca /goal --packs --verbose > "$tmp/slash-packs-verbose.txt"
+need_grep "security: secrets auth permissions dependency-audit threat-review handoff" "$tmp/slash-packs-verbose.txt"
+[ ! -e "$slash_packs_verbose_root/state.env" ] || fail "/goal --packs --verbose should not write state"
+
 plan_only_root="$tmp/plan-only"
 run_goal "$plan_only_root" --plan-only > "$tmp/plan-only.txt"
 need_grep "phase: plan" "$tmp/plan-only.txt"

@@ -48,6 +48,9 @@ ORCA_ROOT="$fallback_root" ./bin/orca notion doctor > "$tmp/notion-doctor-fallba
 need_grep "notion issue board: missing" "$tmp/notion-doctor-fallback.txt"
 need_grep "notion sync command: missing" "$tmp/notion-doctor-fallback.txt"
 need_grep "linear: not configured, still optional" "$tmp/notion-doctor-fallback.txt"
+if ORCA_ROOT="$fallback_root" ./bin/orca notion doctor --strict >/dev/null 2>&1; then
+  fail "expected strict doctor to fail without Notion config"
+fi
 
 sync_script="$tmp/sync.sh"
 sync_log="$tmp/sync.log"
@@ -73,6 +76,7 @@ ORCA_ROOT="$success_root" ORCA_NOTION_SYNC_COMMAND="$sync_script" ./bin/orca not
 need_grep "notion issue board: configured" "$tmp/notion-doctor-success.txt"
 need_grep "notion sync command: executable" "$tmp/notion-doctor-success.txt"
 need_grep "notion outbox: 0 payload(s)" "$tmp/notion-doctor-success.txt"
+ORCA_ROOT="$success_root" ORCA_NOTION_SYNC_COMMAND="$sync_script" ./bin/orca notion doctor --strict >/dev/null
 
 fail_root="$tmp/notion-fail"
 ORCA_ROOT="$fail_root" ./bin/orca backend status >/dev/null

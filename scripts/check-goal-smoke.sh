@@ -233,4 +233,19 @@ if ORCA_ROOT="$malformed_root" ORCA_NOTION_SYNC_COMMAND="$sync_script" ./bin/orc
 fi
 [ -f "$malformed_payload" ] || fail "expected malformed payload to remain in outbox"
 
+missing_field_payload="$malformed_root/notion/outbox/missing-field.json"
+cat > "$missing_field_payload" <<EOF
+{
+  "action": "goal_unified",
+  "canonical_backend": "notion",
+  "phase": "handoff",
+  "payload": {"ok": true},
+  "updated_at": "2026-06-23T00:00:00Z"
+}
+EOF
+if ORCA_ROOT="$malformed_root" ORCA_NOTION_SYNC_COMMAND="$sync_script" ./bin/orca notion sync --dry-run "$missing_field_payload" >/dev/null 2>&1; then
+  fail "expected missing-field dry-run sync to return non-zero"
+fi
+[ -f "$missing_field_payload" ] || fail "expected missing-field payload to remain in outbox"
+
 printf 'check-goal-smoke: ok\n'

@@ -146,6 +146,23 @@ ORCA_ROOT="$fallback_root" ./bin/orca notion outbox --json > "$tmp/notion-outbox
 need_json_field "$tmp/notion-outbox-fallback.json" "outbox_count" "0"
 need_json_field "$tmp/notion-outbox-fallback.json" "synced_count" "0"
 fallback_outbox_before=$(/usr/bin/find "$fallback_root/notion/outbox" -type f 2>/dev/null | wc -l | tr -d ' ')
+handoff_root="$tmp/notion-handoff"
+handoff_payload=$(ORCA_ROOT="$handoff_root" ./bin/orca notion handoff --issue "Update Notion issue after PR merge" --status Done --note "Live Notion unavailable")
+need_file "$handoff_payload"
+need_json_field "$handoff_payload" "schema_version" "1"
+need_json_field "$handoff_payload" "payload_type" "goal_event"
+need_json_field "$handoff_payload" "action" "manual_handoff"
+need_grep '"issue": "Update Notion issue after PR merge"' "$handoff_payload"
+need_grep '"status": "Done"' "$handoff_payload"
+need_grep '"note": "Live Notion unavailable"' "$handoff_payload"
+ORCA_ROOT="$handoff_root" ./bin/orca notion payload --validate "$handoff_payload" > "$tmp/notion-handoff-validate.txt"
+need_grep "notion-payload: valid $handoff_payload" "$tmp/notion-handoff-validate.txt"
+ORCA_ROOT="$handoff_root" ./bin/orca notion outbox --json > "$tmp/notion-handoff-outbox.json"
+need_json_field "$tmp/notion-handoff-outbox.json" "outbox_count" "1"
+if ORCA_ROOT="$tmp/notion-handoff-missing-issue" ./bin/orca notion handoff --status Done > "$tmp/notion-handoff-missing-issue.txt" 2>&1; then
+  fail "expected notion handoff without --issue to fail"
+fi
+need_grep "issue is required" "$tmp/notion-handoff-missing-issue.txt"
 ORCA_ROOT="$fallback_root" ./bin/orca notion payload --example > "$tmp/notion-payload-example.json"
 need_json_field "$tmp/notion-payload-example.json" "schema_version" "1"
 need_json_field "$tmp/notion-payload-example.json" "payload_type" "goal_event"

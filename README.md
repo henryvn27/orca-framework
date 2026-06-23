@@ -33,9 +33,19 @@ Notion config is ID-free by default. Set project-specific IDs in `.orca/config.e
 ```sh
 notion_project_page_id=<page-id>
 notion_issue_board_data_source_id=<collection-id>
+notion_sync_command=/path/to/notion-adapter
 ```
 
 When those values exist, `orca goal`, `orca progress`, and `orca unify` treat Notion as canonical and write sync payloads under `.orca/notion/`. If `ORCA_NOTION_SYNC_COMMAND` or `notion_sync_command` is set, ORCA calls that adapter command with the payload path; the adapter owns the live Notion write. If the adapter is missing or fails, `.orca/notion/outbox/` remains the durable mirror to apply.
+
+Run queued Notion payloads explicitly:
+
+```sh
+ORCA_NOTION_SYNC_COMMAND=/path/to/notion-adapter orca notion sync --all
+orca notion sync .orca/notion/outbox/2026-06-22T12:00:00Z-goal_unified-example-handoff-1.json
+```
+
+The adapter command receives one argument: the JSON payload path. ORCA moves a payload to `.orca/notion/synced/` only after the adapter exits `0`; missing config, adapter failure, and malformed payloads leave files in `.orca/notion/outbox/`.
 
 If Notion is unavailable, ORCA uses a local markdown fallback:
 
@@ -96,6 +106,7 @@ Each loop has a goal, measurement, action, stop condition, budget, and handoff. 
 orca goal
 orca progress
 orca unify
+orca notion sync
 orca backend status
 orca review
 ```

@@ -71,4 +71,55 @@ assert_goal_artifacts "$fail_root"
 outbox_count=$(/usr/bin/find "$fail_root/notion/outbox" -type f | wc -l | tr -d ' ')
 [ "$outbox_count" -gt 0 ] || fail "expected failed sync payloads to remain in outbox"
 
+adapter_log="$tmp/adapter.log"
+cat > "$sync_script" <<EOF
+#!/bin/sh
+printf '%s\n' "\$1" >> "$adapter_log"
+exit 0
+EOF
+chmod +x "$sync_script"
+
+adapter_root="$tmp/adapter-success"
+ORCA_ROOT="$adapter_root" ./bin/orca backend status >/dev/null
+sed -i.bak 's/notion_issue_board_data_source_id=/notion_issue_board_data_source_id=collection-456/' "$adapter_root/config.env"
+ORCA_ROOT="$adapter_root" ./bin/orca /goal "make this production ready" --pack release-ready >/dev/null
+adapter_outbox_before=$(/usr/bin/find "$adapter_root/notion/outbox" -type f | wc -l | tr -d ' ')
+[ "$adapter_outbox_before" -gt 0 ] || fail "expected adapter success setup to create outbox payloads"
+ORCA_ROOT="$adapter_root" ORCA_NOTION_SYNC_COMMAND="$sync_script" ./bin/orca notion sync --all >/dev/null
+[ -s "$adapter_log" ] || fail "adapter sync command did not receive payloads"
+adapter_outbox_after=$(/usr/bin/find "$adapter_root/notion/outbox" -type f | wc -l | tr -d ' ')
+[ "$adapter_outbox_after" -eq 0 ] || fail "expected adapter success to clear outbox"
+adapter_synced=$(/usr/bin/find "$adapter_root/notion/synced" -type f | wc -l | tr -d ' ')
+[ "$adapter_synced" -gt 0 ] || fail "expected adapter success to move payloads to synced"
+
+adapter_fail_root="$tmp/adapter-fail"
+ORCA_ROOT="$adapter_fail_root" ./bin/orca backend status >/dev/null
+sed -i.bak 's/notion_issue_board_data_source_id=/notion_issue_board_data_source_id=collection-456/' "$adapter_fail_root/config.env"
+ORCA_ROOT="$adapter_fail_root" ./bin/orca /goal "make this production ready" --pack release-ready >/dev/null
+if ORCA_ROOT="$adapter_fail_root" ORCA_NOTION_SYNC_COMMAND=/usr/bin/false ./bin/orca notion sync --all >/dev/null 2>&1; then
+  fail "expected adapter sync failure to return non-zero"
+fi
+adapter_fail_outbox=$(/usr/bin/find "$adapter_fail_root/notion/outbox" -type f | wc -l | tr -d ' ')
+[ "$adapter_fail_outbox" -gt 0 ] || fail "expected adapter failure payloads to remain in outbox"
+
+missing_config_root="$tmp/adapter-missing-config"
+ORCA_ROOT="$missing_config_root" ./bin/orca backend status >/dev/null
+sed -i.bak 's/notion_issue_board_data_source_id=/notion_issue_board_data_source_id=collection-456/' "$missing_config_root/config.env"
+ORCA_ROOT="$missing_config_root" ./bin/orca /goal "make this production ready" --pack release-ready >/dev/null
+if ORCA_ROOT="$missing_config_root" ./bin/orca notion sync --all >/dev/null 2>&1; then
+  fail "expected adapter sync without configured command to return non-zero"
+fi
+missing_config_outbox=$(/usr/bin/find "$missing_config_root/notion/outbox" -type f | wc -l | tr -d ' ')
+[ "$missing_config_outbox" -gt 0 ] || fail "expected missing-config payloads to remain in outbox"
+
+malformed_root="$tmp/adapter-malformed"
+ORCA_ROOT="$malformed_root" ./bin/orca backend status >/dev/null
+mkdir -p "$malformed_root/notion/outbox"
+malformed_payload="$malformed_root/notion/outbox/bad.json"
+printf '{bad json\n' > "$malformed_payload"
+if ORCA_ROOT="$malformed_root" ORCA_NOTION_SYNC_COMMAND="$sync_script" ./bin/orca notion sync "$malformed_payload" >/dev/null 2>&1; then
+  fail "expected malformed payload sync to return non-zero"
+fi
+[ -f "$malformed_payload" ] || fail "expected malformed payload to remain in outbox"
+
 printf 'check-goal-smoke: ok\n'

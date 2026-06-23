@@ -1,0 +1,4 @@
+loop=issue-board-sync
+result=pass
+note=Issue status mirrored and Notion sync payload generated when configured
+updated_at=2026-06-23T02:39:19Z

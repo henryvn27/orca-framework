@@ -15,22 +15,17 @@ Use after a plan exists or for a small change whose plan can be stated inline.
 
 ## Optional Inputs
 
-- Linear issue ID or opt-out work item
+- Notion issue, `.orca/` task, or explicit Linear issue
 - Test command
 - Design constraints
 - Related issue
 
-## Linear Context
+## Backend Context
 
-- Expects: issue ID, approved plan, state, labels, linked branch or PR conventions
-- Reads: approved scope, non-goals, blockers, verification expectations
-- Posts: progress updates, blockers, verification evidence, branch or PR links, review handoff
-- Trigger: `Ready for Build`, `In Progress`, `agent-build`
-- Human approval: required before starting if approval gate is missing
-
-## Opt-Out Context
-
-Record implementation updates and evidence in the chosen work item or build log.
+- Notion mode: update Issue Board status, blockers, verification evidence, branch or PR links, and review handoff.
+- Markdown mode: update `.orca/issues.md`, `.orca/runs/`, and `.orca/handoffs/`.
+- Linear mode: sync comments only when explicitly active.
+- Human approval: required before starting if approval gate is missing.
 
 ## Workflow
 
@@ -47,7 +42,9 @@ Record implementation updates and evidence in the chosen work item or build log.
 - Code or content changes
 - Verification notes
 - Updated plan when applicable
-- Linear sync comments when active
+- Notion issue update when active
+- `.orca/` run/handoff update when markdown fallback is active
+- Linear sync comments when explicitly active
 
 ## Failure Cases
 

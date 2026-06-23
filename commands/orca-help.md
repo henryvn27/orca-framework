@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Show the ORCA Framework workflow, available commands, Linear-first usage, opt-out mode, and recommended next command.
+Show the ORCA workflow, `/goal` usage, Notion default, markdown fallback, optional Linear adapter, and recommended next command.
 
 ## When To Use
 
@@ -14,27 +14,23 @@ Use when a user asks what ORCA Framework can do, how to start, or which command 
 
 ## Optional Inputs
 
-- Linear issue ID or opt-out work item
+- Notion project page or Issue Board item
+- `.orca/` markdown issue/task
+- Linear issue ID when Linear is explicitly selected
 - Existing artifacts
 - Target platform
 - Known blockers
 
-## Linear Context
+## Backend Context
 
-- Expects: issue ID, state, labels, and latest comments when Linear-first mode is active
-- Reads: issue context, project context, labels, and linked artifacts
-- Posts: optional guidance comment when requested
-- Trigger: user asks for routing help or an agent receives an ambiguous delegation
-- Human approval: not required
-
-## Opt-Out Context
-
-If the user does not want Linear, ask which record should hold ORCA Framework artifacts.
+- Notion mode: treat the project page and Issue Board as canonical.
+- Markdown mode: use `.orca/` files as canonical fallback.
+- Linear mode: use Linear only when explicitly selected.
 
 ## Workflow
 
 1. Identify whether the user needs intake, discovery, spec, planning, build, review, QA, security, shipping, or retro.
-2. Confirm Linear-first or opt-out mode.
+2. Confirm Notion, markdown fallback, or explicit Linear mode.
 3. If the user mainly wants to understand what is happening or why ORCA chose a path, route to `orca-explain`.
 4. If the user only wants one quick side question answered without derailing the main thread, route to the host's lightest side-question path or `orca-btw` behavior.
 4. Summarize the next two useful commands.

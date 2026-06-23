@@ -17,6 +17,7 @@ Usage:
   orca notion payload --example
   orca notion payload --validate PATH [--json]
   orca notion adapter --check PAYLOAD
+  orca notion adapter --json-check PAYLOAD
   orca notion adapter --dry-run PAYLOAD
   orca notion doctor [--strict] [--json]
   orca backend status [--json]
@@ -39,6 +40,7 @@ Examples:
   orca notion payload --example
   orca notion payload --validate .orca/notion/outbox/payload.json
   orca notion adapter --check .orca/notion/outbox/payload.json
+  orca notion adapter --json-check .orca/notion/outbox/payload.json
   orca notion sync --all
   orca notion doctor [--strict] [--json]
   orca list
@@ -463,7 +465,7 @@ orca_notion_adapter() {
     return 1
   }
   [ "$#" -gt 0 ] || {
-    printf 'Usage: orca notion adapter --check PAYLOAD | --dry-run PAYLOAD\n' >&2
+    printf 'Usage: orca notion adapter --check PAYLOAD | --json-check PAYLOAD | --dry-run PAYLOAD\n' >&2
     return 1
   }
   case "$1" in
@@ -475,6 +477,14 @@ orca_notion_adapter() {
       }
       "$adapter" --summary "$1"
       ;;
+    --json-check|--json-summary)
+      shift
+      [ "$#" -eq 1 ] || {
+        printf 'Usage: orca notion adapter --json-check PAYLOAD\n' >&2
+        return 1
+      }
+      "$adapter" --json-summary "$1"
+      ;;
     --dry-run)
       shift
       [ "$#" -eq 1 ] || {
@@ -484,10 +494,10 @@ orca_notion_adapter() {
       "$adapter" --dry-run "$1"
       ;;
     -h|--help)
-      printf 'Usage: orca notion adapter --check PAYLOAD | --dry-run PAYLOAD\n'
+      printf 'Usage: orca notion adapter --check PAYLOAD | --json-check PAYLOAD | --dry-run PAYLOAD\n'
       ;;
     *)
-      printf 'Usage: orca notion adapter --check PAYLOAD | --dry-run PAYLOAD\n' >&2
+      printf 'Usage: orca notion adapter --check PAYLOAD | --json-check PAYLOAD | --dry-run PAYLOAD\n' >&2
       return 1
       ;;
   esac
@@ -1218,7 +1228,7 @@ if [ "$script_name" = "orca" ]; then
         orca_notion_adapter "$@"
         exit $?
       fi
-      printf 'Usage: orca notion sync [--dry-run] [--json] [PAYLOAD|--all]\n       orca notion outbox [--json]\n       orca notion payload --example | --validate PATH [--json]\n       orca notion adapter --check PAYLOAD | --dry-run PAYLOAD\n       orca notion doctor [--strict] [--json]\n' >&2
+      printf 'Usage: orca notion sync [--dry-run] [--json] [PAYLOAD|--all]\n       orca notion outbox [--json]\n       orca notion payload --example | --validate PATH [--json]\n       orca notion adapter --check PAYLOAD | --json-check PAYLOAD | --dry-run PAYLOAD\n       orca notion doctor [--strict] [--json]\n' >&2
       exit 1
       ;;
   esac

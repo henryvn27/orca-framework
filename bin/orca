@@ -1177,6 +1177,10 @@ orca_goal() {
         shift
         break
         ;;
+      --*)
+        printf 'unknown goal option: %s\n' "$1" >&2
+        exit 1
+        ;;
       *)
         outcome="${outcome}${outcome:+ }$1"
         shift

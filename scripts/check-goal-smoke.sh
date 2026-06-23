@@ -267,6 +267,9 @@ fi
 if ORCA_ROOT="$malformed_root" ORCA_NOTION_SYNC_COMMAND="$sync_script" ./bin/orca notion sync --dry-run --json "$malformed_payload" > "$tmp/malformed-dry-run.json" 2>/dev/null; then
   fail "expected malformed JSON dry-run sync to return non-zero"
 fi
+if ORCA_ROOT="$malformed_root" ./bin/orca notion adapter --doctor "$malformed_payload" > "$tmp/malformed-adapter-doctor.json" 2>/dev/null; then
+  fail "expected malformed adapter doctor to return non-zero"
+fi
 need_json_field "$tmp/malformed-dry-run.json" "dry_run" "true"
 need_json_field "$tmp/malformed-dry-run.json" "failed" "1"
 need_json_field "$tmp/malformed-dry-run.json" "ok" "false"

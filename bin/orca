@@ -690,10 +690,11 @@ RUBY
       ;;
     --dry-run)
       shift
-      [ "$#" -eq 1 ] || {
-        printf 'Usage: orca notion adapter --dry-run PAYLOAD\n' >&2
+      if [ "$#" -ne 1 ] || [ "${1#--}" != "$1" ]; then
+        printf '%s\n' 'PAYLOAD is required' >&2
         return 1
-      }
+      fi
+      validate_notion_payload_file "$1" >/dev/null || return 1
       "$adapter" --dry-run "$1"
       ;;
     -h|--help)

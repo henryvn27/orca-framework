@@ -305,6 +305,18 @@ fi
 need_json_field "$tmp/notion-adapter-doctor-malformed.json" "ok" "false"
 need_json_field "$tmp/notion-adapter-doctor-malformed.json" "error" "Malformed Notion payload"
 need_json_field "$tmp/notion-adapter-doctor-malformed.json" "target" "$tmp/notion-adapter-malformed-payload.json"
+if ORCA_ROOT="$fallback_root" ./bin/orca notion adapter --dry-run > "$tmp/notion-adapter-dry-run-missing.txt" 2>&1; then
+  fail "expected adapter dry-run without PAYLOAD to fail"
+fi
+need_grep "PAYLOAD is required" "$tmp/notion-adapter-dry-run-missing.txt"
+if ORCA_ROOT="$fallback_root" ./bin/orca notion adapter --dry-run --json-check > "$tmp/notion-adapter-dry-run-option.txt" 2>&1; then
+  fail "expected adapter dry-run with option-shaped PAYLOAD to fail"
+fi
+need_grep "PAYLOAD is required" "$tmp/notion-adapter-dry-run-option.txt"
+if ORCA_ROOT="$fallback_root" ./bin/orca notion adapter --dry-run "$tmp/notion-adapter-malformed-payload.json" > "$tmp/notion-adapter-dry-run-malformed.txt" 2>&1; then
+  fail "expected adapter dry-run with malformed payload to fail"
+fi
+need_grep "Malformed Notion payload" "$tmp/notion-adapter-dry-run-malformed.txt"
 ORCA_ROOT="$fallback_root" ./bin/orca notion adapter --dry-run "$adapter_fixture" > "$tmp/notion-adapter-dry-run.json"
 need_json_field "$tmp/notion-adapter-dry-run.json" "action" "create"
 need_json_field "$tmp/notion-adapter-dry-run.json" "data_source_id" "issue-board-123"

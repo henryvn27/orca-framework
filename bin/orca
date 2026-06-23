@@ -15,6 +15,7 @@ Usage:
   orca notion sync [--dry-run] [--json] [PAYLOAD|--all]
   orca notion outbox [--json]
   orca notion payload --example
+  orca notion payload --validate PATH [--json]
   orca notion doctor [--strict] [--json]
   orca backend status [--json]
   orca help
@@ -34,6 +35,7 @@ Examples:
   orca notion sync --dry-run --json --all
   orca notion outbox --json
   orca notion payload --example
+  orca notion payload --validate .orca/notion/outbox/payload.json
   orca notion sync --all
   orca notion doctor [--strict] [--json]
   orca list
@@ -363,36 +365,92 @@ sync_notion_payload_file() {
 }
 
 orca_notion_payload() {
-  [ "${1:-}" = "--example" ] || {
-    printf 'Usage: orca notion payload --example\n' >&2
+  [ "$#" -gt 0 ] || {
+    printf 'Usage: orca notion payload --example | --validate PATH [--json]\n' >&2
     return 1
   }
-  shift
-  [ "$#" -eq 0 ] || {
-    printf 'Usage: orca notion payload --example\n' >&2
-    return 1
-  }
-  printf '{\n'
-  printf '  "schema_version": 1,\n'
-  printf '  "payload_type": "goal_event",\n'
-  printf '  "action": "goal_unified",\n'
-  printf '  "canonical_backend": "notion",\n'
-  printf '  "project_page_id": "",\n'
-  printf '  "issue_board_data_source_id": "",\n'
-  printf '  "goal": "make this production ready",\n'
-  printf '  "goal_slug": "make-this-production-ready",\n'
-  printf '  "phase": "handoff",\n'
-  printf '  "pack": "release-ready",\n'
-  printf '  "payload": {\n'
-  printf '    "issue": "Run /goal loop for make this production ready",\n'
-  printf '    "status": "Done",\n'
-  printf '    "readiness_score": 100,\n'
-  printf '    "handoff_path": ".orca/handoffs/make-this-production-ready.md",\n'
-  printf '    "cycles_done": 1,\n'
-  printf '    "max_cycles": 1\n'
-  printf '  },\n'
-  printf '  "updated_at": "%s"\n' "$(now_utc)"
-  printf '}\n'
+  case "$1" in
+    --example)
+      shift
+      [ "$#" -eq 0 ] || {
+        printf 'Usage: orca notion payload --example\n' >&2
+        return 1
+      }
+      printf '{\n'
+      printf '  "schema_version": 1,\n'
+      printf '  "payload_type": "goal_event",\n'
+      printf '  "action": "goal_unified",\n'
+      printf '  "canonical_backend": "notion",\n'
+      printf '  "project_page_id": "",\n'
+      printf '  "issue_board_data_source_id": "",\n'
+      printf '  "goal": "make this production ready",\n'
+      printf '  "goal_slug": "make-this-production-ready",\n'
+      printf '  "phase": "handoff",\n'
+      printf '  "pack": "release-ready",\n'
+      printf '  "payload": {\n'
+      printf '    "issue": "Run /goal loop for make this production ready",\n'
+      printf '    "status": "Done",\n'
+      printf '    "readiness_score": 100,\n'
+      printf '    "handoff_path": ".orca/handoffs/make-this-production-ready.md",\n'
+      printf '    "cycles_done": 1,\n'
+      printf '    "max_cycles": 1\n'
+      printf '  },\n'
+      printf '  "updated_at": "%s"\n' "$(now_utc)"
+      printf '}\n'
+      ;;
+    --validate)
+      shift
+      json=0
+      [ "$#" -gt 0 ] || {
+        printf 'Usage: orca notion payload --validate PATH [--json]\n' >&2
+        return 1
+      }
+      target=$1
+      shift
+      while [ "$#" -gt 0 ]; do
+        case "$1" in
+          --json)
+            json=1
+            ;;
+          *)
+            printf 'orca: unknown notion payload option: %s\n' "$1" >&2
+            return 2
+            ;;
+        esac
+        shift
+      done
+      validate_target=$target
+      tmp_payload=
+      if [ "$target" = "-" ]; then
+        tmp_payload=$(mktemp "${TMPDIR:-/tmp}/orca-notion-payload.XXXXXX")
+        cat > "$tmp_payload"
+        validate_target=$tmp_payload
+      fi
+      if validate_notion_payload_file "$validate_target" >/dev/null; then
+        valid=true
+        status=0
+      else
+        valid=false
+        status=1
+      fi
+      [ -z "$tmp_payload" ] || rm -f "$tmp_payload"
+      if [ "$json" -eq 1 ]; then
+        printf '{"target":"%s","valid":%s,"ok":%s}\n' "$(json_escape "$target")" "$valid" "$valid"
+      elif [ "$status" -eq 0 ]; then
+        printf 'notion-payload: valid %s\n' "$target"
+      else
+        printf 'notion-payload: invalid %s\n' "$target" >&2
+      fi
+      return "$status"
+      ;;
+    -h|--help)
+      printf 'Usage: orca notion payload --example | --validate PATH [--json]\n'
+      ;;
+    *)
+      printf 'Usage: orca notion payload --example | --validate PATH [--json]\n' >&2
+      return 1
+      ;;
+  esac
 }
 
 orca_notion_sync() {
@@ -1115,7 +1173,7 @@ if [ "$script_name" = "orca" ]; then
         orca_notion_payload "$@"
         exit $?
       fi
-      printf 'Usage: orca notion sync [--dry-run] [--json] [PAYLOAD|--all]\n       orca notion outbox [--json]\n       orca notion payload --example\n       orca notion doctor [--strict] [--json]\n' >&2
+      printf 'Usage: orca notion sync [--dry-run] [--json] [PAYLOAD|--all]\n       orca notion outbox [--json]\n       orca notion payload --example | --validate PATH [--json]\n       orca notion doctor [--strict] [--json]\n' >&2
       exit 1
       ;;
   esac

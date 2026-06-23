@@ -13,7 +13,7 @@ Usage:
   orca progress
   orca unify
   orca notion sync [PAYLOAD|--all]
-  orca notion doctor
+  orca notion doctor [--strict]
   orca backend status
   orca help
   orca list
@@ -30,7 +30,7 @@ Examples:
   orca progress
   orca unify
   orca notion sync --all
-  orca notion doctor
+  orca notion doctor [--strict]
   orca list
   orca show orca-build
   orca run orca-onboard --print -- "Build a small iOS settings screen"
@@ -385,13 +385,33 @@ orca_notion_sync() {
 }
 
 orca_notion_doctor() {
+  strict=0
+  while [ "$#" -gt 0 ]; do
+    case "$1" in
+      --strict)
+        strict=1
+        ;;
+      -h|--help)
+        printf 'Usage: orca notion doctor [--strict]\n'
+        return 0
+        ;;
+      *)
+        printf 'orca: unknown notion doctor option: %s\n' "$1" >&2
+        return 2
+        ;;
+    esac
+    shift
+  done
+
   load_config
+  failed=0
   dir=$(notion_dir)
   printf 'notion issue board: '
   if [ -n "${notion_issue_board_data_source_id:-}" ]; then
     printf 'configured\n'
   else
     printf 'missing\n'
+    failed=1
   fi
   printf 'notion project page: '
   if [ -n "${notion_project_page_id:-}" ]; then
@@ -402,6 +422,7 @@ orca_notion_doctor() {
   printf 'notion sync command: '
   if [ -z "${notion_sync_command:-}" ]; then
     printf 'missing\n'
+    failed=1
   elif [ -x "$notion_sync_command" ]; then
     printf 'executable\n'
   else
@@ -414,6 +435,7 @@ orca_notion_doctor() {
   else
     printf 'linear: not configured, still optional\n'
   fi
+  [ "$strict" -eq 0 ] || [ "$failed" -eq 0 ]
 }
 
 write_state() {
@@ -815,9 +837,9 @@ if [ "$script_name" = "orca" ]; then
       if [ "${1:-}" = "doctor" ]; then
         shift
         orca_notion_doctor "$@"
-        exit 0
+        exit $?
       fi
-      printf 'Usage: orca notion sync [PAYLOAD|--all]\n       orca notion doctor\n' >&2
+      printf 'Usage: orca notion sync [PAYLOAD|--all]\n       orca notion doctor [--strict]\n' >&2
       exit 1
       ;;
   esac

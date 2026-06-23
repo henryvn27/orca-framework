@@ -10,6 +10,7 @@ usage() {
   cat <<'EOF'
 Usage:
   orca goal <outcome> [--pack NAME] [--auto] [--max-cycles N] [--until blocked|done] [--plan-only]
+  orca goal --packs
   orca progress
   orca unify
   orca notion sync [--dry-run] [--json] [PAYLOAD|--all]
@@ -31,6 +32,7 @@ Usage:
 Installed shims such as `orca-onboard` and `orca-build` call `orca run <command>`.
 
 Examples:
+  orca goal --packs
   orca goal "make this production ready" --pack release-ready
   orca goal "make this production ready" --pack release-ready --plan-only
   orca goal "make this production ready" --pack release-ready --auto --max-cycles 5
@@ -937,6 +939,10 @@ orca_goal() {
   outcome=""
   while [ "$#" -gt 0 ]; do
     case "$1" in
+      --packs)
+        pack_names
+        exit 0
+        ;;
       --pack)
         [ "$#" -ge 2 ] || {
           printf '%s\n' '--pack requires a value' >&2
@@ -993,6 +999,7 @@ orca_goal() {
   fi
   [ -n "$outcome" ] || {
     printf 'Usage: orca goal <outcome> [--pack NAME] [--auto] [--max-cycles N] [--until blocked|done] [--plan-only]\n' >&2
+    printf '       orca goal --packs\n' >&2
     exit 1
   }
   case "$max_cycles" in

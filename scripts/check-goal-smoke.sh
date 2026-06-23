@@ -58,6 +58,16 @@ fallback_root="$tmp/fallback"
 run_goal "$fallback_root" >/dev/null
 assert_goal_artifacts "$fallback_root"
 
+packs_root="$tmp/packs-list"
+ORCA_ROOT="$packs_root" ./bin/orca goal --packs > "$tmp/packs-list.txt"
+need_grep "release-ready app-store-ready startup-mvp security performance notion-hygiene" "$tmp/packs-list.txt"
+[ ! -e "$packs_root/state.env" ] || fail "goal --packs should not write state"
+
+slash_packs_root="$tmp/slash-packs-list"
+ORCA_ROOT="$slash_packs_root" ./bin/orca /goal --packs > "$tmp/slash-packs-list.txt"
+need_grep "release-ready app-store-ready startup-mvp security performance notion-hygiene" "$tmp/slash-packs-list.txt"
+[ ! -e "$slash_packs_root/state.env" ] || fail "/goal --packs should not write state"
+
 plan_only_root="$tmp/plan-only"
 run_goal "$plan_only_root" --plan-only > "$tmp/plan-only.txt"
 need_grep "phase: plan" "$tmp/plan-only.txt"

@@ -15,6 +15,7 @@ Usage:
   orca unify
   orca notion sync [--dry-run] [--json] [PAYLOAD|--all]
   orca notion outbox [--json]
+  orca notion handoff --issue TITLE [--status STATUS] [--note TEXT]
   orca notion payload --example
   orca notion payload --validate PATH [--json]
   orca notion adapter --check PAYLOAD
@@ -41,6 +42,7 @@ Examples:
   orca unify
   orca notion sync --dry-run --json --all
   orca notion outbox --json
+  orca notion handoff --issue "Update Notion issue after PR merge" --status Done --note "Live Notion unavailable; queued local handoff."
   orca notion payload --example
   orca notion payload --validate .orca/notion/outbox/payload.json
   orca notion adapter --check .orca/notion/outbox/payload.json
@@ -343,6 +345,33 @@ write_notion_payload() {
   printf '%s\n' "$path"
 }
 
+write_notion_outbox_payload() {
+  action="$1"
+  payload="$2"
+  load_config
+  backend=$(canonical_backend)
+  dir=$(notion_dir)
+  mkdir -p "$dir/outbox" "$dir/synced"
+  path="$dir/outbox/$(now_utc)-$action-$goal_slug-${phase:-unknown}-${cycles_done:-0}.json"
+  {
+    printf '{\n'
+    printf '  "schema_version": 1,\n'
+    printf '  "payload_type": "goal_event",\n'
+    printf '  "action": "%s",\n' "$(json_escape "$action")"
+    printf '  "canonical_backend": "%s",\n' "$(json_escape "$backend")"
+    printf '  "project_page_id": "%s",\n' "$(json_escape "${notion_project_page_id:-}")"
+    printf '  "issue_board_data_source_id": "%s",\n' "$(json_escape "${notion_issue_board_data_source_id:-}")"
+    printf '  "goal": "%s",\n' "$(json_escape "$goal")"
+    printf '  "goal_slug": "%s",\n' "$(json_escape "$goal_slug")"
+    printf '  "phase": "%s",\n' "$(json_escape "$phase")"
+    printf '  "pack": "%s",\n' "$(json_escape "$pack")"
+    printf '  "payload": %s,\n' "$payload"
+    printf '  "updated_at": "%s"\n' "$(now_utc)"
+    printf '}\n'
+  } > "$path"
+  printf '%s\n' "$path"
+}
+
 validate_notion_payload_file() {
   payload_file="$1"
   [ -f "$payload_file" ] || {
@@ -488,6 +517,69 @@ orca_notion_payload() {
       return 1
       ;;
   esac
+}
+
+orca_notion_handoff() {
+  issue=
+  status="In progress"
+  note=
+  goal=
+  while [ "$#" -gt 0 ]; do
+    case "$1" in
+      --issue)
+        [ "$#" -ge 2 ] || {
+          printf '%s\n' '--issue requires a value' >&2
+          return 1
+        }
+        issue="$2"
+        shift 2
+        ;;
+      --status)
+        [ "$#" -ge 2 ] || {
+          printf '%s\n' '--status requires a value' >&2
+          return 1
+        }
+        status="$2"
+        shift 2
+        ;;
+      --note)
+        [ "$#" -ge 2 ] || {
+          printf '%s\n' '--note requires a value' >&2
+          return 1
+        }
+        note="$2"
+        shift 2
+        ;;
+      --goal)
+        [ "$#" -ge 2 ] || {
+          printf '%s\n' '--goal requires a value' >&2
+          return 1
+        }
+        goal="$2"
+        shift 2
+        ;;
+      -h|--help)
+        printf 'Usage: orca notion handoff --issue TITLE [--status STATUS] [--note TEXT] [--goal GOAL]\n'
+        return 0
+        ;;
+      *)
+        printf 'orca: unknown notion handoff option: %s\n' "$1" >&2
+        return 2
+        ;;
+    esac
+  done
+  [ -n "$issue" ] || {
+    printf '%s\n' '--issue is required' >&2
+    return 1
+  }
+  [ -n "$goal" ] || goal="$issue"
+  goal_slug=$(slugify "$goal")
+  [ -n "$goal_slug" ] || goal_slug="notion-handoff"
+  phase="handoff"
+  pack="manual"
+  cycles_done=0
+  payload=$(printf '{"issue": "%s", "status": "%s", "note": "%s", "source": "manual_notion_handoff"}' "$(json_escape "$issue")" "$(json_escape "$status")" "$(json_escape "$note")")
+  write_notion_outbox_payload "manual_handoff" "$payload"
 }
 
 orca_notion_adapter() {
@@ -1323,6 +1415,11 @@ if [ "$script_name" = "orca" ]; then
         orca_notion_outbox "$@"
         exit $?
       fi
+      if [ "${1:-}" = "handoff" ]; then
+        shift
+        orca_notion_handoff "$@"
+        exit $?
+      fi
       if [ "${1:-}" = "payload" ]; then
         shift
         orca_notion_payload "$@"
@@ -1333,7 +1430,7 @@ if [ "$script_name" = "orca" ]; then
         orca_notion_adapter "$@"
         exit $?
       fi
-      printf 'Usage: orca notion sync [--dry-run] [--json] [PAYLOAD|--all]\n       orca notion outbox [--json]\n       orca notion payload --example | --validate PATH [--json]\n       orca notion adapter --check PAYLOAD | --json-check PAYLOAD | --doctor PAYLOAD | --dry-run PAYLOAD\n       orca notion doctor [--strict] [--json]\n' >&2
+      printf 'Usage: orca notion sync [--dry-run] [--json] [PAYLOAD|--all]\n       orca notion outbox [--json]\n       orca notion handoff --issue TITLE [--status STATUS] [--note TEXT]\n       orca notion payload --example | --validate PATH [--json]\n       orca notion adapter --check PAYLOAD | --json-check PAYLOAD | --doctor PAYLOAD | --dry-run PAYLOAD\n       orca notion doctor [--strict] [--json]\n' >&2
       exit 1
       ;;
   esac

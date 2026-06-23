@@ -67,6 +67,10 @@ command -v ruby >/dev/null 2>&1 || {
   exit 1
 }
 
+ruby_json() {
+  RUBYOPT="${RUBYOPT:+$RUBYOPT }--disable-gems" ruby -rjson "$@"
+}
+
 plan_file=$(mktemp "${TMPDIR:-/tmp}/orca-notion-plan.XXXXXX")
 query_file=$(mktemp "${TMPDIR:-/tmp}/orca-notion-query.XXXXXX")
 create_file=$(mktemp "${TMPDIR:-/tmp}/orca-notion-create.XXXXXX")
@@ -74,7 +78,7 @@ update_file=$(mktemp "${TMPDIR:-/tmp}/orca-notion-update.XXXXXX")
 response_file=$(mktemp "${TMPDIR:-/tmp}/orca-notion-response.XXXXXX")
 trap 'rm -f "$plan_file" "$query_file" "$create_file" "$update_file" "$response_file"' EXIT INT TERM HUP
 
-ruby -rjson - "$payload_file" "$plan_file" "$query_file" "$create_file" "$update_file" <<'RUBY'
+ruby_json - "$payload_file" "$plan_file" "$query_file" "$create_file" "$update_file" <<'RUBY'
 payload_path, plan_path, query_path, create_path, update_path = ARGV
 payload = JSON.parse(File.read(payload_path))
 
@@ -181,7 +185,7 @@ RUBY
 
 if [ "$dry_run" = "1" ]; then
   if [ "$json_summary" -eq 1 ]; then
-    ruby -rjson - "$plan_file" <<'RUBY'
+    ruby_json - "$plan_file" <<'RUBY'
 plan = JSON.parse(File.read(ARGV.fetch(0)))
 token_present = !ENV.fetch("NOTION_TOKEN", ENV.fetch("ORCA_NOTION_TOKEN", "")).empty?
 summary = {
@@ -196,7 +200,7 @@ summary = {
 puts JSON.generate(summary)
 RUBY
   elif [ "$summary" -eq 1 ]; then
-    ruby -rjson - "$plan_file" <<'RUBY'
+    ruby_json - "$plan_file" <<'RUBY'
 plan = JSON.parse(File.read(ARGV.fetch(0)))
 token_present = !ENV.fetch("NOTION_TOKEN", ENV.fetch("ORCA_NOTION_TOKEN", "")).empty?
 puts "notion-adapter: action=#{plan.fetch("action")}"
@@ -219,7 +223,7 @@ token="${NOTION_TOKEN:-${ORCA_NOTION_TOKEN:-}}"
 }
 
 notion_version="${NOTION_VERSION:-2026-03-11}"
-data_source_id=$(ruby -rjson -e 'puts JSON.parse(File.read(ARGV.fetch(0))).fetch("data_source_id")' "$plan_file")
+data_source_id=$(ruby_json -e 'puts JSON.parse(File.read(ARGV.fetch(0))).fetch("data_source_id")' "$plan_file")
 existing_page_id="${ORCA_NOTION_EXISTING_PAGE_ID:-}"
 
 if [ -z "$existing_page_id" ]; then
@@ -231,7 +235,7 @@ if [ -z "$existing_page_id" ]; then
     --data-binary "@$query_file")
   case "$query_status" in
     2??)
-      existing_page_id=$(ruby -rjson -e '
+      existing_page_id=$(ruby_json -e '
         data = JSON.parse(File.read(ARGV.fetch(0)))
         result = data.fetch("results", []).first
         puts(result ? result["id"].to_s : "")
@@ -265,7 +269,7 @@ fi
 
 case "$status" in
   2??)
-    ruby -rjson -e '
+    ruby_json -e '
       verb = ARGV.fetch(1)
       data = JSON.parse(File.read(ARGV.fetch(0)))
       puts "notion-adapter: #{verb} #{data["url"] || data["id"] || "page"}"

@@ -13,7 +13,7 @@ need_json_field() {
   file="$1"
   ruby_expr="$2"
   expected="$3"
-  ruby -rjson -e '
+  RUBYOPT="${RUBYOPT:+$RUBYOPT }--disable-gems" ruby -rjson -e '
     data = JSON.parse(File.read(ARGV.fetch(0)))
     actual = eval(ARGV.fetch(1)).to_s
     expected = ARGV.fetch(2)

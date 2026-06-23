@@ -162,9 +162,13 @@ shell_quote() {
   printf "'%s'" "$(printf '%s' "$1" | sed "s/'/'\\\\''/g")"
 }
 
+ruby_json() {
+  RUBYOPT="${RUBYOPT:+$RUBYOPT }--disable-gems" ruby -rjson "$@"
+}
+
 json_escape() {
   if command -v ruby >/dev/null 2>&1; then
-    ruby -rjson -e 'print JSON.generate(ARGV[0])[1...-1]' -- "$1"
+    ruby_json -e 'print JSON.generate(ARGV[0])[1...-1]' -- "$1"
   else
     printf '%s' "$1" | sed 's/\\/\\\\/g; s/"/\\"/g'
   fi
@@ -324,7 +328,7 @@ validate_notion_payload_file() {
     return 1
   }
   if command -v ruby >/dev/null 2>&1; then
-    ruby -rjson -e '
+    ruby_json -e '
       data = JSON.parse(File.read(ARGV[0]))
       raise "unsupported schema_version" unless data["schema_version"] == 1
       raise "unsupported payload_type" unless data["payload_type"] == "goal_event"
@@ -505,7 +509,7 @@ orca_notion_adapter() {
         rm -f "$backend_json" "$adapter_json"
         return "$status"
       }
-      ruby -rjson - "$backend_json" "$adapter_json" <<'RUBY'
+      ruby_json - "$backend_json" "$adapter_json" <<'RUBY'
 backend = JSON.parse(File.read(ARGV.fetch(0)))
 adapter = JSON.parse(File.read(ARGV.fetch(1)))
 ok = backend.fetch("ready", false) && adapter.fetch("ok", false) && adapter.fetch("live_ready", false)

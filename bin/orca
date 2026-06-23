@@ -1322,10 +1322,12 @@ orca_backend_status() {
     notion_configured=false
     notion_status=markdown_fallback
   fi
-  if [ -n "${notion_sync_command:-}" ]; then
-    notion_sync_status=command_configured
-  else
+  if [ -z "${notion_sync_command:-}" ]; then
     notion_sync_status=outbox_mirror_only
+  elif [ -x "$notion_sync_command" ]; then
+    notion_sync_status=executable
+  else
+    notion_sync_status=configured_shell_command
   fi
   if [ -n "$linear_workspace$linear_team$linear_project_id" ]; then
     linear_configured=true
@@ -1360,8 +1362,10 @@ orca_backend_status() {
   printf 'active canonical: %s\n' "$active_backend"
   if [ "$notion_configured" = true ]; then
     printf 'notion: configured\n'
-    if [ "$notion_sync_status" = command_configured ]; then
-      printf 'notion sync: command configured\n'
+    if [ "$notion_sync_status" = executable ]; then
+      printf 'notion sync: executable\n'
+    elif [ "$notion_sync_status" = configured_shell_command ]; then
+      printf 'notion sync: configured shell command\n'
     else
       printf 'notion sync: outbox mirror only\n'
     fi

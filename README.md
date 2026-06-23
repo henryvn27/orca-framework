@@ -159,7 +159,7 @@ orca backend status --json
 orca notion doctor --json
 ```
 
-Use text output for humans and JSON output for agents, CI, or release gates that need stable backend readiness fields without scraping prose. `orca backend status --json` includes `ok:true` when backend status can be read. `orca notion doctor --json` includes `ok` as a stable alias for `ready`.
+Use text output for humans and JSON output for agents, CI, or release gates that need stable backend readiness fields without scraping prose. `orca backend status --json` includes `ok:true` when backend status can be read, and reports `notion_sync_status` as `outbox_mirror_only`, `executable`, or `configured_shell_command`. `orca notion doctor --json` includes `ok` as a stable alias for `ready`.
 
 ## Tasks
 

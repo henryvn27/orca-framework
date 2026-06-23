@@ -94,6 +94,7 @@ need_grep_file "orca notion handoff --issue" README.md
 need_grep_file "orca notion handoff --json" README.md
 need_grep_file "orca notion outbox --json.*ok:true" README.md
 need_grep_file "orca backend status --json.*ok:true" README.md
+need_grep_file "notion_sync_status.*outbox_mirror_only.*executable.*configured_shell_command" README.md
 need_grep_file "orca notion doctor --json.*ok.*ready" README.md
 
 [ -x bin/orca ] || fail "bin/orca is not executable"

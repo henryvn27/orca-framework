@@ -15,7 +15,7 @@ Usage:
   orca unify
   orca notion sync [--dry-run] [--json] [PAYLOAD|--all]
   orca notion outbox [--json]
-  orca notion handoff --issue TITLE [--status STATUS] [--note TEXT]
+  orca notion handoff --issue TITLE [--status STATUS] [--note TEXT] [--json]
   orca notion payload --example
   orca notion payload --validate PATH [--json]
   orca notion adapter --check PAYLOAD
@@ -43,6 +43,7 @@ Examples:
   orca notion sync --dry-run --json --all
   orca notion outbox --json
   orca notion handoff --issue "Update Notion issue after PR merge" --status Done --note "Live Notion unavailable; queued local handoff."
+  orca notion handoff --json --issue "Update Notion issue after PR merge" --status Done
   orca notion payload --example
   orca notion payload --validate .orca/notion/outbox/payload.json
   orca notion adapter --check .orca/notion/outbox/payload.json
@@ -524,11 +525,16 @@ orca_notion_handoff() {
   status="In progress"
   note=
   goal=
+  json=0
   while [ "$#" -gt 0 ]; do
     case "$1" in
       --issue)
         [ "$#" -ge 2 ] || {
-          printf '%s\n' '--issue requires a value' >&2
+          if [ "$json" -eq 1 ]; then
+            printf '{"ok":false,"error":"--issue requires a value"}\n'
+          else
+            printf '%s\n' '--issue requires a value' >&2
+          fi
           return 1
         }
         issue="$2"
@@ -536,7 +542,11 @@ orca_notion_handoff() {
         ;;
       --status)
         [ "$#" -ge 2 ] || {
-          printf '%s\n' '--status requires a value' >&2
+          if [ "$json" -eq 1 ]; then
+            printf '{"ok":false,"error":"--status requires a value"}\n'
+          else
+            printf '%s\n' '--status requires a value' >&2
+          fi
           return 1
         }
         status="$2"
@@ -544,7 +554,11 @@ orca_notion_handoff() {
         ;;
       --note)
         [ "$#" -ge 2 ] || {
-          printf '%s\n' '--note requires a value' >&2
+          if [ "$json" -eq 1 ]; then
+            printf '{"ok":false,"error":"--note requires a value"}\n'
+          else
+            printf '%s\n' '--note requires a value' >&2
+          fi
           return 1
         }
         note="$2"
@@ -552,24 +566,40 @@ orca_notion_handoff() {
         ;;
       --goal)
         [ "$#" -ge 2 ] || {
-          printf '%s\n' '--goal requires a value' >&2
+          if [ "$json" -eq 1 ]; then
+            printf '{"ok":false,"error":"--goal requires a value"}\n'
+          else
+            printf '%s\n' '--goal requires a value' >&2
+          fi
           return 1
         }
         goal="$2"
         shift 2
         ;;
+      --json)
+        json=1
+        shift
+        ;;
       -h|--help)
-        printf 'Usage: orca notion handoff --issue TITLE [--status STATUS] [--note TEXT] [--goal GOAL]\n'
+        printf 'Usage: orca notion handoff --issue TITLE [--status STATUS] [--note TEXT] [--goal GOAL] [--json]\n'
         return 0
         ;;
       *)
-        printf 'orca: unknown notion handoff option: %s\n' "$1" >&2
+        if [ "$json" -eq 1 ]; then
+          printf '{"ok":false,"error":"unknown notion handoff option: %s"}\n' "$(json_escape "$1")"
+        else
+          printf 'orca: unknown notion handoff option: %s\n' "$1" >&2
+        fi
         return 2
         ;;
     esac
   done
   [ -n "$issue" ] || {
-    printf '%s\n' '--issue is required' >&2
+    if [ "$json" -eq 1 ]; then
+      printf '{"ok":false,"error":"--issue is required"}\n'
+    else
+      printf '%s\n' '--issue is required' >&2
+    fi
     return 1
   }
   [ -n "$goal" ] || goal="$issue"
@@ -579,7 +609,12 @@ orca_notion_handoff() {
   pack="manual"
   cycles_done=0
   payload=$(printf '{"issue": "%s", "status": "%s", "note": "%s", "source": "manual_notion_handoff"}' "$(json_escape "$issue")" "$(json_escape "$status")" "$(json_escape "$note")")
-  write_notion_outbox_payload "manual_handoff" "$payload"
+  payload_path=$(write_notion_outbox_payload "manual_handoff" "$payload")
+  if [ "$json" -eq 1 ]; then
+    printf '{"payload_path":"%s","issue":"%s","status":"%s","ok":true}\n' "$(json_escape "$payload_path")" "$(json_escape "$issue")" "$(json_escape "$status")"
+  else
+    printf '%s\n' "$payload_path"
+  fi
 }
 
 orca_notion_adapter() {
@@ -1405,7 +1440,7 @@ if [ "$script_name" = "orca" ]; then
       ;;
     notion)
       if [ "${1:-}" = "--help" ] || [ "${1:-}" = "-h" ] || [ "${1:-}" = "help" ]; then
-        printf 'Usage: orca notion sync [--dry-run] [--json] [PAYLOAD|--all]\n       orca notion outbox [--json]\n       orca notion handoff --issue TITLE [--status STATUS] [--note TEXT]\n       orca notion payload --example | --validate PATH [--json]\n       orca notion adapter --check PAYLOAD | --json-check PAYLOAD | --doctor PAYLOAD | --dry-run PAYLOAD\n       orca notion doctor [--strict] [--json]\n'
+        printf 'Usage: orca notion sync [--dry-run] [--json] [PAYLOAD|--all]\n       orca notion outbox [--json]\n       orca notion handoff --issue TITLE [--status STATUS] [--note TEXT] [--json]\n       orca notion payload --example | --validate PATH [--json]\n       orca notion adapter --check PAYLOAD | --json-check PAYLOAD | --doctor PAYLOAD | --dry-run PAYLOAD\n       orca notion doctor [--strict] [--json]\n'
         exit 0
       fi
       if [ "${1:-}" = "sync" ]; then
@@ -1438,7 +1473,7 @@ if [ "$script_name" = "orca" ]; then
         orca_notion_adapter "$@"
         exit $?
       fi
-      printf 'Usage: orca notion sync [--dry-run] [--json] [PAYLOAD|--all]\n       orca notion outbox [--json]\n       orca notion handoff --issue TITLE [--status STATUS] [--note TEXT]\n       orca notion payload --example | --validate PATH [--json]\n       orca notion adapter --check PAYLOAD | --json-check PAYLOAD | --doctor PAYLOAD | --dry-run PAYLOAD\n       orca notion doctor [--strict] [--json]\n' >&2
+      printf 'Usage: orca notion sync [--dry-run] [--json] [PAYLOAD|--all]\n       orca notion outbox [--json]\n       orca notion handoff --issue TITLE [--status STATUS] [--note TEXT] [--json]\n       orca notion payload --example | --validate PATH [--json]\n       orca notion adapter --check PAYLOAD | --json-check PAYLOAD | --doctor PAYLOAD | --dry-run PAYLOAD\n       orca notion doctor [--strict] [--json]\n' >&2
       exit 1
       ;;
   esac

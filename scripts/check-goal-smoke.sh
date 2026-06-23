@@ -143,7 +143,7 @@ need_grep "valid packs: release-ready app-store-ready startup-mvp security perfo
 ORCA_ROOT="$fallback_root" ./bin/orca notion outbox > "$tmp/notion-outbox-fallback.txt"
 need_grep "notion outbox: 0 payload(s)" "$tmp/notion-outbox-fallback.txt"
 ORCA_ROOT="$fallback_root" ./bin/orca notion --help > "$tmp/notion-help.txt"
-need_grep "orca notion handoff --issue TITLE" "$tmp/notion-help.txt"
+need_grep "orca notion handoff --issue TITLE \\[--status STATUS\\] \\[--note TEXT\\] \\[--json\\]" "$tmp/notion-help.txt"
 ORCA_ROOT="$fallback_root" ./bin/orca notion help > "$tmp/notion-help-alias.txt"
 need_grep "orca notion sync" "$tmp/notion-help-alias.txt"
 ORCA_ROOT="$fallback_root" ./bin/orca backend --help > "$tmp/backend-help.txt"
@@ -167,6 +167,19 @@ ORCA_ROOT="$handoff_root" ./bin/orca notion payload --validate "$handoff_payload
 need_grep "notion-payload: valid $handoff_payload" "$tmp/notion-handoff-validate.txt"
 ORCA_ROOT="$handoff_root" ./bin/orca notion outbox --json > "$tmp/notion-handoff-outbox.json"
 need_json_field "$tmp/notion-handoff-outbox.json" "outbox_count" "1"
+handoff_json_root="$tmp/notion-handoff-json"
+ORCA_ROOT="$handoff_json_root" ./bin/orca notion handoff --json --issue "Update Notion issue after PR merge" --status Done --note "Live Notion unavailable" > "$tmp/notion-handoff-json.json"
+need_json_field "$tmp/notion-handoff-json.json" "ok" "true"
+need_json_field "$tmp/notion-handoff-json.json" "issue" "Update Notion issue after PR merge"
+need_json_field "$tmp/notion-handoff-json.json" "status" "Done"
+handoff_json_payload=$(RUBYOPT="${RUBYOPT:+$RUBYOPT }--disable-gems" ruby -rjson -e 'print JSON.parse(File.read(ARGV.fetch(0))).fetch("payload_path")' -- "$tmp/notion-handoff-json.json")
+need_file "$handoff_json_payload"
+need_json_field "$handoff_json_payload" "action" "manual_handoff"
+if ORCA_ROOT="$tmp/notion-handoff-json-missing-issue" ./bin/orca notion handoff --json --status Done > "$tmp/notion-handoff-json-missing-issue.json" 2>&1; then
+  fail "expected JSON notion handoff without --issue to fail"
+fi
+need_json_field "$tmp/notion-handoff-json-missing-issue.json" "ok" "false"
+need_json_field "$tmp/notion-handoff-json-missing-issue.json" "error" "--issue is required"
 if ORCA_ROOT="$tmp/notion-handoff-missing-issue" ./bin/orca notion handoff --status Done > "$tmp/notion-handoff-missing-issue.txt" 2>&1; then
   fail "expected notion handoff without --issue to fail"
 fi

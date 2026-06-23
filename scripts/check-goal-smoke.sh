@@ -24,7 +24,7 @@ need_json_field() {
   field="$2"
   expected="$3"
   command -v ruby >/dev/null 2>&1 || fail "ruby is required for JSON contract checks"
-  ruby -rjson -e '
+  RUBYOPT="${RUBYOPT:+$RUBYOPT }--disable-gems" ruby -rjson -e '
     data = JSON.parse(File.read(ARGV.fetch(0)))
     actual = data.fetch(ARGV.fetch(1)).to_s
     expected = ARGV.fetch(2)

@@ -122,9 +122,9 @@ for wrapper in caveman efficient-frontier visual-plan visual-recap; do
 done
 
 if command -v ruby >/dev/null 2>&1; then
-  ruby -rjson -e 'ARGV.each { |path| JSON.parse(File.read(path)) }' scripts/fixtures/notion/*.json ||
+  RUBYOPT="${RUBYOPT:+$RUBYOPT }--disable-gems" ruby -rjson -e 'ARGV.each { |path| JSON.parse(File.read(path)) }' scripts/fixtures/notion/*.json ||
     fail "malformed Notion fixture JSON"
-  ruby -rjson -e '
+  RUBYOPT="${RUBYOPT:+$RUBYOPT }--disable-gems" ruby -rjson -e '
     data = JSON.parse(File.read("scripts/fixtures/notion/adapter-doctor-token-missing.json"))
     abort("missing backend fixture object") unless data["backend"].is_a?(Hash)
     abort("missing adapter fixture object") unless data["adapter"].is_a?(Hash)

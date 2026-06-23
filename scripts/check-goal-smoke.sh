@@ -70,6 +70,17 @@ need_grep "readiness_score='0'" "$plan_only_root/state.env"
 [ ! -f "$plan_only_root/handoffs/make-this-production-ready.md" ] ||
   fail "plan-only should not create handoff"
 
+until_blocked_root="$tmp/until-blocked"
+run_goal "$until_blocked_root" --auto --max-cycles 1 --until blocked > "$tmp/until-blocked.txt"
+assert_goal_artifacts "$until_blocked_root"
+need_grep "auto: bounded, max_cycles=1, until=blocked" "$tmp/until-blocked.txt"
+need_grep "until='blocked'" "$until_blocked_root/state.env"
+
+if ORCA_ROOT="$tmp/bad-until" ./bin/orca /goal "make this production ready" --until forever > "$tmp/bad-until.txt" 2>&1; then
+  fail "expected invalid --until value to return non-zero"
+fi
+need_grep "until must be blocked or done" "$tmp/bad-until.txt"
+
 ORCA_ROOT="$fallback_root" ./bin/orca notion outbox > "$tmp/notion-outbox-fallback.txt"
 need_grep "notion outbox: 0 payload(s)" "$tmp/notion-outbox-fallback.txt"
 ORCA_ROOT="$fallback_root" ./bin/orca notion outbox --json > "$tmp/notion-outbox-fallback.json"

@@ -83,8 +83,10 @@ for path in $required_dirs; do
   need_dir "$path"
 done
 
-need_grep_file "Copy-paste prompt for Codex or Claude Code" README.md
-need_grep_file "Install ORCA in this environment" README.md
+need_grep_file "Install With An Agent" README.md
+need_grep_file "Copy this prompt into Codex or Claude Code" README.md
+need_grep_file "Install ORCA Framework from https://github.com/henryvn27/orca-framework" README.md
+need_grep_file "For agent-assisted setup, use the copy-pastable Codex or Claude Code prompt near the top" README.md
 need_grep_file "https://github.com/henryvn27/orca-framework" README.md
 need_grep_file "orca goal --packs" README.md
 need_grep_file "orca goal --packs --verbose" README.md

@@ -187,6 +187,34 @@ export PATH="$(pwd)/.orca-framework/bin:$PATH"
 
 If already inside an ORCA checkout, do not clone again.
 
+Copy-paste prompt for Codex or Claude Code:
+
+```text
+Install ORCA in this environment. Use https://github.com/henryvn27/orca-framework as the source.
+
+Rules:
+- If this directory is already an ORCA checkout, do not clone it again.
+- Prefer Notion-backed project management/docs/issues when configured.
+- Keep Linear optional; do not make it the default.
+- Do not hardcode private workspace, project, Notion, or Linear IDs.
+- Preserve unrelated dirty files.
+
+Steps:
+1. Inspect the current directory and decide whether to use the existing checkout or clone ORCA.
+2. Run `./scripts/validate-repo.sh`.
+3. Install locally with `./install/install.sh --mode local --target ./.orca-framework`.
+4. Add `./.orca-framework/bin` to PATH for the current shell.
+5. Run `./install/verify-install.sh --target ./.orca-framework`.
+6. Run `./install/doctor.sh --target ./.orca-framework`.
+7. Run `orca goal --packs`.
+
+Finish with:
+- install location
+- PATH change used
+- validation commands and results
+- any blockers or manual follow-up
+```
+
 ## Advanced Docs
 
 - [docs/install.md](docs/install.md)

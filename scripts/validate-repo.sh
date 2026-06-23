@@ -17,6 +17,12 @@ need_dir() {
   [ -d "$1" ] || fail "missing required directory: $1"
 }
 
+need_grep_file() {
+  pattern="$1"
+  file="$2"
+  grep -q "$pattern" "$file" || fail "missing '$pattern' in $file"
+}
+
 required_files="
 README.md
 LICENSE
@@ -76,6 +82,11 @@ done
 for path in $required_dirs; do
   need_dir "$path"
 done
+
+need_grep_file "Copy-paste prompt for Codex or Claude Code" README.md
+need_grep_file "Install ORCA in this environment" README.md
+need_grep_file "https://github.com/henryvn27/orca-framework" README.md
+need_grep_file "orca goal --packs" README.md
 
 [ -x bin/orca ] || fail "bin/orca is not executable"
 [ -x install/install.sh ] || fail "install/install.sh is not executable"

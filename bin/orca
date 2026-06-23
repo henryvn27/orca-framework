@@ -1346,7 +1346,8 @@ orca_backend_status() {
     printf '"notion_dir":"%s",' "$(json_escape "$notion_state_dir")"
     printf '"notion_outbox_count":%s,' "$outbox_count"
     printf '"notion_synced_count":%s,' "$synced_count"
-    printf '"linear_configured":%s' "$linear_configured"
+    printf '"linear_configured":%s,' "$linear_configured"
+    printf '"ok":true'
     printf '}\n'
     return 0
   fi

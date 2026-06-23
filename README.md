@@ -143,6 +143,13 @@ Vague tasks should be clarified before implementation starts.
 
 A loop pack defines what "done" means for the goal.
 
+List available packs:
+
+```sh
+orca goal --packs
+orca goal --packs --verbose
+```
+
 Built-in packs:
 
 - `release-ready`

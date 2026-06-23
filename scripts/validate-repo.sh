@@ -51,6 +51,10 @@ docs/hosts/vscode.md
 integrations/README.md
 integrations/impeccable.md
 integrations/superpowers.md
+scripts/fixtures/notion/goal-event-valid.json
+scripts/fixtures/notion/goal-event-missing-data-source.json
+scripts/fixtures/notion/goal-event-unsupported-schema.json
+scripts/fixtures/notion/goal-event-unsupported-type.json
 "
 
 required_dirs="
@@ -114,6 +118,11 @@ for wrapper in caveman efficient-frontier visual-plan visual-recap; do
     need_file "skills/orca-$wrapper/SKILL.md"
   fi
 done
+
+if command -v ruby >/dev/null 2>&1; then
+  ruby -rjson -e 'ARGV.each { |path| JSON.parse(File.read(path)) }' scripts/fixtures/notion/*.json ||
+    fail "malformed Notion fixture JSON"
+fi
 
 if /usr/bin/find . -path './.git' -prune -o -name '.DS_Store' -print -quit | grep -q .; then
   fail "tracked tree still contains .DS_Store"

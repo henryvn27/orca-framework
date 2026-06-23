@@ -154,6 +154,18 @@ need_grep "unknown goal option: --bad" "$tmp/bad-goal-option-only.txt"
 
 ORCA_ROOT="$fallback_root" ./bin/orca notion outbox > "$tmp/notion-outbox-fallback.txt"
 need_grep "notion outbox: 0 payload(s)" "$tmp/notion-outbox-fallback.txt"
+if ORCA_ROOT="$tmp/progress-bad-option-no-state" ./bin/orca progress --bad > "$tmp/progress-bad-option-no-state.txt" 2>&1; then
+  fail "expected progress with unknown option and no state to return non-zero"
+fi
+need_grep "unknown progress option: --bad" "$tmp/progress-bad-option-no-state.txt"
+if ORCA_ROOT="$fallback_root" ./bin/orca progress --bad > "$tmp/progress-bad-option-with-state.txt" 2>&1; then
+  fail "expected progress with unknown option and existing state to return non-zero"
+fi
+need_grep "unknown progress option: --bad" "$tmp/progress-bad-option-with-state.txt"
+if ORCA_ROOT="$fallback_root" ./bin/orca unify --bad > "$tmp/unify-bad-option-with-state.txt" 2>&1; then
+  fail "expected unify with unknown option and existing state to return non-zero"
+fi
+need_grep "unknown unify option: --bad" "$tmp/unify-bad-option-with-state.txt"
 ORCA_ROOT="$fallback_root" ./bin/orca notion --help > "$tmp/notion-help.txt"
 need_grep "orca notion handoff --issue TITLE \\[--status STATUS\\] \\[--note TEXT\\] \\[--json\\]" "$tmp/notion-help.txt"
 ORCA_ROOT="$fallback_root" ./bin/orca notion help > "$tmp/notion-help-alias.txt"

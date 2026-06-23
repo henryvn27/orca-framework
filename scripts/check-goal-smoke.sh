@@ -140,6 +140,18 @@ need_grep "unknown --pack: release-reddy" "$tmp/bad-pack.txt"
 need_grep "valid packs: release-ready app-store-ready startup-mvp security performance notion-hygiene" "$tmp/bad-pack.txt"
 [ ! -f "$tmp/bad-pack/state.env" ] || fail "invalid pack should not write state"
 
+if ORCA_ROOT="$tmp/bad-goal-option" ./bin/orca /goal "make this production ready" --bad > "$tmp/bad-goal-option.txt" 2>&1; then
+  fail "expected unknown /goal option after outcome to return non-zero"
+fi
+need_grep "unknown goal option: --bad" "$tmp/bad-goal-option.txt"
+[ ! -f "$tmp/bad-goal-option/state.env" ] || fail "unknown /goal option should not write state"
+
+if ORCA_ROOT="$tmp/bad-goal-option-only" ./bin/orca /goal --bad > "$tmp/bad-goal-option-only.txt" 2>&1; then
+  fail "expected unknown /goal option without outcome to return non-zero"
+fi
+need_grep "unknown goal option: --bad" "$tmp/bad-goal-option-only.txt"
+[ ! -f "$tmp/bad-goal-option-only/state.env" ] || fail "unknown /goal option without outcome should not write state"
+
 ORCA_ROOT="$fallback_root" ./bin/orca notion outbox > "$tmp/notion-outbox-fallback.txt"
 need_grep "notion outbox: 0 payload(s)" "$tmp/notion-outbox-fallback.txt"
 ORCA_ROOT="$fallback_root" ./bin/orca notion --help > "$tmp/notion-help.txt"

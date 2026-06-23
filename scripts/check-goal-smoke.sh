@@ -81,6 +81,36 @@ if ORCA_ROOT="$tmp/bad-until" ./bin/orca /goal "make this production ready" --un
 fi
 need_grep "until must be blocked or done" "$tmp/bad-until.txt"
 
+if ORCA_ROOT="$tmp/missing-pack" ./bin/orca /goal "make this production ready" --pack > "$tmp/missing-pack.txt" 2>&1; then
+  fail "expected missing --pack value to return non-zero"
+fi
+need_grep "pack requires a value" "$tmp/missing-pack.txt"
+
+if ORCA_ROOT="$tmp/missing-pack-next-option" ./bin/orca /goal "make this production ready" --pack --auto > "$tmp/missing-pack-next-option.txt" 2>&1; then
+  fail "expected --pack followed by another option to return non-zero"
+fi
+need_grep "pack requires a value" "$tmp/missing-pack-next-option.txt"
+
+if ORCA_ROOT="$tmp/missing-max-cycles" ./bin/orca /goal "make this production ready" --max-cycles > "$tmp/missing-max-cycles.txt" 2>&1; then
+  fail "expected missing --max-cycles value to return non-zero"
+fi
+need_grep "max-cycles requires a value" "$tmp/missing-max-cycles.txt"
+
+if ORCA_ROOT="$tmp/missing-max-cycles-next-option" ./bin/orca /goal "make this production ready" --max-cycles --until done > "$tmp/missing-max-cycles-next-option.txt" 2>&1; then
+  fail "expected --max-cycles followed by another option to return non-zero"
+fi
+need_grep "max-cycles requires a value" "$tmp/missing-max-cycles-next-option.txt"
+
+if ORCA_ROOT="$tmp/missing-until" ./bin/orca /goal "make this production ready" --until > "$tmp/missing-until.txt" 2>&1; then
+  fail "expected missing --until value to return non-zero"
+fi
+need_grep "until requires a value" "$tmp/missing-until.txt"
+
+if ORCA_ROOT="$tmp/missing-until-next-option" ./bin/orca /goal "make this production ready" --until --plan-only > "$tmp/missing-until-next-option.txt" 2>&1; then
+  fail "expected --until followed by another option to return non-zero"
+fi
+need_grep "until requires a value" "$tmp/missing-until-next-option.txt"
+
 ORCA_ROOT="$fallback_root" ./bin/orca notion outbox > "$tmp/notion-outbox-fallback.txt"
 need_grep "notion outbox: 0 payload(s)" "$tmp/notion-outbox-fallback.txt"
 ORCA_ROOT="$fallback_root" ./bin/orca notion outbox --json > "$tmp/notion-outbox-fallback.json"

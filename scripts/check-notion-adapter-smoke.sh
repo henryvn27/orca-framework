@@ -73,6 +73,19 @@ NOTION_TOKEN=test-token ./scripts/orca-notion-sync-adapter.sh --summary "$payloa
 grep -q "notion-adapter: token_present=true" "$tmp/summary-token.txt" || fail "summary missing true token state"
 grep -q "notion-adapter: live_ready=true" "$tmp/summary-token.txt" || fail "summary missing true live readiness"
 
+./scripts/orca-notion-sync-adapter.sh --json-summary "$payload" > "$tmp/json-summary-no-token.json"
+need_json_field "$tmp/json-summary-no-token.json" 'data.fetch("action")' "create"
+need_json_field "$tmp/json-summary-no-token.json" 'data.fetch("title")' "Run /goal loop for make this production ready"
+need_json_field "$tmp/json-summary-no-token.json" 'data.fetch("data_source_id")' "issue-board-123"
+need_json_field "$tmp/json-summary-no-token.json" 'data.fetch("match_property")' "Issue"
+need_json_field "$tmp/json-summary-no-token.json" 'data.fetch("token_present")' "false"
+need_json_field "$tmp/json-summary-no-token.json" 'data.fetch("live_ready")' "false"
+need_json_field "$tmp/json-summary-no-token.json" 'data.fetch("ok")' "true"
+
+NOTION_TOKEN=test-token ./scripts/orca-notion-sync-adapter.sh --json-summary "$payload" > "$tmp/json-summary-token.json"
+need_json_field "$tmp/json-summary-token.json" 'data.fetch("token_present")' "true"
+need_json_field "$tmp/json-summary-token.json" 'data.fetch("live_ready")' "true"
+
 if ORCA_NOTION_DATA_SOURCE_ID=override-456 NOTION_TOKEN= ./scripts/orca-notion-sync-adapter.sh "$payload" >/dev/null 2>&1; then
   fail "expected live adapter without token to fail"
 fi
@@ -93,6 +106,9 @@ bad="$tmp/bad.json"
 printf '{bad json\n' > "$bad"
 if ORCA_NOTION_ADAPTER_DRY_RUN=1 ./scripts/orca-notion-sync-adapter.sh --summary "$bad" >/dev/null 2>&1; then
   fail "expected malformed payload summary to fail"
+fi
+if ORCA_NOTION_ADAPTER_DRY_RUN=1 ./scripts/orca-notion-sync-adapter.sh --json-summary "$bad" >/dev/null 2>&1; then
+  fail "expected malformed payload JSON summary to fail"
 fi
 if ORCA_NOTION_ADAPTER_DRY_RUN=1 ./scripts/orca-notion-sync-adapter.sh "$bad" >/dev/null 2>&1; then
   fail "expected malformed payload to fail"

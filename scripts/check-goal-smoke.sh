@@ -188,6 +188,13 @@ if ORCA_ROOT="$tmp/notion-handoff-json-missing-issue" ./bin/orca notion handoff 
 fi
 need_json_field "$tmp/notion-handoff-json-missing-issue.json" "ok" "false"
 need_json_field "$tmp/notion-handoff-json-missing-issue.json" "error" "--issue is required"
+for option in issue status note goal; do
+  if ORCA_ROOT="$tmp/notion-handoff-json-missing-$option-value" ./bin/orca notion handoff "--$option" --json > "$tmp/notion-handoff-json-missing-$option-value.json" 2>&1; then
+    fail "expected JSON notion handoff with --$option followed by --json to fail"
+  fi
+  need_json_field "$tmp/notion-handoff-json-missing-$option-value.json" "ok" "false"
+  need_json_field "$tmp/notion-handoff-json-missing-$option-value.json" "error" "--$option requires a value"
+done
 if ORCA_ROOT="$tmp/notion-handoff-missing-issue" ./bin/orca notion handoff --status Done > "$tmp/notion-handoff-missing-issue.txt" 2>&1; then
   fail "expected notion handoff without --issue to fail"
 fi

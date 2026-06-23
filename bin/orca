@@ -526,58 +526,60 @@ orca_notion_handoff() {
   note=
   goal=
   json=0
+  for arg in "$@"; do
+    [ "$arg" = "--json" ] && json=1
+  done
   while [ "$#" -gt 0 ]; do
     case "$1" in
       --issue)
-        [ "$#" -ge 2 ] || {
+        if [ "$#" -lt 2 ] || [ "${2#--}" != "$2" ]; then
           if [ "$json" -eq 1 ]; then
             printf '{"ok":false,"error":"--issue requires a value"}\n'
           else
             printf '%s\n' '--issue requires a value' >&2
           fi
           return 1
-        }
+        fi
         issue="$2"
         shift 2
         ;;
       --status)
-        [ "$#" -ge 2 ] || {
+        if [ "$#" -lt 2 ] || [ "${2#--}" != "$2" ]; then
           if [ "$json" -eq 1 ]; then
             printf '{"ok":false,"error":"--status requires a value"}\n'
           else
             printf '%s\n' '--status requires a value' >&2
           fi
           return 1
-        }
+        fi
         status="$2"
         shift 2
         ;;
       --note)
-        [ "$#" -ge 2 ] || {
+        if [ "$#" -lt 2 ] || [ "${2#--}" != "$2" ]; then
           if [ "$json" -eq 1 ]; then
             printf '{"ok":false,"error":"--note requires a value"}\n'
           else
             printf '%s\n' '--note requires a value' >&2
           fi
           return 1
-        }
+        fi
         note="$2"
         shift 2
         ;;
       --goal)
-        [ "$#" -ge 2 ] || {
+        if [ "$#" -lt 2 ] || [ "${2#--}" != "$2" ]; then
           if [ "$json" -eq 1 ]; then
             printf '{"ok":false,"error":"--goal requires a value"}\n'
           else
             printf '%s\n' '--goal requires a value' >&2
           fi
           return 1
-        }
+        fi
         goal="$2"
         shift 2
         ;;
       --json)
-        json=1
         shift
         ;;
       -h|--help)

@@ -16,6 +16,32 @@ orca progress
 orca unify
 ```
 
+## Install With An Agent
+
+Copy this prompt into Codex or Claude Code:
+
+```text
+Install ORCA Framework from https://github.com/henryvn27/orca-framework.
+
+Use the repo's own install docs and scripts. Do not invent a custom install path unless needed.
+
+Steps:
+1. Check that git and a POSIX shell are available.
+2. Clone https://github.com/henryvn27/orca-framework.git into a safe local folder, or use the existing clone if already present.
+3. Run ./scripts/validate-repo.sh from the ORCA repo.
+4. Run ./install/install.sh --mode global unless I ask for a project-local install.
+5. Add $HOME/.orca-framework/bin to my shell PATH if it is not already available.
+6. Run ./install/verify-install.sh --target $HOME/.orca-framework.
+7. Run ./install/doctor.sh --target $HOME/.orca-framework.
+8. Verify that orca goal --packs works from a new shell.
+
+Rules:
+- Preserve any unrelated dirty Git work.
+- Do not delete an existing ORCA install unless I approve it.
+- If a command fails, stop and show the exact failing command plus the shortest useful error.
+- Finish with installed path, PATH change made or still needed, and verification results.
+```
+
 Autonomous mode is bounded:
 
 ```sh

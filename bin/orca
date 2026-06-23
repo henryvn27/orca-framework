@@ -812,16 +812,22 @@ orca_notion_sync() {
 
 orca_notion_outbox() {
   json=0
+  for arg in "$@"; do
+    [ "$arg" = "--json" ] && json=1
+  done
   while [ "$#" -gt 0 ]; do
     case "$1" in
       --json)
-        json=1
         ;;
       -h|--help)
         printf 'Usage: orca notion outbox [--json]\n'
         return 0
         ;;
       *)
+        if [ "$json" -eq 1 ]; then
+          printf '{"ok":false,"error":"unknown notion outbox option: %s"}\n' "$(json_escape "$1")"
+          return 2
+        fi
         printf 'orca: unknown notion outbox option: %s\n' "$1" >&2
         return 2
         ;;
@@ -868,19 +874,25 @@ orca_notion_outbox() {
 orca_notion_doctor() {
   strict=0
   json=0
+  for arg in "$@"; do
+    [ "$arg" = "--json" ] && json=1
+  done
   while [ "$#" -gt 0 ]; do
     case "$1" in
       --strict)
         strict=1
         ;;
       --json)
-        json=1
         ;;
       -h|--help)
         printf 'Usage: orca notion doctor [--strict] [--json]\n'
         return 0
         ;;
       *)
+        if [ "$json" -eq 1 ]; then
+          printf '{"ok":false,"ready":false,"error":"unknown notion doctor option: %s"}\n' "$(json_escape "$1")"
+          return 2
+        fi
         printf 'orca: unknown notion doctor option: %s\n' "$1" >&2
         return 2
         ;;
@@ -1309,16 +1321,22 @@ orca_unify() {
 
 orca_backend_status() {
   json=0
+  for arg in "$@"; do
+    [ "$arg" = "--json" ] && json=1
+  done
   while [ "$#" -gt 0 ]; do
     case "$1" in
       --json)
-        json=1
         ;;
       -h|--help)
         printf 'Usage: orca backend status [--json]\n'
         return 0
         ;;
       *)
+        if [ "$json" -eq 1 ]; then
+          printf '{"ok":false,"error":"unknown backend status option: %s"}\n' "$(json_escape "$1")"
+          return 2
+        fi
         printf 'orca: unknown backend status option: %s\n' "$1" >&2
         return 2
         ;;

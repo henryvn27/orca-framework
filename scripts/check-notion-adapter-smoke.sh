@@ -33,17 +33,31 @@ ruby -rjson -e '
   File.write(ARGV.fetch(0), JSON.pretty_generate(data))
 ' "$payload"
 
-ORCA_NOTION_ADAPTER_DRY_RUN=1 ./scripts/orca-notion-sync-adapter.sh "$payload" > "$tmp/request.json"
-need_json_field "$tmp/request.json" 'data.fetch("parent").fetch("data_source_id")' "issue-board-123"
-need_json_field "$tmp/request.json" 'data.fetch("properties").fetch("Issue").fetch("title").fetch(0).fetch("text").fetch("content")' "Run /goal loop for make this production ready"
-need_json_field "$tmp/request.json" 'data.fetch("properties").fetch("Status").fetch("status").fetch("name")' "Done"
+ORCA_NOTION_ADAPTER_DRY_RUN=1 ./scripts/orca-notion-sync-adapter.sh "$payload" > "$tmp/plan-create.json"
+need_json_field "$tmp/plan-create.json" 'data.fetch("action")' "create"
+need_json_field "$tmp/plan-create.json" 'data.fetch("data_source_id")' "issue-board-123"
+need_json_field "$tmp/plan-create.json" 'data.fetch("match").fetch("property")' "Issue"
+need_json_field "$tmp/plan-create.json" 'data.fetch("match").fetch("title")' "Run /goal loop for make this production ready"
+need_json_field "$tmp/plan-create.json" 'data.fetch("match").fetch("query").fetch("filter").fetch("title").fetch("equals")' "Run /goal loop for make this production ready"
+need_json_field "$tmp/plan-create.json" 'data.fetch("create").fetch("method")' "POST"
+need_json_field "$tmp/plan-create.json" 'data.fetch("create").fetch("body").fetch("parent").fetch("data_source_id")' "issue-board-123"
+need_json_field "$tmp/plan-create.json" 'data.fetch("create").fetch("body").fetch("properties").fetch("Issue").fetch("title").fetch(0).fetch("text").fetch("content")' "Run /goal loop for make this production ready"
+need_json_field "$tmp/plan-create.json" 'data.fetch("create").fetch("body").fetch("properties").fetch("Status").fetch("status").fetch("name")' "Done"
 
-ORCA_NOTION_ADAPTER_DRY_RUN=1 ORCA_NOTION_TITLE_PROPERTY=Name ORCA_NOTION_STATUS_PROPERTY=State ./scripts/orca-notion-sync-adapter.sh "$payload" > "$tmp/custom-request.json"
-need_json_field "$tmp/custom-request.json" 'data.fetch("properties").key?("Name")' "true"
-need_json_field "$tmp/custom-request.json" 'data.fetch("properties").key?("State")' "true"
+ORCA_NOTION_ADAPTER_DRY_RUN=1 ORCA_NOTION_EXISTING_PAGE_ID=page-789 ./scripts/orca-notion-sync-adapter.sh "$payload" > "$tmp/plan-update.json"
+need_json_field "$tmp/plan-update.json" 'data.fetch("action")' "update"
+need_json_field "$tmp/plan-update.json" 'data.fetch("existing_page_id")' "page-789"
+need_json_field "$tmp/plan-update.json" 'data.fetch("update").fetch("method")' "PATCH"
+need_json_field "$tmp/plan-update.json" 'data.fetch("update").fetch("url")' "https://api.notion.com/v1/pages/page-789"
+need_json_field "$tmp/plan-update.json" 'data.fetch("update").fetch("body").fetch("properties").fetch("Status").fetch("status").fetch("name")' "Done"
 
-ORCA_NOTION_DATA_SOURCE_ID=override-456 ORCA_NOTION_ADAPTER_DRY_RUN=1 ./scripts/orca-notion-sync-adapter.sh "$payload" > "$tmp/override-request.json"
-need_json_field "$tmp/override-request.json" 'data.fetch("parent").fetch("data_source_id")' "override-456"
+ORCA_NOTION_ADAPTER_DRY_RUN=1 ORCA_NOTION_TITLE_PROPERTY=Name ORCA_NOTION_STATUS_PROPERTY=State ./scripts/orca-notion-sync-adapter.sh "$payload" > "$tmp/custom-plan.json"
+need_json_field "$tmp/custom-plan.json" 'data.fetch("create").fetch("body").fetch("properties").key?("Name")' "true"
+need_json_field "$tmp/custom-plan.json" 'data.fetch("create").fetch("body").fetch("properties").key?("State")' "true"
+
+ORCA_NOTION_DATA_SOURCE_ID=override-456 ORCA_NOTION_ADAPTER_DRY_RUN=1 ./scripts/orca-notion-sync-adapter.sh "$payload" > "$tmp/override-plan.json"
+need_json_field "$tmp/override-plan.json" 'data.fetch("data_source_id")' "override-456"
+need_json_field "$tmp/override-plan.json" 'data.fetch("create").fetch("body").fetch("parent").fetch("data_source_id")' "override-456"
 
 if ORCA_NOTION_DATA_SOURCE_ID=override-456 NOTION_TOKEN= ./scripts/orca-notion-sync-adapter.sh "$payload" >/dev/null 2>&1; then
   fail "expected live adapter without token to fail"

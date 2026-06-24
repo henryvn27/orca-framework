@@ -101,7 +101,7 @@ export ORCA_NOTION_SYNC_COMMAND="$(pwd)/scripts/orca-notion-sync-adapter.sh"
 orca notion sync --all
 ```
 
-The adapter reads `issue_board_data_source_id` from each payload, or `ORCA_NOTION_DATA_SOURCE_ID` when you need an override. It defaults to issue-board properties named `Issue` and `Status`; set `ORCA_NOTION_TITLE_PROPERTY` or `ORCA_NOTION_STATUS_PROPERTY` for a different board schema. Before creating, it queries the data source by title so repeated payloads update the existing page instead of creating duplicates. Set `ORCA_NOTION_MATCH_PROPERTY` if your board uses a different title property, or `ORCA_NOTION_EXISTING_PAGE_ID` when a caller already knows the target page. Test the create/update plan without network access:
+The adapter reads `issue_board_data_source_id` from each payload, or `ORCA_NOTION_DATA_SOURCE_ID` when you need an override. It defaults to issue-board properties named `Issue`, `Status`, and `Completed Date`; set `ORCA_NOTION_TITLE_PROPERTY`, `ORCA_NOTION_STATUS_PROPERTY`, or `ORCA_NOTION_COMPLETED_DATE_PROPERTY` for a different board schema. Before creating, it queries the data source by title so repeated payloads update the existing page instead of creating duplicates. Set `ORCA_NOTION_MATCH_PROPERTY` if your board uses a different title property, or `ORCA_NOTION_EXISTING_PAGE_ID` when a caller already knows the target page. Test the create/update plan without network access:
 
 ```sh
 orca notion adapter --dry-run .orca/notion/outbox/payload.json
@@ -112,6 +112,14 @@ orca notion adapter --doctor .orca/notion/outbox/payload.json
 
 Stable adapter fixtures live in `scripts/fixtures/notion/` for contract tests and integration examples. `scripts/fixtures/notion/adapter-doctor-token-missing.json` mirrors the `--doctor` token-missing readiness case shown below.
 Use `--doctor` when you need one read-only JSON preflight that combines backend readiness with adapter readiness. Its top-level `ok` means the payload is valid, ORCA's Notion backend is configured, and the adapter has live Notion sync readiness. A payload can pass `--json-check` while `--doctor` still reports `ok: false` when config or `NOTION_TOKEN` is missing.
+
+Notion Issue Board date policy:
+
+- New or active issues leave `Completed Date` blank.
+- When ORCA syncs a `Done` status, the adapter sets `Completed Date` to the local completion date only if the page has no existing completed date.
+- Replayed payloads and updates to pages with an existing `Completed Date` preserve that value.
+- `Last Updated Date` is Notion-managed/read-only and is never written by ORCA.
+- `ORCA_NOTION_COMPLETION_DATE=YYYY-MM-DD` exists for explicit corrections/tests; do not use it to guess historical dates.
 
 Example `--doctor` output when ORCA's backend config is ready but live Notion sync is not:
 

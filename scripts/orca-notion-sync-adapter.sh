@@ -11,8 +11,10 @@ Environment:
   ORCA_NOTION_DATA_SOURCE_ID         Overrides payload issue_board_data_source_id.
   ORCA_NOTION_TITLE_PROPERTY         Defaults to Issue.
   ORCA_NOTION_STATUS_PROPERTY        Defaults to Status.
+  ORCA_NOTION_COMPLETED_DATE_PROPERTY Defaults to Completed Date.
   ORCA_NOTION_MATCH_PROPERTY         Defaults to title property.
   ORCA_NOTION_EXISTING_PAGE_ID       Dry-run/live override to force update path.
+  ORCA_NOTION_COMPLETION_DATE        Optional YYYY-MM-DD override for tests/backfills.
   ORCA_NOTION_ADAPTER_DRY_RUN=1      Print request plan JSON, no network.
 EOF
 }
@@ -79,6 +81,7 @@ response_file=$(mktemp "${TMPDIR:-/tmp}/orca-notion-response.XXXXXX")
 trap 'rm -f "$plan_file" "$query_file" "$create_file" "$update_file" "$response_file"' EXIT INT TERM HUP
 
 ruby_json - "$payload_file" "$plan_file" "$query_file" "$create_file" "$update_file" <<'RUBY'
+require "date"
 payload_path, plan_path, query_path, create_path, update_path = ARGV
 payload = JSON.parse(File.read(payload_path))
 
@@ -93,8 +96,11 @@ abort("notion-adapter: missing issue board data source id") if data_source_id.em
 
 title_property = ENV.fetch("ORCA_NOTION_TITLE_PROPERTY", "Issue")
 status_property = ENV.fetch("ORCA_NOTION_STATUS_PROPERTY", "Status")
+completed_date_property = ENV.fetch("ORCA_NOTION_COMPLETED_DATE_PROPERTY", "Completed Date")
 match_property = ENV.fetch("ORCA_NOTION_MATCH_PROPERTY", title_property)
 existing_page_id = ENV["ORCA_NOTION_EXISTING_PAGE_ID"].to_s
+completion_date = ENV.fetch("ORCA_NOTION_COMPLETION_DATE", Date.today.iso8601)
+abort("notion-adapter: ORCA_NOTION_COMPLETION_DATE must be YYYY-MM-DD") unless completion_date.match?(/\A\d{4}-\d{2}-\d{2}\z/)
 
 body_payload = payload["payload"]
 title = body_payload["issue"].to_s
@@ -129,6 +135,11 @@ properties = {
   }
 }
 
+create_properties = Marshal.load(Marshal.dump(properties))
+if status == "Done"
+  create_properties[completed_date_property] = {"date" => {"start" => completion_date}}
+end
+
 query = {
   "page_size" => 1,
   "filter" => {
@@ -139,7 +150,7 @@ query = {
 
 create = {
   "parent" => {"data_source_id" => data_source_id},
-  "properties" => properties,
+  "properties" => create_properties,
   "children" => [
     {
       "object" => "block",
@@ -165,6 +176,14 @@ plan = {
     "query" => query
   },
   "existing_page_id" => existing_page_id,
+  "completed_date" => {
+    "property" => completed_date_property,
+    "completion_date" => completion_date,
+    "set_on_create_when_done" => status == "Done",
+    "set_on_update_when_done_and_blank" => status == "Done",
+    "dry_run_existing_page_note" => "Existing-page updates add Completed Date only after live page/query evidence shows it is blank.",
+    "last_updated_date" => "read-only; never written"
+  },
   "create" => {
     "method" => "POST",
     "url" => "https://api.notion.com/v1/pages",
@@ -225,6 +244,7 @@ token="${NOTION_TOKEN:-${ORCA_NOTION_TOKEN:-}}"
 notion_version="${NOTION_VERSION:-2026-03-11}"
 data_source_id=$(ruby_json -e 'puts JSON.parse(File.read(ARGV.fetch(0))).fetch("data_source_id")' "$plan_file")
 existing_page_id="${ORCA_NOTION_EXISTING_PAGE_ID:-}"
+existing_completed_date=
 
 if [ -z "$existing_page_id" ]; then
   query_status=$(curl -sS -o "$response_file" -w '%{http_code}' \
@@ -240,6 +260,14 @@ if [ -z "$existing_page_id" ]; then
         result = data.fetch("results", []).first
         puts(result ? result["id"].to_s : "")
       ' "$response_file")
+      if [ -n "$existing_page_id" ]; then
+        existing_completed_date=$(ruby_json -e '
+          data = JSON.parse(File.read(ARGV.fetch(0)))
+          completed_property = JSON.parse(File.read(ARGV.fetch(1))).fetch("completed_date").fetch("property")
+          result = data.fetch("results", []).first
+          puts result.fetch("properties", {}).fetch(completed_property, {}).fetch("date", {})&.fetch("start", nil).to_s
+        ' "$response_file" "$plan_file")
+      fi
       ;;
     *)
       printf 'notion-adapter: Notion query failed with HTTP %s\n' "$query_status" >&2
@@ -247,9 +275,42 @@ if [ -z "$existing_page_id" ]; then
       exit 1
       ;;
   esac
+elif [ -n "$existing_page_id" ]; then
+  page_status=$(curl -sS -o "$response_file" -w '%{http_code}' \
+    -X GET "https://api.notion.com/v1/pages/$existing_page_id" \
+    -H "Authorization: Bearer $token" \
+    -H "Content-Type: application/json" \
+    -H "Notion-Version: $notion_version")
+  case "$page_status" in
+    2??)
+      existing_completed_date=$(ruby_json -e '
+        data = JSON.parse(File.read(ARGV.fetch(0)))
+        completed_property = JSON.parse(File.read(ARGV.fetch(1))).fetch("completed_date").fetch("property")
+        puts data.fetch("properties", {}).fetch(completed_property, {}).fetch("date", {})&.fetch("start", nil).to_s
+      ' "$response_file" "$plan_file")
+      ;;
+    *)
+      printf 'notion-adapter: Notion page fetch failed with HTTP %s\n' "$page_status" >&2
+      cat "$response_file" >&2
+      exit 1
+      ;;
+  esac
 fi
 
 if [ -n "$existing_page_id" ]; then
+  ORCA_EXISTING_COMPLETED_DATE="$existing_completed_date" ruby_json - "$plan_file" "$update_file" <<'RUBY'
+plan_path, update_path = ARGV
+plan = JSON.parse(File.read(plan_path))
+body = plan.fetch("update").fetch("body")
+completed = plan.fetch("completed_date")
+existing_completed_date = ENV.fetch("ORCA_EXISTING_COMPLETED_DATE", "")
+if completed.fetch("set_on_update_when_done_and_blank") && existing_completed_date.empty?
+  body.fetch("properties")[completed.fetch("property")] = {
+    "date" => {"start" => completed.fetch("completion_date")}
+  }
+end
+File.write(update_path, JSON.generate(body))
+RUBY
   status=$(curl -sS -o "$response_file" -w '%{http_code}' \
     -X PATCH "https://api.notion.com/v1/pages/$existing_page_id" \
     -H "Authorization: Bearer $token" \

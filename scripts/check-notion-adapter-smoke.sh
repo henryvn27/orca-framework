@@ -45,6 +45,19 @@ need_json_field "$tmp/plan-create.json" 'data.fetch("create").fetch("method")' "
 need_json_field "$tmp/plan-create.json" 'data.fetch("create").fetch("body").fetch("parent").fetch("data_source_id")' "issue-board-123"
 need_json_field "$tmp/plan-create.json" 'data.fetch("create").fetch("body").fetch("properties").fetch("Issue").fetch("title").fetch(0).fetch("text").fetch("content")' "Run /goal loop for make this production ready"
 need_json_field "$tmp/plan-create.json" 'data.fetch("create").fetch("body").fetch("properties").fetch("Status").fetch("status").fetch("name")' "Done"
+need_json_field "$tmp/plan-create.json" 'data.fetch("create").fetch("body").fetch("properties").fetch("Completed Date").fetch("date").fetch("start")' "$(date '+%Y-%m-%d')"
+need_json_field "$tmp/plan-create.json" 'data.fetch("create").fetch("body").fetch("properties").key?("Last Updated Date")' "false"
+
+active_payload="$tmp/active-payload.json"
+RUBYOPT="${RUBYOPT:+$RUBYOPT }--disable-gems" ruby -rjson -e '
+  data = JSON.parse(File.read(ARGV.fetch(0)))
+  data.fetch("payload")["status"] = "In progress"
+  File.write(ARGV.fetch(1), JSON.pretty_generate(data))
+' -- "$payload" "$active_payload"
+ORCA_NOTION_ADAPTER_DRY_RUN=1 ./scripts/orca-notion-sync-adapter.sh "$active_payload" > "$tmp/plan-create-active.json"
+need_json_field "$tmp/plan-create-active.json" 'data.fetch("create").fetch("body").fetch("properties").fetch("Status").fetch("status").fetch("name")' "In progress"
+need_json_field "$tmp/plan-create-active.json" 'data.fetch("create").fetch("body").fetch("properties").key?("Completed Date")' "false"
+need_json_field "$tmp/plan-create-active.json" 'data.fetch("create").fetch("body").fetch("properties").key?("Last Updated Date")' "false"
 
 ORCA_NOTION_ADAPTER_DRY_RUN=1 ORCA_NOTION_EXISTING_PAGE_ID=page-789 ./scripts/orca-notion-sync-adapter.sh "$payload" > "$tmp/plan-update.json"
 need_json_field "$tmp/plan-update.json" 'data.fetch("action")' "update"
@@ -52,6 +65,8 @@ need_json_field "$tmp/plan-update.json" 'data.fetch("existing_page_id")' "page-7
 need_json_field "$tmp/plan-update.json" 'data.fetch("update").fetch("method")' "PATCH"
 need_json_field "$tmp/plan-update.json" 'data.fetch("update").fetch("url")' "https://api.notion.com/v1/pages/page-789"
 need_json_field "$tmp/plan-update.json" 'data.fetch("update").fetch("body").fetch("properties").fetch("Status").fetch("status").fetch("name")' "Done"
+need_json_field "$tmp/plan-update.json" 'data.fetch("update").fetch("body").fetch("properties").key?("Completed Date")' "false"
+need_json_field "$tmp/plan-update.json" 'data.fetch("update").fetch("body").fetch("properties").key?("Last Updated Date")' "false"
 
 ORCA_NOTION_ADAPTER_DRY_RUN=1 ORCA_NOTION_TITLE_PROPERTY=Name ORCA_NOTION_STATUS_PROPERTY=State ./scripts/orca-notion-sync-adapter.sh "$payload" > "$tmp/custom-plan.json"
 need_json_field "$tmp/custom-plan.json" 'data.fetch("create").fetch("body").fetch("properties").key?("Name")' "true"
@@ -89,6 +104,92 @@ need_json_field "$tmp/json-summary-token.json" 'data.fetch("live_ready")' "true"
 if ORCA_NOTION_DATA_SOURCE_ID=override-456 NOTION_TOKEN= ./scripts/orca-notion-sync-adapter.sh "$payload" >/dev/null 2>&1; then
   fail "expected live adapter without token to fail"
 fi
+
+fake_bin="$tmp/fake-bin"
+mkdir -p "$fake_bin"
+cat > "$fake_bin/curl" <<'EOF'
+#!/bin/sh
+set -eu
+out_file=
+method=
+url=
+data_file=
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    -o)
+      out_file="$2"
+      shift 2
+      ;;
+    -X)
+      method="$2"
+      shift 2
+      ;;
+    --data-binary)
+      data_file="${2#@}"
+      shift 2
+      ;;
+    -H|-w)
+      shift 2
+      ;;
+    -sS)
+      shift
+      ;;
+    http*)
+      url="$1"
+      shift
+      ;;
+    *)
+      shift
+      ;;
+  esac
+done
+[ -n "$out_file" ] || exit 2
+case "$url" in
+  */data_sources/*/query)
+    if [ -n "${FAKE_NOTION_COMPLETED_DATE:-}" ]; then
+      completed_json='{"start":"'"$FAKE_NOTION_COMPLETED_DATE"'","end":null,"time_zone":null}'
+    else
+      completed_json='null'
+    fi
+    cat > "$out_file" <<JSON
+{"results":[{"id":"page-existing","properties":{"Completed Date":{"type":"date","date":$completed_json}}}]}
+JSON
+    printf '200'
+    ;;
+  */pages/page-existing)
+    if [ "$method" = "PATCH" ]; then
+      cp "$data_file" "$FAKE_NOTION_PATCH_CAPTURE"
+      printf '{"url":"https://notion.example/page-existing"}' > "$out_file"
+      printf '200'
+    else
+      printf '{"id":"page-existing","properties":{"Completed Date":{"type":"date","date":null}}}' > "$out_file"
+      printf '200'
+    fi
+    ;;
+  *)
+    printf '{"url":"https://notion.example/new"}' > "$out_file"
+    printf '200'
+    ;;
+esac
+EOF
+chmod +x "$fake_bin/curl"
+
+FAKE_NOTION_PATCH_CAPTURE="$tmp/patch-blank-completed-date.json" \
+  PATH="$fake_bin:$PATH" \
+  NOTION_TOKEN=test-token \
+  ORCA_NOTION_COMPLETION_DATE=2026-06-24 \
+  ./scripts/orca-notion-sync-adapter.sh "$payload" > "$tmp/live-update-blank.txt"
+need_json_field "$tmp/patch-blank-completed-date.json" 'data.fetch("properties").fetch("Completed Date").fetch("date").fetch("start")' "2026-06-24"
+need_json_field "$tmp/patch-blank-completed-date.json" 'data.fetch("properties").key?("Last Updated Date")' "false"
+
+FAKE_NOTION_PATCH_CAPTURE="$tmp/patch-existing-completed-date.json" \
+  FAKE_NOTION_COMPLETED_DATE=2026-06-20 \
+  PATH="$fake_bin:$PATH" \
+  NOTION_TOKEN=test-token \
+  ORCA_NOTION_COMPLETION_DATE=2026-06-24 \
+  ./scripts/orca-notion-sync-adapter.sh "$payload" > "$tmp/live-update-existing.txt"
+need_json_field "$tmp/patch-existing-completed-date.json" 'data.fetch("properties").key?("Completed Date")' "false"
+need_json_field "$tmp/patch-existing-completed-date.json" 'data.fetch("properties").key?("Last Updated Date")' "false"
 
 if ORCA_NOTION_ADAPTER_DRY_RUN=1 ./scripts/orca-notion-sync-adapter.sh "$missing_id" >/dev/null 2>&1; then
   fail "expected missing issue board data source id to fail"

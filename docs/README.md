@@ -67,6 +67,7 @@ These are teaching-oriented pages for common paths:
 - [commands.md](commands.md)
 - [skills.md](skills.md)
 - [workflow.md](workflow.md)
+- [version-control.md](version-control.md)
 - [install.md](install.md)
 - [auto-updates.md](auto-updates.md)
 - [compatibility-matrix.md](compatibility-matrix.md)

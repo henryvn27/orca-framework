@@ -25,9 +25,10 @@ Use when a controller decides another actor should perform bounded implementatio
 2. Choose the orchestration pattern if delegation is warranted.
 3. State the objective, linked artifacts, and ownership boundary.
 4. Bound scope and out-of-scope work.
-5. Define required outputs, verification, and return schema.
-6. Define stop conditions, escalation rules, and approval boundary.
-7. Require a structured result on return.
+5. For repo-writing delegates, require `docs/version-control.md`: start/status branch checks, unrelated dirty-work preservation, scoped branch ownership, PR target, and no protected-branch implementation.
+6. Define required outputs, verification, and return schema.
+7. Define stop conditions, escalation rules, and approval boundary.
+8. Require a structured result on return.
 
 ## Expected Outputs
 
@@ -46,3 +47,4 @@ The parent should not have to guess how to ingest the result.
 - overlapping ownership between workers
 - no verification requirement
 - no structured return format
+- no branch or PR ownership boundary for repo-writing work

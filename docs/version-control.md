@@ -15,6 +15,19 @@ Recommended branch names:
 
 Do not mix unrelated framework systems in the same branch unless the work is intentionally a single reliability or release iteration.
 
+Before non-trivial repo work, inspect and record:
+
+```sh
+git rev-parse --show-toplevel
+git status --short --branch
+git branch --show-current
+git symbolic-ref refs/remotes/origin/HEAD
+```
+
+Use repo-specific protected branch names when documented. If none are documented, treat `main` as protected. Preserve unrelated dirty work. Do not reset, revert, delete, or stage unrelated files.
+
+Start from a scoped non-protected branch. Never implement directly on a protected branch.
+
 ## Iteration Shape
 
 Each meaningful iteration should have:
@@ -68,6 +81,28 @@ The current public release candidate starts at `0.1.0`. Iterations that add fram
 
 ## Validation Before PR Or Push
 
+Meaningful changes go through PRs unless repo policy explicitly allows a direct merge. Do not push directly to protected branches.
+
+Before closing repo work:
+
+1. Re-read the current request.
+2. Review the diff.
+3. Stage only scoped files.
+4. Commit with a concise message.
+5. Run focused verification.
+6. Push the scoped branch.
+7. Open or update a PR.
+8. Check PR status before merge.
+9. Merge only when scope is complete and checks/risk are acceptable.
+10. Delete the merged feature branch only when safe.
+11. End on the correct integration branch or documented clean state.
+
+PRs should include target branch, summary, files changed, tests/checks run, manual QA, risk/rollback, version/build impact, and deployment/Xcode Cloud/CI impact when relevant.
+
+Final handoff should report branch, commit, PR URL, merge state, tests/checks, remaining dirty files, blockers, and follow-ups.
+
+Avoid `git reset --hard`, `git checkout -- <file>`, force-push, deleting branches or worktrees, changing protected branch rules, or bypassing branch guards unless Henry explicitly requests it.
+
 Run:
 
 ```sh
@@ -107,3 +142,14 @@ Before considering an iteration complete, inspect:
 - whether new tools or MCP servers need registry entries or approval notes
 
 The goal is not process overhead. The goal is that another maintainer can reconstruct the iteration without reading the full chat transcript.
+
+## Scoutly Policy
+
+Use these rules only for Scoutly repos unless a newer Scoutly doc says otherwise:
+
+- Protected branches: `main`, `staging`, `dev`.
+- Normal work: branch from `dev`, PR to `dev`.
+- Release-candidate work: branch from `staging`, PR to `staging`.
+- Production hotfix: branch from `main`, PR to `main`, then merge forward to `staging` and `dev`.
+- Allowed prefixes: `feature/`, `fix/`, `chore/`, `docs/`, `release/`.
+- Run `npm run git:guard` before push when available.

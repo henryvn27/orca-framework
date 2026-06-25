@@ -31,11 +31,12 @@ Use after a plan exists or for a small change whose plan can be stated inline.
 
 1. Use `orca-build`.
 2. Confirm approval if required.
-3. Read relevant files before editing.
-4. Make scoped changes, including realistic loading, empty, and error states for user-facing async surfaces.
-5. If the execution workflow clearly benefits from Superpowers and the pack is available or desired, route that segment through `orca-superpowers` instead of cloning the upstream discipline locally.
-6. Run verification after meaningful phases.
-7. Update the work item with evidence and remaining risks.
+3. For non-trivial repo edits, follow `docs/version-control.md` before implementation: inspect repo root/status/current/default branch, preserve unrelated dirty work, and use a scoped non-protected branch.
+4. Read relevant files before editing.
+5. Make scoped changes, including realistic loading, empty, and error states for user-facing async surfaces.
+6. If the execution workflow clearly benefits from Superpowers and the pack is available or desired, route that segment through `orca-superpowers` instead of cloning the upstream discipline locally.
+7. Run verification after meaningful phases.
+8. Update the work item with evidence, branch or PR links, and remaining risks.
 
 ## Outputs And Artifacts
 
@@ -49,6 +50,7 @@ Use after a plan exists or for a small change whose plan can be stated inline.
 ## Failure Cases
 
 - If unrelated dirty changes exist, preserve them.
+- If current branch is protected, branch before editing.
 - If tests fail, diagnose before claiming completion.
 - If scope changes, return to planning and approval.
 - If new async UI loads data, do not ship a blank gap when a skeleton frame or equivalent placeholder should exist.

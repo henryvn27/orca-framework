@@ -48,9 +48,10 @@ Write ship readiness to the chosen record before marking work complete.
    - processed or visible
    - distributed
 6. For web deploys, keep preview and production distinct and default to preview unless production is explicitly intended.
-7. Prepare release notes and rollback guidance.
-8. Identify follow-up issues.
-9. Recommend done only with evidence.
+7. For repo changes, follow `docs/version-control.md`: review diff, stage scoped files only, commit, push, open or update the PR, check PR status, and merge only when policy/checks/risk allow.
+8. Prepare release notes and rollback guidance.
+9. Identify follow-up issues.
+10. Recommend done only with evidence.
 
 ## Outputs And Artifacts
 
@@ -63,6 +64,7 @@ Write ship readiness to the chosen record before marking work complete.
 - If a gate is incomplete, stop and route to the relevant command.
 - If validation cannot run, record the exact blocker.
 - If upload or deploy evidence is missing, do not call the release complete.
+- If branch protection or PR checks block merge, record the blocker and leave the branch/PR ready.
 
 ## Related Commands And Skills
 

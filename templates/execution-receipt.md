@@ -17,6 +17,16 @@
 - Milestone:
 - Goal contract:
 
+## Git And PR
+
+- Repo root:
+- Base branch:
+- Working branch:
+- Commit:
+- PR:
+- Merge state:
+- Remaining dirty files:
+
 ## Actions Taken
 
 - Concrete actions only. Avoid vague summaries like "improved workflow" or "implemented enhancements."

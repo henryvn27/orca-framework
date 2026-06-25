@@ -28,6 +28,16 @@
 
 - 
 
+## Git And PR Scope
+
+- Repo root:
+- Base branch:
+- Working branch:
+- Protected branches:
+- PR target:
+- Dirty files to preserve:
+- Branch guard/check before push:
+
 ## Out Of Scope
 
 - 

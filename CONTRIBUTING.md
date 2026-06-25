@@ -8,6 +8,7 @@ Thank you for improving ORCA Framework. Contributions should make the framework 
 - Preserve the separation between blind QA, briefed QA, and informed QA.
 - Avoid unsupported claims about tool support or test coverage.
 - Write concrete guidance that an agent can follow.
+- Use `docs/version-control.md` for branch, PR, protected-branch, and handoff expectations.
 - Run `./scripts/validate-repo.sh` before opening a pull request.
 
 ## Pull Request Checklist

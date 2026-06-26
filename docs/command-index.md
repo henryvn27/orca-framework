@@ -34,6 +34,7 @@ Use `orca list` after install for exact command availability.
 - `orca-efficient-frontier`
 - `orca-impeccable`
 - `orca-superpowers`
+- `orca-taste`
 - `orca-visual-plan`
 - `orca-visual-recap`
 

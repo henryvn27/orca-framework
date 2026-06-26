@@ -41,6 +41,7 @@ orca run orca-build --print -- "Implement the approved plan"
 - `orca-efficient-frontier`
 - `orca-impeccable`
 - `orca-superpowers`
+- `orca-taste`
 - `orca-visual-plan`
 - `orca-visual-recap`
 

@@ -32,7 +32,12 @@ Produce interfaces that feel intentional and product-specific rather than generi
 - copy that sounds like a model smoothing over uncertainty
 - treating every specialized design tool as something ORCA Framework must replace
 
+## Taste Skill Route
+
+Use `orca-taste` for landing pages, portfolios, redesigns, and anti-AI UI passes where Taste Skill is a better fit than ORCA's local checklist.
+
 ## Read Next
 
 - [../visual-quality.md](../visual-quality.md)
+- [../taste-skill-pack.md](../taste-skill-pack.md)
 - [../human-voice.md](../human-voice.md)

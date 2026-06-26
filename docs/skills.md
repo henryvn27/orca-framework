@@ -18,7 +18,7 @@ These skills coordinate issue-native work in Linear. If the user opts out of Lin
 
 - Core governance: `orca-core`
 - Intake and discovery: `orca-onboard`, `orca-discover`, `orca-legacy`, `orca-research`, `orca-controller-mode`, `orca-business-ideation`, `orca-model-council`, `orca-council-product-idea`, `orca-council-feature-evaluation`, `orca-council-market-opportunity`, `orca-attribution`, `orca-background-mode`, `orca-docs-system`, `orca-integrations`, `orca-integration-recommendation`, `orca-graph-vault-support`, `orca-corpus-support`, `orca-adaptive-guidance`, `orca-agent-orchestration`
-- Wrapped upstream packs: `orca-impeccable`, `orca-superpowers`
+- Wrapped upstream packs: `orca-impeccable`, `orca-superpowers`, `orca-taste`
 - Install and setup: `orca-install-help`
 - Updates and release safety: `orca-auto-update`
 - Delivery: `orca-spec`, `orca-plan`, `orca-goal-mode`, `orca-build`
@@ -84,3 +84,4 @@ Reliability skills should be treated as cross-cutting helpers:
 - `orca-self-improvement` for separating local adaptation from framework evolution and requiring evidence before promotion
 - `orca-impeccable` for routing ORCA design work into the maintained Impeccable skill pack with explicit wrapper boundaries
 - `orca-superpowers` for routing ORCA build and plan work into the maintained Superpowers workflow when that pack is the strongest fit
+- `orca-taste` for routing anti-slop frontend and anti-AI UI work into Taste Skill with explicit upstream attribution

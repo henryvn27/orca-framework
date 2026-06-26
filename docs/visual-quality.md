@@ -54,6 +54,8 @@ User-facing work should aim for:
 4. define typography, spacing, and component rules
 5. implement and then review with real screenshots or browser context
 
+When the work is a landing page, portfolio, redesign, or public marketing UI and the main risk is generic AI-looking output, route through `orca-taste` and `integrations/taste-skill.md`.
+
 ## Artifact Spillover
 
 If the UI is specific but the surrounding artifacts are generic, ORCA still feels AI-generated.

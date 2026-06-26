@@ -57,6 +57,7 @@ docs/hosts/vscode.md
 integrations/README.md
 integrations/impeccable.md
 integrations/superpowers.md
+integrations/taste-skill.md
 scripts/fixtures/notion/goal-event-valid.json
 scripts/fixtures/notion/goal-event-missing-data-source.json
 scripts/fixtures/notion/goal-event-unsupported-schema.json
@@ -115,16 +116,16 @@ else
   doc_count="$(/usr/bin/find docs -type f \( -name '*.md' -o -name '*.mdx' \) | wc -l | tr -d ' ')"
 fi
 
-[ "$command_count" = "86" ] || fail "expected 86 commands, found $command_count"
-[ "$skill_count" = "71" ] || fail "expected 71 skills, found $skill_count"
+[ "$command_count" = "87" ] || fail "expected 87 commands, found $command_count"
+[ "$skill_count" = "72" ] || fail "expected 72 skills, found $skill_count"
 [ "$template_count" = "183" ] || fail "expected 183 templates, found $template_count"
-[ "$doc_count" = "454" ] || fail "expected 454 docs, found $doc_count"
+[ "$doc_count" = "455" ] || fail "expected 455 docs, found $doc_count"
 
-for command in install doctor onboard spec plan build review ship context research delegate checkpoint receipt status attribution help impeccable superpowers; do
+for command in install doctor onboard spec plan build review ship context research delegate checkpoint receipt status attribution help impeccable superpowers taste; do
   need_file "commands/orca-$command.md"
 done
 
-for skill in install-help tool-setup onboard spec plan build review ship context research delegation checkpoint receipts attribution impeccable superpowers; do
+for skill in install-help tool-setup onboard spec plan build review ship context research delegation checkpoint receipts attribution impeccable superpowers taste; do
   need_file "skills/orca-$skill/SKILL.md"
 done
 
@@ -132,6 +133,9 @@ for wrapper in impeccable superpowers; do
   need_file "commands/orca-$wrapper.md"
   need_file "integrations/$wrapper.md"
 done
+
+need_file "commands/orca-taste.md"
+need_file "integrations/taste-skill.md"
 
 for wrapper in caveman efficient-frontier visual-plan visual-recap; do
   if [ -e "commands/orca-$wrapper.md" ] || [ -e "integrations/$wrapper.md" ] || [ -d "skills/orca-$wrapper" ]; then

@@ -40,7 +40,7 @@ Store design findings in the chosen record.
 4. Check whether layout, typography, motion, and copy feel product-specific instead of generic prompt output.
 5. Check whether surrounding artifacts such as release notes, empty states, onboarding text, and review summaries also sound product-specific instead of framework boilerplate.
 6. If the work is design-heavy and Impeccable is available or desired, route through `orca-impeccable` instead of pretending ORCA should replace the upstream pack.
-7. If the work is a landing page, portfolio, redesign, or anti-AI UI pass, route through `orca-taste` and keep Taste Skill provenance explicit.
+7. If the work is a landing page, portfolio, redesign, or anti-AI UI pass, route through `orca-taste`; if reusable anti-AI UI rules or React patterns are created, move them to `hvn-anti-ai-ui`.
 8. Produce prioritized design findings.
 9. Sync findings to the work item.
 

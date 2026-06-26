@@ -9,7 +9,7 @@ Upstream: `https://github.com/Leonxlnx/taste-skill`
 ## Use When
 
 - the task is a landing page, portfolio, public marketing page, or redesign
-- the user asks for anti-AI UI, anti-slop frontend output, or Taste Skill directly
+- the user asks for anti-slop frontend output or Taste Skill directly
 - generic SaaS layouts, weak hierarchy, bland copy, or default AI visual patterns are the main risk
 
 ## Do Not Use When
@@ -50,15 +50,9 @@ npx skills add https://github.com/Leonxlnx/taste-skill --skill "design-taste-fro
 
 Install a specific variant by replacing the skill name with the variant in `skills/*/SKILL.md`.
 
-## Anti-AI UI Gate
+## Anti-AI UI Boundary
 
-Before marking UI work done, check:
-
-- product-specific visual direction
-- intentional layout, spacing, typography, and component language
-- non-generic copy in hero, empty states, loading states, release notes, and review artifacts
-- button/form contrast and responsive behavior
-- screenshot or browser proof, not only a passing build
+For reusable anti-AI UI rules, React patterns, and UI-specific copy guidance, route to `https://github.com/henryvn27/hvn-anti-ai-ui`. ORCA should keep only workflow hooks and evidence requirements.
 
 ## Provenance Rule
 

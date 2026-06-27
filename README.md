@@ -250,6 +250,8 @@ If already inside an ORCA checkout, do not clone again.
 
 For agent-assisted setup, use the copy-pastable Codex or Claude Code prompt near the top of this README.
 
+Optional wrapped skill packs include Superpowers, Taste Skill, and Matt Pocock Skills. ORCA routes to them when installed; it does not vendor their instructions.
+
 ## Advanced Docs
 
 - [docs/install.md](docs/install.md)

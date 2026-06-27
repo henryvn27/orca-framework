@@ -105,6 +105,18 @@ Each entry records:
 - Related ORCA Framework areas: `commands/orca-superpowers.md`, `skills/orca-superpowers/`, `integrations/superpowers.md`
 - Status notes: active maintained upstream wrapper target for execution-heavy coding workflows
 
+### Matt Pocock Skills
+
+- Link: [mattpocock/skills](https://github.com/mattpocock/skills)
+- Maintainer or org: Matt Pocock
+- License: MIT
+- Relationship type: direct wrapper or integration
+- What ORCA Framework uses or borrows: engineering-practice skill routes for tight bug diagnosis, vertical-slice TDD, issue/PRD synthesis, domain modeling, codebase design, architecture review, handoff, and skill-writing discipline
+- ORCA Framework relationship detail: ORCA Framework wraps Matt Pocock Skills through `orca-matt-pocock-skills`, integration docs, and wrapper skills; ORCA Framework does not redistribute upstream skill source in this repo
+- Special notices required: preserve attribution and MIT notices if future changes vendor prompts, skills, or helper code from the upstream repo
+- Related ORCA Framework areas: `commands/orca-matt-pocock-skills.md`, `skills/orca-matt-pocock-skills/`, `integrations/matt-pocock-skills.md`
+- Status notes: active optional upstream wrapper target for engineering feedback loops
+
 ### Claude Code
 
 - Link: [Claude Code docs](https://code.claude.com/docs/en/overview)

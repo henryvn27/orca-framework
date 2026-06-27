@@ -56,6 +56,7 @@ docs/hosts/generic.md
 docs/hosts/vscode.md
 integrations/README.md
 integrations/impeccable.md
+integrations/matt-pocock-skills.md
 integrations/superpowers.md
 integrations/taste-skill.md
 scripts/fixtures/notion/goal-event-valid.json
@@ -116,16 +117,16 @@ else
   doc_count="$(/usr/bin/find docs -type f \( -name '*.md' -o -name '*.mdx' \) | wc -l | tr -d ' ')"
 fi
 
-[ "$command_count" = "87" ] || fail "expected 87 commands, found $command_count"
-[ "$skill_count" = "72" ] || fail "expected 72 skills, found $skill_count"
+[ "$command_count" = "88" ] || fail "expected 88 commands, found $command_count"
+[ "$skill_count" = "73" ] || fail "expected 73 skills, found $skill_count"
 [ "$template_count" = "183" ] || fail "expected 183 templates, found $template_count"
 [ "$doc_count" = "455" ] || fail "expected 455 docs, found $doc_count"
 
-for command in install doctor onboard spec plan build review ship context research delegate checkpoint receipt status attribution help impeccable superpowers taste; do
+for command in install doctor onboard spec plan build review ship context research delegate checkpoint receipt status attribution help impeccable superpowers taste matt-pocock-skills; do
   need_file "commands/orca-$command.md"
 done
 
-for skill in install-help tool-setup onboard spec plan build review ship context research delegation checkpoint receipts attribution impeccable superpowers taste; do
+for skill in install-help tool-setup onboard spec plan build review ship context research delegation checkpoint receipts attribution impeccable superpowers taste matt-pocock-skills; do
   need_file "skills/orca-$skill/SKILL.md"
 done
 
@@ -136,6 +137,8 @@ done
 
 need_file "commands/orca-taste.md"
 need_file "integrations/taste-skill.md"
+need_file "commands/orca-matt-pocock-skills.md"
+need_file "integrations/matt-pocock-skills.md"
 
 for wrapper in caveman efficient-frontier visual-plan visual-recap; do
   if [ -e "commands/orca-$wrapper.md" ] || [ -e "integrations/$wrapper.md" ] || [ -d "skills/orca-$wrapper" ]; then

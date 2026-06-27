@@ -15,6 +15,7 @@
 - extended the improvement loop with session-quality signals, quality scoring, and rough-session prompting UX
 - added a broad integration-pack system for web, mobile, backend, auth, payments, analytics, automation, and business tools
 - refined stack guidance so ORCA Framework recommends only best-fit tools and otherwise stays neutral or helps with user-chosen setup
+- added PermitPulse as a real ORCA demo case study for autonomous business wedge selection and first-outreach-ready assets
 
 ## What To Read If You Have Been Away
 

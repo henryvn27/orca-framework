@@ -19,6 +19,7 @@ This page helps returning users rediscover what changed without reading every fi
 - clearer ORCA-first positioning that treats ORCA Framework as the replacement for older GStack or GSD-centered routines
 - optional NotebookLM support for research and knowledge-heavy workflows without making it a default stack recommendation
 - a truth-hierarchy rule that treats user vaults as primary workflow evidence when they are available
+- PermitPulse demo documentation showing ORCA narrowing a broad business prompt into a first-outreach-ready lead-alert service
 
 ## Best Pages To Revisit
 

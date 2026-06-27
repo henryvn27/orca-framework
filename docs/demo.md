@@ -12,5 +12,6 @@ Use `orca-demo` when you want the fastest impressive ORCA experience with very l
 ## Read Next
 
 - command contract: `commands/orca-demo.md`
+- real demo case study: [permitpulse-demo.md](permitpulse-demo.md)
 - first 10 minutes: [first-10-minutes.md](first-10-minutes.md)
 - proof and outcomes: [proof.md](proof.md)

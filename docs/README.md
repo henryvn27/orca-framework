@@ -13,6 +13,7 @@ If you want the polished docs-site version instead of browsing raw markdown, use
 - [first-workflow.md](first-workflow.md): one five-command ORCA path for the first real session
 - [../commands/orca-demo.md](../commands/orca-demo.md): low-input personalized showcase that becomes a real `/goal`
 - [demo.md](demo.md): docs-site routing page for the ORCA demo path
+- [permitpulse-demo.md](permitpulse-demo.md): real ORCA demo case study for a permit-data lead-alert business
 - [quickstart.md](quickstart.md): shortest path to installing and trying ORCA Framework
 - [install-overview.md](install-overview.md): how the install system is organized
 - [install.md](install.md): canonical step-by-step install guide

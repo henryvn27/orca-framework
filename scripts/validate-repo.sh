@@ -121,7 +121,7 @@ fi
 [ "$command_count" = "89" ] || fail "expected 89 commands, found $command_count"
 [ "$skill_count" = "74" ] || fail "expected 74 skills, found $skill_count"
 [ "$template_count" = "183" ] || fail "expected 183 templates, found $template_count"
-[ "$doc_count" = "455" ] || fail "expected 455 docs, found $doc_count"
+[ "$doc_count" = "456" ] || fail "expected 456 docs, found $doc_count"
 
 for command in install doctor onboard spec plan build review ship context research delegate checkpoint receipt status attribution help impeccable superpowers taste matt-pocock-skills karpathy-guidelines; do
   need_file "commands/orca-$command.md"

@@ -80,3 +80,5 @@ Business ideation extends ORCA Framework upstream:
 - `orca-spec` begins only after the opportunity and first validation path are clear enough
 
 NotebookLM can be a useful optional support layer here when the user wants a research notebook for competitor, market, or evidence synthesis. It should help compress source material, not replace judgment or direct validation.
+
+See [permitpulse-demo.md](permitpulse-demo.md) for a concrete ORCA demo that narrowed a broad business prompt into a Chicago roofing-permit lead-alert wedge and first-outreach-ready assets.

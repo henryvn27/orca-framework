@@ -17,7 +17,7 @@ The following categories appear in this repo:
 
 - GitHub and Linear service integrations
 - GitHub MCP server and Linear MCP setup paths
-- officially wrapped upstream capability packs such as Impeccable, Superpowers, and Matt Pocock Skills, documented as wrappers rather than native ORCA code
+- officially wrapped upstream capability packs such as Impeccable, Superpowers, Matt Pocock Skills, and Karpathy Guidelines, documented as wrappers rather than native ORCA code
 - compatibility documentation for Codex CLI, Claude Code, Hermes Agent, VS Code, Cursor, GitHub Copilot, and related hosts
 - reference and workflow influences such as GitHub Spec Kit, Bloomberg Beta's manual, and Steve Blank's customer-development writing
 

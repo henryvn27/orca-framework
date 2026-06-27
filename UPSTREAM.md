@@ -117,6 +117,18 @@ Each entry records:
 - Related ORCA Framework areas: `commands/orca-matt-pocock-skills.md`, `skills/orca-matt-pocock-skills/`, `integrations/matt-pocock-skills.md`
 - Status notes: active optional upstream wrapper target for engineering feedback loops
 
+### Karpathy Guidelines
+
+- Link: [multica-ai/andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills)
+- Maintainer or org: Multica AI / forrestchang
+- License: MIT
+- Relationship type: direct wrapper or integration
+- What ORCA Framework uses or borrows: a compact coding-agent behavior gate for surfacing assumptions, avoiding overbuilt code, keeping diffs surgical, and defining verifiable success criteria
+- ORCA Framework relationship detail: ORCA Framework wraps Karpathy Guidelines through `orca-karpathy-guidelines`, integration docs, and wrapper skills; ORCA Framework does not redistribute upstream skill source in this repo
+- Special notices required: preserve attribution and MIT notices if future changes vendor prompts, skills, Cursor rules, or helper files from the upstream repo
+- Related ORCA Framework areas: `commands/orca-karpathy-guidelines.md`, `skills/orca-karpathy-guidelines/`, `integrations/karpathy-guidelines.md`
+- Status notes: active optional upstream wrapper target for coding-agent behavior discipline
+
 ### Claude Code
 
 - Link: [Claude Code docs](https://code.claude.com/docs/en/overview)

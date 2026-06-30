@@ -21,7 +21,7 @@ These skills coordinate issue-native work in Linear. If the user opts out of Lin
 - Wrapped upstream packs: `orca-impeccable`, `orca-superpowers`
 - Install and setup: `orca-install-help`
 - Updates and release safety: `orca-auto-update`
-- Delivery: `orca-spec`, `orca-plan`, `orca-goal-mode`, `orca-build`
+- Delivery: `orca-spec`, `orca-plan`, `orca-goal-mode`, `orca-goal-prompt`, `orca-build`
 - Reliability: `orca-observability`, `orca-eval`, `orca-approval-gate`, `orca-benchmark`, `orca-accounting`, `orca-portability`, `orca-regression-task`, `orca-shared-state`, `orca-checkpoint`, `orca-tool-governance`, `orca-tool-setup`, `orca-runtime-adaptation`, `orca-receipts`, `orca-next-step`, `orca-delegation`, `orca-ci`, `orca-pr-feedback`, `orca-context`
 - Platform release packs: `orca-testflight-release`, `orca-testflight-ops`
 - Web deploy packs: `orca-vercel-deploy`
@@ -60,6 +60,7 @@ Reliability skills should be treated as cross-cutting helpers:
 - `orca-receipts` for compact execution summaries that support review, replay, and restore decisions
 - `orca-legacy` for repo archaeology, business logic extraction, and staged modernization planning
 - `orca-goal-mode` for converting bounded specs or milestones into durable goal contracts
+- `orca-goal-prompt` for creating native `/goal` prompts that work through bounded ORCA plan chunks, delegate blocker fixes, record true blockers, and keep moving
 - `orca-next-step` for concise, adaptive phase-exit guidance
 - `orca-delegation` for bounded controller-to-executor briefs and structured returns
 - `orca-ship` for final release readiness and explicit uploaded or deployed evidence, not just local success

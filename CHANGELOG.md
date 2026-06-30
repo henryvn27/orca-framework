@@ -6,6 +6,7 @@
 
 ### Added
 
+- Added `orca-goal-prompt` for creating native `/goal` prompts that work through bounded ORCA plan chunks, delegate blocker fixes, record true blockers, and keep moving.
 - Added default GitHub hygiene guidance for repo work, including scoped branches, PR expectations, protected-branch safety, and Scoutly-specific branch policy.
 - Added an auto-update architecture with update channels, update modes, update discovery and verification, rollback and recovery policy, staged rollout guidance, update UX artifacts, and ORCA update command surfaces.
 - Added background mode and keep-making-progress support with autonomy levels, loop guards, permission handling, risk tiers, and resumable background receipts.

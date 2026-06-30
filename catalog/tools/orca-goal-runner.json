@@ -1,0 +1,12 @@
+{
+  "id": "orca-goal-runner",
+  "name": "ORCA Goal Runner",
+  "status": "extract-tool",
+  "repo": "https://github.com/henryvn27/orca-goal-runner",
+  "category": "workflow",
+  "description": "Bounded /goal loops, packs, readiness scoring, progress, and handoff state.",
+  "sourcePaths": ["bin/orca", "commands/orca-goal.md", "skills/orca-goal-mode", "scripts/check-goal-smoke.sh", ".orca/packs"],
+  "provides": ["goal-loop", "loop-packs", "readiness-score"],
+  "dependencies": [],
+  "conflicts": []
+}

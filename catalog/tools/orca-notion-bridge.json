@@ -1,0 +1,12 @@
+{
+  "id": "orca-notion-bridge",
+  "name": "ORCA Notion Bridge",
+  "status": "extract-tool",
+  "repo": "https://github.com/henryvn27/orca-notion-bridge",
+  "category": "integration",
+  "description": "Notion payloads, outbox sync, adapter contract, and local fallback handoffs.",
+  "sourcePaths": ["bin/orca", "scripts/orca-notion-sync-adapter.sh", "scripts/fixtures/notion", "docs/source-of-truth-policy.md"],
+  "provides": ["notion-sync", "notion-outbox", "tracker-handoff"],
+  "dependencies": ["notion"],
+  "conflicts": []
+}

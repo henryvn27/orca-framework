@@ -24,6 +24,7 @@ Usage:
   orca notion adapter --dry-run PAYLOAD
   orca notion doctor [--strict] [--json]
   orca backend status [--json]
+  orca tools [--json]
   orca help
   orca list
   orca show <command>
@@ -51,6 +52,8 @@ Examples:
   orca notion adapter --doctor .orca/notion/outbox/payload.json
   orca notion sync --all
   orca notion doctor [--strict] [--json]
+  orca tools
+  orca tools --json
   orca list
   orca show orca-build
   orca run orca-onboard --print -- "Build a small iOS settings screen"
@@ -60,6 +63,40 @@ EOF
 
 list_commands() {
   find "$root/commands" -type f -name 'orca-*.md' | sed "s#^$root/commands/##" | sed 's/\.md$//' | sort
+}
+
+list_tools() {
+  json=0
+  case "${1:-}" in
+    --json) json=1 ;;
+    ""|--human) ;;
+    -h|--help)
+      printf 'Usage: orca tools [--json]\n'
+      return 0
+      ;;
+    *)
+      printf 'Usage: orca tools [--json]\n' >&2
+      return 1
+      ;;
+  esac
+
+  catalog_dir="$root/catalog/tools"
+  [ -d "$catalog_dir" ] || {
+    [ "$json" -eq 1 ] && printf '{"tools":[]}\n'
+    return 0
+  }
+
+  if [ "$json" -eq 1 ]; then
+    ruby_json -e 'puts JSON.generate({ tools: ARGV.sort.map { |path| JSON.parse(File.read(path)) } })' "$catalog_dir"/*.json
+    return 0
+  fi
+
+  ruby_json -e '
+    ARGV.sort.each do |path|
+      tool = JSON.parse(File.read(path))
+      puts "#{tool.fetch("id")} [#{tool.fetch("status")}] #{tool.fetch("repo")}"
+    end
+  ' "$catalog_dir"/*.json
 }
 
 normalize_command() {
@@ -1457,6 +1494,10 @@ case "$subcommand" in
   list)
     list_commands
     exit 0
+    ;;
+  tools)
+    list_tools "$@"
+    exit $?
     ;;
   show|path|run)
     if [ "$script_name" = "orca" ]; then

@@ -1,0 +1,15 @@
+{
+  "id": "anti-ai-ui",
+  "name": "Anti-AI UI",
+  "status": "external",
+  "repo": "https://github.com/henryvn27/anti-ai-ui",
+  "category": "frontend-design",
+  "description": "React components and anti-generic UI guidance extracted from ORCA visual-quality standards.",
+  "install": {
+    "npm": "npm install anti-ai-ui @emotion/react @emotion/styled"
+  },
+  "verify": "npm run lint && npm run build",
+  "provides": ["react-components", "visual-quality-guidance"],
+  "dependencies": ["react", "@emotion/react", "@emotion/styled"],
+  "conflicts": []
+}

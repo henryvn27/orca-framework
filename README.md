@@ -8,6 +8,15 @@ It turns a broad request into scoped work, verified implementation, durable stat
 /goal -> clarify -> plan -> apply -> unify -> loop pack -> readiness score -> handoff
 ```
 
+ORCA is also being split into a manager/catalog layer. Standalone tools live in their own repos; ORCA references them through `catalog/tools/*.json` and exposes them with:
+
+```sh
+orca tools
+orca tools --json
+```
+
+See [docs/orca-tool-catalog.md](docs/orca-tool-catalog.md).
+
 ## Start
 
 ```sh

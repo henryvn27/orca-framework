@@ -118,7 +118,7 @@ fi
 [ "$command_count" = "86" ] || fail "expected 86 commands, found $command_count"
 [ "$skill_count" = "72" ] || fail "expected 72 skills, found $skill_count"
 [ "$template_count" = "183" ] || fail "expected 183 templates, found $template_count"
-[ "$doc_count" = "454" ] || fail "expected 454 docs, found $doc_count"
+[ "$doc_count" = "455" ] || fail "expected 455 docs, found $doc_count"
 
 for command in install doctor onboard spec plan build review ship context research delegate checkpoint receipt status attribution help impeccable superpowers; do
   need_file "commands/orca-$command.md"
@@ -144,6 +144,8 @@ done
 if command -v ruby >/dev/null 2>&1; then
   RUBYOPT="${RUBYOPT:+$RUBYOPT }--disable-gems" ruby -rjson -e 'ARGV.each { |path| JSON.parse(File.read(path)) }' scripts/fixtures/notion/*.json ||
     fail "malformed Notion fixture JSON"
+  RUBYOPT="${RUBYOPT:+$RUBYOPT }--disable-gems" ruby -rjson -e 'ARGV.each { |path| JSON.parse(File.read(path)) }' catalog/tools/*.json ||
+    fail "malformed ORCA tool catalog JSON"
   RUBYOPT="${RUBYOPT:+$RUBYOPT }--disable-gems" ruby -rjson -e '
     data = JSON.parse(File.read("scripts/fixtures/notion/adapter-doctor-token-missing.json"))
     abort("missing backend fixture object") unless data["backend"].is_a?(Hash)

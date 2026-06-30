@@ -1,0 +1,20 @@
+{
+  "id": "qa-review-kit",
+  "name": "QA Review Kit",
+  "status": "external",
+  "repo": "https://github.com/henryvn27/qa-review-kit",
+  "category": "qa",
+  "description": "Blind QA, briefed QA, web QA, UI debugging, screenshots, regression tasks, and PR feedback handling.",
+  "provides": [
+    "blind-qa",
+    "context-brief",
+    "web-qa",
+    "ui-debug",
+    "screenshot",
+    "regression-task",
+    "pr-feedback",
+    "ci"
+  ],
+  "dependencies": [],
+  "conflicts": []
+}

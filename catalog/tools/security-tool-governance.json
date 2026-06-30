@@ -1,0 +1,16 @@
+{
+  "id": "security-tool-governance",
+  "name": "Security Tool Governance",
+  "status": "external",
+  "repo": "https://github.com/henryvn27/security-tool-governance",
+  "category": "security",
+  "description": "Security review, approval gates, tool trust, MCP review, and setup guardrails for risky agent work.",
+  "provides": [
+    "security",
+    "approval-gate",
+    "tool-governance",
+    "tool-setup"
+  ],
+  "dependencies": [],
+  "conflicts": []
+}

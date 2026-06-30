@@ -21,3 +21,18 @@
 
 - `dashboard/orca-progress.html` and `dashboard/orca-feature-review.html` were transitional review dashboards. Their useful function is now the catalog/picker direction, not a separate repo.
 - `docs/workflow-stack.md`, `docs/tool-stack.md`, and `docs/notion-system.md` were converted into catalog entries and this map.
+
+## Skill Bundle Repos
+
+The skills directory has also been split into larger reusable tool repos:
+
+- `agent-workflow-runner`
+- `agent-orchestration-kit`
+- `qa-review-kit`
+- `security-tool-governance`
+- `product-strategy-council`
+- `research-discovery-kit`
+- `adaptive-improvement-kit`
+- `docs-portability-kit`
+- `linear-workflow-kit`
+- `web-deploy-kit`

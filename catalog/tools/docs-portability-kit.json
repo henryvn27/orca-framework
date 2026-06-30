@@ -1,0 +1,14 @@
+{
+  "id": "docs-portability-kit",
+  "name": "Docs Portability Kit",
+  "status": "external",
+  "repo": "https://github.com/henryvn27/docs-portability-kit",
+  "category": "docs",
+  "description": "Documentation system, schema portability, artifact contracts, mappings, and versioned portable outputs.",
+  "provides": [
+    "docs-system",
+    "portability"
+  ],
+  "dependencies": [],
+  "conflicts": []
+}

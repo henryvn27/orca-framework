@@ -1,0 +1,18 @@
+{
+  "id": "agent-orchestration-kit",
+  "name": "Agent Orchestration Kit",
+  "status": "external",
+  "repo": "https://github.com/henryvn27/agent-orchestration-kit",
+  "category": "orchestration",
+  "description": "Controller, delegation, background mode, runtime routing, shared state, and multi-agent coordination workflows.",
+  "provides": [
+    "agent-orchestration",
+    "controller-mode",
+    "delegation",
+    "background-mode",
+    "shared-state",
+    "runtime-adaptation"
+  ],
+  "dependencies": [],
+  "conflicts": []
+}

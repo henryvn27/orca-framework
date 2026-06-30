@@ -1,0 +1,18 @@
+{
+  "id": "product-strategy-council",
+  "name": "Product Strategy Council",
+  "status": "external",
+  "repo": "https://github.com/henryvn27/product-strategy-council",
+  "category": "strategy",
+  "description": "Business ideation, product idea councils, market opportunity review, feature evaluation, and validation planning.",
+  "provides": [
+    "business-ideation",
+    "model-council",
+    "council-product-idea",
+    "council-feature-evaluation",
+    "council-market-opportunity",
+    "integration-recommendation"
+  ],
+  "dependencies": [],
+  "conflicts": []
+}

@@ -1,0 +1,14 @@
+{
+  "id": "web-deploy-kit",
+  "name": "Web Deploy Kit",
+  "status": "external",
+  "repo": "https://github.com/henryvn27/web-deploy-kit",
+  "category": "deployment",
+  "description": "Preview-first Vercel deployment and web shipping support for agent-built web projects.",
+  "provides": [
+    "vercel-deploy",
+    "integrations"
+  ],
+  "dependencies": [],
+  "conflicts": []
+}

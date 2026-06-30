@@ -1,0 +1,11 @@
+{
+  "id": "superpowers",
+  "name": "Superpowers",
+  "status": "external",
+  "repo": "skill://superpowers",
+  "category": "workflow",
+  "description": "Planning, TDD, review, branch finishing, and verification discipline. Invoked directly; no wrapper needed.",
+  "provides": ["planning", "tdd", "verification", "code-review"],
+  "dependencies": [],
+  "conflicts": []
+}

@@ -1,0 +1,11 @@
+{
+  "id": "caveman",
+  "name": "Caveman",
+  "status": "external",
+  "repo": "skill://caveman",
+  "category": "communication",
+  "description": "Compressed agent communication mode. Invoked directly as a skill; no wrapper needed.",
+  "provides": ["terse-agent-communication"],
+  "dependencies": [],
+  "conflicts": []
+}

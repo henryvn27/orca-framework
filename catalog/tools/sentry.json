@@ -1,0 +1,11 @@
+{
+  "id": "sentry",
+  "name": "Sentry",
+  "status": "external",
+  "repo": "https://github.com/getsentry/sentry",
+  "category": "observability",
+  "description": "Error tracking and crash visibility.",
+  "provides": ["error-tracking", "crash-reporting"],
+  "dependencies": [],
+  "conflicts": []
+}

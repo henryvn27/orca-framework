@@ -1,0 +1,11 @@
+{
+  "id": "visual-recap",
+  "name": "Visual Recap",
+  "status": "external",
+  "repo": "skill://visual-recap",
+  "category": "workflow",
+  "description": "Visual recap skill. Invoked directly; no wrapper needed.",
+  "provides": ["visual-recap"],
+  "dependencies": [],
+  "conflicts": []
+}

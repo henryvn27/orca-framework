@@ -1,0 +1,11 @@
+{
+  "id": "efficient-frontier",
+  "name": "Efficient Frontier",
+  "status": "external",
+  "repo": "skill://efficient-frontier",
+  "category": "workflow",
+  "description": "BuilderIO-style skill for efficient tradeoff planning. Invoked directly as a skill.",
+  "provides": ["planning-tradeoffs"],
+  "dependencies": [],
+  "conflicts": []
+}

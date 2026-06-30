@@ -1,0 +1,11 @@
+{
+  "id": "notion-hvn-dashboard",
+  "name": "Notion HVN Dashboard",
+  "status": "external",
+  "repo": "https://www.notion.so/",
+  "category": "work-management",
+  "description": "Default work tracker: project pages, issue boards, docs, copied context, decisions, and handoffs.",
+  "provides": ["project-tracker", "issue-board", "docs-source-of-truth"],
+  "dependencies": ["notion"],
+  "conflicts": ["linear-primary"]
+}

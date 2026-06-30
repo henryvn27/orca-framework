@@ -1,0 +1,11 @@
+{
+  "id": "claude-code",
+  "name": "Claude Code",
+  "status": "external",
+  "repo": "https://docs.anthropic.com/en/docs/claude-code",
+  "category": "agent-runtime",
+  "description": "Agent runtime for codebase work and skill execution.",
+  "provides": ["agent-runtime", "codebase-automation"],
+  "dependencies": [],
+  "conflicts": []
+}

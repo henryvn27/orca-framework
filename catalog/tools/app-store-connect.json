@@ -1,0 +1,11 @@
+{
+  "id": "app-store-connect",
+  "name": "App Store Connect",
+  "status": "external",
+  "repo": "https://developer.apple.com/app-store-connect/",
+  "category": "release-ops",
+  "description": "Apple submission, metadata, TestFlight, review, pricing, and release management.",
+  "provides": ["apple-release-management", "app-review", "metadata"],
+  "dependencies": [],
+  "conflicts": []
+}

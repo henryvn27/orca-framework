@@ -1,0 +1,11 @@
+{
+  "id": "firebase",
+  "name": "Firebase",
+  "status": "external",
+  "repo": "https://firebase.google.com/",
+  "category": "backend",
+  "description": "Mobile/web backend services when a product needs Firebase auth, database, hosting, messaging, or analytics.",
+  "provides": ["backend-services", "mobile-backend"],
+  "dependencies": [],
+  "conflicts": []
+}

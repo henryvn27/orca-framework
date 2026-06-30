@@ -1,0 +1,11 @@
+{
+  "id": "posthog",
+  "name": "PostHog",
+  "status": "external",
+  "repo": "https://github.com/PostHog/posthog",
+  "category": "analytics",
+  "description": "Product analytics, events, funnels, and session replay when a product needs telemetry.",
+  "provides": ["product-analytics", "session-replay"],
+  "dependencies": [],
+  "conflicts": []
+}

@@ -1,0 +1,11 @@
+{
+  "id": "apple-release-preflight",
+  "name": "Apple Release Preflight",
+  "status": "external",
+  "repo": "https://github.com/henryvn27/apple-release-preflight",
+  "category": "release-ops",
+  "description": "Submission-readiness pack for TestFlight and App Store review.",
+  "provides": ["app-store-preflight", "review-notes", "submission-pack"],
+  "dependencies": ["app-store-connect", "testflight"],
+  "conflicts": []
+}

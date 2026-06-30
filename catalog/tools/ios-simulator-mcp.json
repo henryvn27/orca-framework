@@ -1,0 +1,11 @@
+{
+  "id": "ios-simulator-mcp",
+  "name": "iOS Simulator MCP",
+  "status": "external",
+  "repo": "https://github.com/joshuayoes/ios-simulator-mcp",
+  "category": "qa",
+  "description": "iOS simulator inspection and interaction tooling for mobile QA.",
+  "provides": ["ios-simulator-qa", "mobile-screenshots"],
+  "dependencies": ["xcode"],
+  "conflicts": []
+}

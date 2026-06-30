@@ -1,0 +1,12 @@
+{
+  "id": "orca-attribution",
+  "name": "ORCA Attribution",
+  "status": "extract-tool",
+  "repo": "https://github.com/henryvn27/orca-attribution",
+  "category": "governance",
+  "description": "Attribution, provenance, wrapper clarity, and notices.",
+  "sourcePaths": ["commands/orca-attribution.md", "skills/orca-attribution", "docs/attribution.md", "templates/attribution-check.md"],
+  "provides": ["attribution-audit", "third-party-notices"],
+  "dependencies": [],
+  "conflicts": []
+}

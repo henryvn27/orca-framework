@@ -1,0 +1,12 @@
+{
+  "id": "orca-wrapped-packs",
+  "name": "ORCA Wrapped Packs",
+  "status": "split-required",
+  "repo": "https://github.com/henryvn27/orca-wrapped-packs",
+  "category": "wrappers",
+  "description": "Thin credited wrappers for external packs until each wrapper has its own repo.",
+  "sourcePaths": ["commands/orca-impeccable.md", "commands/orca-superpowers.md", "commands/orca-caveman.md", "commands/orca-visual-plan.md", "commands/orca-visual-recap.md", "integrations"],
+  "provides": ["impeccable-wrapper", "superpowers-wrapper", "caveman-wrapper", "visual-plan-wrapper", "visual-recap-wrapper"],
+  "dependencies": ["impeccable", "superpowers"],
+  "conflicts": []
+}

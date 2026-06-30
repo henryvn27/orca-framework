@@ -1,0 +1,15 @@
+{
+  "id": "github-flow-manager",
+  "name": "GitHub Flow Manager",
+  "status": "external",
+  "repo": "https://github.com/henryvn27/github-flow-manager",
+  "category": "workflow",
+  "description": "Agent skill for branch hygiene, PR flow, dev/staging/main promotion, and optional GitHub teaching mode.",
+  "install": {
+    "skill": "Install SKILL.md as github-flow-manager."
+  },
+  "verify": "test -f SKILL.md && test -f agents/openai.yaml",
+  "provides": ["git-branch-hygiene", "pull-request-flow", "github-teaching-mode"],
+  "dependencies": ["github"],
+  "conflicts": []
+}

@@ -2,6 +2,8 @@
 
 Skills are reusable operating procedures stored in `skills/*/SKILL.md`. They define trigger rules, inputs, workflow, outputs, quality bar, common failure modes, and relationships to other ORCA Framework skills.
 
+ORCA is moving these skills toward standalone tool repos. Catalog entries for extracted and external tools live in `catalog/tools/*.json`; use `orca tools` to list them.
+
 ## Linear Skills
 
 - `orca-linear-setup`

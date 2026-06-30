@@ -1,0 +1,12 @@
+{
+  "id": "orca-install-doctor",
+  "name": "ORCA Install Doctor",
+  "status": "extract-tool",
+  "repo": "https://github.com/henryvn27/orca-install-doctor",
+  "category": "setup",
+  "description": "Install scripts, verification, doctor checks, and first-run diagnostics.",
+  "sourcePaths": ["install", "commands/orca-install.md", "commands/orca-doctor.md", "skills/orca-install-help", "docs/install.md", "docs/first-run.md"],
+  "provides": ["installer", "doctor", "first-run-checks"],
+  "dependencies": ["git", "posix-shell"],
+  "conflicts": []
+}

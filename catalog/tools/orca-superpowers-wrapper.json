@@ -1,0 +1,11 @@
+{
+  "id": "orca-superpowers-wrapper",
+  "name": "ORCA Superpowers Wrapper",
+  "status": "external",
+  "repo": "https://github.com/henryvn27/orca-superpowers-wrapper",
+  "category": "wrappers",
+  "description": "Thin credited ORCA wrapper for routing planning/build workflow into the maintained Superpowers pack.",
+  "provides": ["superpowers-wrapper"],
+  "dependencies": ["superpowers"],
+  "conflicts": []
+}

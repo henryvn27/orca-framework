@@ -1,7 +1,7 @@
 {
   "id": "orca-receipts",
   "name": "ORCA Receipts",
-  "status": "extract-tool",
+  "status": "external",
   "repo": "https://github.com/henryvn27/orca-receipts",
   "category": "handoff",
   "description": "Compact execution summaries, verification evidence, replay, and restore context.",

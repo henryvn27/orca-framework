@@ -1,7 +1,7 @@
 {
   "id": "orca-goal-runner",
   "name": "ORCA Goal Runner",
-  "status": "extract-tool",
+  "status": "external",
   "repo": "https://github.com/henryvn27/orca-goal-runner",
   "category": "workflow",
   "description": "Bounded /goal loops, packs, readiness scoring, progress, and handoff state.",

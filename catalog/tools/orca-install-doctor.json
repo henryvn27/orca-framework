@@ -1,7 +1,7 @@
 {
   "id": "orca-install-doctor",
   "name": "ORCA Install Doctor",
-  "status": "extract-tool",
+  "status": "external",
   "repo": "https://github.com/henryvn27/orca-install-doctor",
   "category": "setup",
   "description": "Install scripts, verification, doctor checks, and first-run diagnostics.",

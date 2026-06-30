@@ -27,9 +27,10 @@ orca tools --json
 
 - `anti-ai-ui`: renamed external UI library.
 - `github-flow-manager`: standalone GitHub workflow skill.
-- `orca-goal-runner`: bounded goal-loop engine candidate.
-- `orca-notion-bridge`: Notion/outbox adapter candidate.
-- `orca-install-doctor`: install and diagnostic candidate.
-- `orca-attribution`: attribution and provenance candidate.
-- `orca-receipts`: execution receipt and handoff candidate.
-- `orca-wrapped-packs`: temporary bucket for wrappers that should become separate cataloged tools.
+- `orca-goal-runner`: bounded goal-loop engine.
+- `orca-notion-bridge`: Notion/outbox adapter.
+- `orca-install-doctor`: install and diagnostics.
+- `orca-attribution`: attribution and provenance.
+- `orca-receipts`: execution receipt and handoff.
+- `orca-impeccable-wrapper`: thin Impeccable routing wrapper.
+- `orca-superpowers-wrapper`: thin Superpowers routing wrapper.

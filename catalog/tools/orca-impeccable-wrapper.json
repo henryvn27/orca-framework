@@ -1,0 +1,11 @@
+{
+  "id": "orca-impeccable-wrapper",
+  "name": "ORCA Impeccable Wrapper",
+  "status": "external",
+  "repo": "https://github.com/henryvn27/orca-impeccable-wrapper",
+  "category": "wrappers",
+  "description": "Thin credited ORCA wrapper for routing design-heavy work into the maintained Impeccable pack.",
+  "provides": ["impeccable-wrapper"],
+  "dependencies": ["impeccable"],
+  "conflicts": []
+}

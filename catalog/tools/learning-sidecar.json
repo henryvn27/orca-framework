@@ -1,0 +1,11 @@
+{
+  "id": "learning-sidecar",
+  "name": "Learning Sidecar",
+  "status": "external",
+  "repo": "https://github.com/henryvn27/learning-sidecar",
+  "category": "learning",
+  "description": "Teaching sidecar that explains worker actions in side chat, tracks learner profile files, and adapts explanation depth over time.",
+  "provides": ["side-chat-teaching", "learner-profile", "cycle-reflection", "host-routing"],
+  "dependencies": [],
+  "conflicts": []
+}

@@ -36,3 +36,4 @@ The skills directory has also been split into larger reusable tool repos:
 - `docs-portability-kit`
 - `linear-workflow-kit`
 - `web-deploy-kit`
+- `learning-sidecar`

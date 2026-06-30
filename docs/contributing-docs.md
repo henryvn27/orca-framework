@@ -18,7 +18,7 @@ Check whether you also need to update:
 - `docs/feature-index.md`
 - `docs/command-index.md`
 - a guide under `docs/guides/`
-- `wiki/Home.md` and related wiki indexes
+- `docs/README.md` and related docs indexes
 - `docs/whats-new.md`
 
 ## Required Companion Artifacts
@@ -34,4 +34,3 @@ Always run:
 ```sh
 ./scripts/validate-repo.sh
 ```
-

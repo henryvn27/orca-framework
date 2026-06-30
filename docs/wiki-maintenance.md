@@ -1,36 +1,33 @@
-# Wiki Maintenance
+# Archived Wiki Maintenance
 
-The wiki is a summary and routing layer, not a second full copy of the docs tree and not the primary public docs site.
+The GitHub wiki is disabled for this repository. Keep the public documentation surface in `docs/` so it remains versioned, link-checked, and reviewed with code changes.
 
-The primary polished docs surface should be GitHub Pages.
+This page is retained as historical guidance for avoiding a second docs tree.
 
-## Wiki Rules
+## Current Rules
 
-- keep the wiki homepage current
-- keep `_Sidebar.md` aligned with the current docs information architecture
-- use wiki pages to summarize and route, not to mirror every command contract
-- refresh the wiki when the top-level feature map or start-here path changes
-- keep the wiki thinner than the Pages docs site
+- keep `docs/README.md` and `docs/start-here.md` current
+- keep docs indexes aligned with the current information architecture
+- use summary pages to route, not to mirror every command contract
+- refresh top-level docs when the feature map or start-here path changes
+- avoid restoring a duplicate tracked `wiki/` mirror
 
-## When To Update The Wiki
+## When To Update Summary Docs
 
 - a new major feature bucket is added
 - a new default user path appears
 - a new host or integration meaningfully changes onboarding
 - a knowledge-layer integration such as NotebookLM becomes a practical optional path for research or documentation workflows
 - vault or graph analysis reveals missing hub pages, duplicated topic areas, or weak wiki routing
-- README or `docs/start-here.md` changes enough that the wiki homepage would now mislead readers
+- README or `docs/start-here.md` changes enough that the docs home would now mislead readers
 - the docs layer starts surfacing more routes than a new user can reasonably absorb in the first pass
-- repeated wiki confusion appears across sessions strongly enough to justify framework-level cleanup instead of just local routing help
+- repeated docs confusion appears across sessions strongly enough to justify framework-level cleanup instead of just local routing help
 
 ## Refresh Targets
 
-- `wiki/Home.md`
-- `wiki/Getting-Started.md`
-- `wiki/Feature-Index.md`
-- `wiki/Workflow-Index.md`
-- `wiki/Commands.md`
-- `wiki/Hosts-and-Harnesses.md`
-- `wiki/Automation.md`
-- `wiki/Examples.md`
-- `wiki/FAQ.md`
+- `docs/README.md`
+- `docs/start-here.md`
+- `docs/feature-index.md`
+- `docs/command-index.md`
+- `docs/choose-your-path.md`
+- `docs/whats-new.md`

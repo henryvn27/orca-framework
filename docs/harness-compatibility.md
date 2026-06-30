@@ -43,8 +43,8 @@ Do not treat `supported` as "equivalent across harnesses." Native support, MCP s
 
 - [compatibility matrix](compatibility-matrix.md) is the concise current view
 - [harness watch](harness-watch.md) tracks changes, caveats, and draft-issue-worthy shifts
-- `reports/compatibility/YYYY-MM-DD.md` records dated audit snapshots
-- `reports/compatibility/latest.md` points to the most recent audit
+- dated compatibility snapshots should be generated outside the tracked repository
+- accepted compatibility changes should be promoted back into the docs above
 
 ## Limited-Support Behavior
 

@@ -7,7 +7,6 @@ on:
       - "docs/**"
       - "commands/**"
       - "integrations/**"
-      - "wiki/**"
       - "assets/**"
       - "mkdocs.yml"
       - "requirements-docs.txt"

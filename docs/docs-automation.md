@@ -4,7 +4,7 @@ ORCA Framework documentation should improve continuously instead of depending on
 
 ## Purpose
 
-The docs automation layer keeps the top-level docs, routing pages, and wiki aligned with the real framework surface.
+The docs automation layer keeps the top-level docs and routing pages aligned with the real framework surface.
 
 ## Inputs
 
@@ -17,7 +17,6 @@ The docs automation layer keeps the top-level docs, routing pages, and wiki alig
 - `docs/doc-owners.md`
 - `docs/staleness-detection.md`
 - `docs/whats-new.md`
-- `wiki/*.md`
 - `commands/*.md`
 - `skills/*/SKILL.md`
 - major feature docs under `docs/`
@@ -28,14 +27,12 @@ The docs automation layer keeps the top-level docs, routing pages, and wiki alig
 - new major features without routing from README or `docs/start-here.md`
 - changed command names, guide names, or feature names that leave stale links
 - guide pages whose linked feature docs changed materially
-- wiki summaries that no longer match the docs surface
 - top-level docs that have not been reviewed relative to recent framework changes
 
 ## Expected Automation Actions
 
 - propose README and start-here refreshes when the top-level user story changes
 - update indexes when commands or feature families are added
-- draft wiki summary updates when new docs or major capabilities appear
 - draft freshness notes for stale pages
 - update `docs/recent-doc-updates.md` and `docs/whats-new.md` when major docs surfaces change
 - watch install docs, plugin docs, and harness setup docs for drift as scripts, hosts, or service requirements change

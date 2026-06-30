@@ -1,0 +1,11 @@
+{
+  "id": "supabase",
+  "name": "Supabase",
+  "status": "external",
+  "repo": "https://github.com/supabase/supabase",
+  "category": "backend",
+  "description": "Postgres-backed backend, auth, storage, and realtime services.",
+  "provides": ["postgres", "auth", "storage", "realtime"],
+  "dependencies": [],
+  "conflicts": []
+}

@@ -30,3 +30,6 @@ orca tools --json
 - `anti-ai-ui`: renamed external UI library.
 - `github-flow-manager`: standalone GitHub workflow skill.
 - `orca-goal-runner`: bounded goal-loop engine.
+- `apple-release-preflight`: standalone Apple submission preflight pack extracted from retired `hvn-stack`.
+
+See [retired-hvn-stack-map.md](retired-hvn-stack-map.md) for how the rest of `hvn-stack` was represented.

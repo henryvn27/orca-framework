@@ -1,0 +1,11 @@
+{
+  "id": "vercel",
+  "name": "Vercel",
+  "status": "external",
+  "repo": "https://github.com/vercel/vercel",
+  "category": "deployment",
+  "description": "Preview and production deployments for web apps.",
+  "provides": ["web-deploy", "preview-deployments"],
+  "dependencies": [],
+  "conflicts": []
+}

@@ -1,0 +1,11 @@
+{
+  "id": "visual-plan",
+  "name": "Visual Plan",
+  "status": "external",
+  "repo": "skill://visual-plan",
+  "category": "workflow",
+  "description": "Visual planning skill. Invoked directly; no wrapper needed.",
+  "provides": ["visual-planning"],
+  "dependencies": [],
+  "conflicts": []
+}

@@ -1,0 +1,11 @@
+{
+  "id": "fastlane",
+  "name": "fastlane",
+  "status": "external",
+  "repo": "https://github.com/fastlane/fastlane",
+  "category": "release-ops",
+  "description": "Automation for Apple metadata, screenshots, TestFlight, and App Store submission flows.",
+  "provides": ["precheck", "deliver", "pilot"],
+  "dependencies": ["app-store-connect"],
+  "conflicts": []
+}

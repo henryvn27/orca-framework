@@ -1,0 +1,11 @@
+{
+  "id": "revenuecat",
+  "name": "RevenueCat",
+  "status": "external",
+  "repo": "https://www.revenuecat.com/",
+  "category": "payments",
+  "description": "Mobile subscription infrastructure when an app uses in-app purchases.",
+  "provides": ["mobile-subscriptions", "iap-entitlements"],
+  "dependencies": ["app-store-connect"],
+  "conflicts": ["stripe-mobile-iap-bypass"]
+}

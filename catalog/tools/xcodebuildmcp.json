@@ -1,0 +1,11 @@
+{
+  "id": "xcodebuildmcp",
+  "name": "XcodeBuildMCP",
+  "status": "external",
+  "repo": "https://xcodebuildmcp.com/",
+  "category": "qa",
+  "description": "Apple platform build, simulator, test, install, launch, and UI automation tooling.",
+  "provides": ["xcode-build", "ios-simulator", "apple-ui-automation"],
+  "dependencies": ["xcode"],
+  "conflicts": []
+}

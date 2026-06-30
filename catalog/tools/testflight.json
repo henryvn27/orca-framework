@@ -1,0 +1,11 @@
+{
+  "id": "testflight",
+  "name": "TestFlight",
+  "status": "external",
+  "repo": "https://developer.apple.com/testflight/",
+  "category": "release-ops",
+  "description": "Apple beta distribution, tester groups, beta review info, and What to Test.",
+  "provides": ["apple-beta-distribution", "tester-groups"],
+  "dependencies": ["app-store-connect"],
+  "conflicts": []
+}

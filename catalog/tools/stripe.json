@@ -1,0 +1,11 @@
+{
+  "id": "stripe",
+  "name": "Stripe",
+  "status": "external",
+  "repo": "https://github.com/stripe/stripe-node",
+  "category": "payments",
+  "description": "Web payments, billing, checkout, subscriptions, and invoicing.",
+  "provides": ["payments", "billing", "checkout"],
+  "dependencies": [],
+  "conflicts": ["app-store-iap-only-purchase-flow"]
+}

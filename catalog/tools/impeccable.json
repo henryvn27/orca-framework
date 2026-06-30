@@ -1,0 +1,11 @@
+{
+  "id": "impeccable",
+  "name": "Impeccable",
+  "status": "external",
+  "repo": "skill://impeccable",
+  "category": "frontend-design",
+  "description": "High-stakes frontend/product design skill. Invoked directly; no wrapper needed.",
+  "provides": ["frontend-polish", "design-review", "ux-copy"],
+  "dependencies": [],
+  "conflicts": []
+}

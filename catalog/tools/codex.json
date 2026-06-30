@@ -1,0 +1,11 @@
+{
+  "id": "codex",
+  "name": "Codex",
+  "status": "external",
+  "repo": "https://openai.com/codex/",
+  "category": "agent-runtime",
+  "description": "OpenAI coding agent runtime for repository work.",
+  "provides": ["agent-runtime", "codebase-automation"],
+  "dependencies": ["openai"],
+  "conflicts": []
+}

@@ -1,0 +1,11 @@
+{
+  "id": "playwright",
+  "name": "Playwright",
+  "status": "external",
+  "repo": "https://github.com/microsoft/playwright",
+  "category": "qa",
+  "description": "Browser automation, screenshots, and web QA.",
+  "provides": ["web-qa", "browser-automation", "screenshots"],
+  "dependencies": [],
+  "conflicts": []
+}

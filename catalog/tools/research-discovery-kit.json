@@ -1,0 +1,17 @@
+{
+  "id": "research-discovery-kit",
+  "name": "Research Discovery Kit",
+  "status": "external",
+  "repo": "https://github.com/henryvn27/research-discovery-kit",
+  "category": "research",
+  "description": "Evidence gathering, repo discovery, legacy archaeology, graph/vault inspection, and corpus support.",
+  "provides": [
+    "research",
+    "discover",
+    "legacy",
+    "graph-vault-support",
+    "corpus-support"
+  ],
+  "dependencies": [],
+  "conflicts": []
+}

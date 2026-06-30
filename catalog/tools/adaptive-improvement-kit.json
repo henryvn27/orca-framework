@@ -1,0 +1,21 @@
+{
+  "id": "adaptive-improvement-kit",
+  "name": "Adaptive Improvement Kit",
+  "status": "external",
+  "repo": "https://github.com/henryvn27/adaptive-improvement-kit",
+  "category": "quality",
+  "description": "Run accounting, observability, evaluation, benchmarking, retros, session improvement, and friction policy.",
+  "provides": [
+    "accounting",
+    "observability",
+    "eval",
+    "benchmark",
+    "retro",
+    "session-improvement",
+    "self-improvement",
+    "friction-policy",
+    "adaptive-guidance"
+  ],
+  "dependencies": [],
+  "conflicts": []
+}

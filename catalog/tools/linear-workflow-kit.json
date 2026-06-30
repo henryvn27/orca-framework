@@ -1,0 +1,19 @@
+{
+  "id": "linear-workflow-kit",
+  "name": "Linear Workflow Kit",
+  "status": "external",
+  "repo": "https://github.com/henryvn27/linear-workflow-kit",
+  "category": "work-management",
+  "description": "Linear setup, triage, planning, execution, QA, release, and comment artifact workflows for teams that still use Linear.",
+  "provides": [
+    "linear-core",
+    "linear-setup",
+    "linear-triage",
+    "linear-planner",
+    "linear-executor",
+    "linear-qa",
+    "linear-release"
+  ],
+  "dependencies": [],
+  "conflicts": []
+}

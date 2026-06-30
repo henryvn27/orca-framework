@@ -1,0 +1,22 @@
+{
+  "id": "agent-workflow-runner",
+  "name": "Agent Workflow Runner",
+  "status": "external",
+  "repo": "https://github.com/henryvn27/agent-workflow-runner",
+  "category": "workflow",
+  "description": "Spec, plan, build, review, ship, checkpoint, and next-step workflows for agent-managed implementation.",
+  "provides": [
+    "onboard",
+    "spec",
+    "plan",
+    "build",
+    "review",
+    "ship",
+    "checkpoint",
+    "context",
+    "next-step",
+    "demo"
+  ],
+  "dependencies": [],
+  "conflicts": []
+}

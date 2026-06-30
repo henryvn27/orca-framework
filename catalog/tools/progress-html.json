@@ -1,0 +1,11 @@
+{
+  "id": "progress-html",
+  "name": "Progress HTML",
+  "status": "external",
+  "repo": "https://github.com/henryvn27/progress-html",
+  "category": "visibility",
+  "description": "Static progress.html templates and agent instructions for keeping user-visible work progress current across slices and chunks.",
+  "provides": ["progress-html-template", "agent-update-instructions", "slice-status-dashboard"],
+  "dependencies": [],
+  "conflicts": []
+}

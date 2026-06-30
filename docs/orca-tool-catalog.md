@@ -31,5 +31,6 @@ orca tools --json
 - `github-flow-manager`: standalone GitHub workflow skill.
 - `orca-goal-runner`: bounded goal-loop engine.
 - `apple-release-preflight`: standalone Apple submission preflight pack extracted from retired `hvn-stack`.
+- `progress-html`: standalone visible progress tracker templates and agent update instructions.
 
 See [retired-hvn-stack-map.md](retired-hvn-stack-map.md) for how the rest of `hvn-stack` was represented.

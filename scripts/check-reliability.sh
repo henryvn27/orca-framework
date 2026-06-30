@@ -585,6 +585,7 @@ for file in \
   skills/orca-attribution/SKILL.md \
   skills/orca-next-step/SKILL.md \
   skills/orca-goal-mode/SKILL.md \
+  skills/orca-goal-prompt/SKILL.md \
   skills/orca-controller-mode/SKILL.md \
   skills/orca-delegation/SKILL.md \
   skills/orca-portability/SKILL.md \

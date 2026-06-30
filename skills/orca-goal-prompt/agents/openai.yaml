@@ -1,0 +1,4 @@
+interface:
+  display_name: "ORCA Goal Prompt"
+  short_description: "Create native /goal prompts for bounded ORCA plan chunks."
+  default_prompt: "Create a /goal prompt for this ORCA plan chunk."

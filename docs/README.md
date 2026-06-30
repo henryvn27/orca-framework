@@ -118,11 +118,6 @@ These are teaching-oriented pages for common paths:
 - [session-quality-signals.md](session-quality-signals.md)
 - [improvement-backlog.md](improvement-backlog.md)
 
-## Wiki
+## GitHub Wiki
 
-The `wiki/` folder is a practical GitHub-native summary layer, not the primary public docs experience:
-
-- [../wiki/Home.md](../wiki/Home.md)
-- [../wiki/Getting-Started.md](../wiki/Getting-Started.md)
-- [../wiki/Feature-Index.md](../wiki/Feature-Index.md)
-- [../wiki/Workflow-Index.md](../wiki/Workflow-Index.md)
+The GitHub wiki is disabled for this repository. Keep public docs in `docs/` so links, review, and CI validation stay in one tracked tree.

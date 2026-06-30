@@ -140,7 +140,7 @@ For each active opportunity, keep:
 - Prior sightings:
   - 2026-05-31 initial live ORCA Framework sweep
   - 2026-06-02 docs unchanged; local Linear runtime still blocked by reauthentication
-- Related issue if created: [reports/ecosystem-sweep/draft-issues/2026-05-31-linear-mcp-setup-refresh.md](../reports/ecosystem-sweep/draft-issues/2026-05-31-linear-mcp-setup-refresh.md)
+- Related issue if created: Linear MCP setup refresh.
 
 - Title: Impeccable wrapper guidance is starting to drift across official surfaces
 - Short summary: Official Impeccable pages now mix `/impeccable teach` and `/impeccable init`, while recent releases changed Codex subagent delivery, deprecated `--fast`, and added daily self-update behavior. ORCA Framework should keep wrapper guidance version-aware instead of restating one brittle install or onboarding story.
@@ -180,7 +180,7 @@ For each active opportunity, keep:
 - Last confirmed: 2026-05-31
 - Prior sightings:
   - 2026-05-31 initial live ORCA Framework sweep
-- Related issue if created: [reports/ecosystem-sweep/draft-issues/2026-05-31-opencode-source-tracking-split.md](../reports/ecosystem-sweep/draft-issues/2026-05-31-opencode-source-tracking-split.md)
+- Related issue if created: OpenCode source tracking split.
 
 ### QA
 
@@ -218,7 +218,7 @@ For each active opportunity, keep:
   - 2026-05-31 initial live ORCA Framework sweep
   - 2026-05-31 same-day refresh: updated to Codex `0.135.0` release details
   - 2026-06-02: broadened with Codex `0.136.0` archive, app-server, remote-registration, and safety changes
-- Related issue if created: [reports/ecosystem-sweep/draft-issues/2026-05-31-codex-goal-guidance-refresh.md](../reports/ecosystem-sweep/draft-issues/2026-05-31-codex-goal-guidance-refresh.md)
+- Related issue if created: Codex goal guidance refresh.
 
 - Title: Claude Code dynamic workflows are significant but still host-specific
 - Short summary: Claude Code keeps deepening its lifecycle and safety surface. The current `2.1.160` release adds prompts before writing shell-startup and build-tool config files that can grant code execution, and fixes restored `claude agents` sessions dropping history, but the path is still Claude-specific.

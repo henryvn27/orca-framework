@@ -16,3 +16,15 @@ outputs/
 work/
 .playwright-mcp/
 site/
+
+# Local ORCA runtime state
+.orca/
+
+# Generated reports and browser evidence
+reports/
+*.png
+!assets/*.png
+!docs/assets/*.png
+
+# Python cache
+__pycache__/

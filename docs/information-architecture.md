@@ -148,9 +148,7 @@ Primary pages:
 - `docs/docs-automation.md`
 - `docs/doc-owners.md`
 
-### Wiki
-
-Purpose: provide a summary-heavy knowledge base and GitHub wiki entry surface.
+### Summary Docs
 
 Primary audience:
 
@@ -159,9 +157,10 @@ Primary audience:
 
 Primary pages:
 
-- `wiki/Home.md`
-- `wiki/_Sidebar.md`
-- `wiki/*.md`
+- `docs/README.md`
+- `docs/start-here.md`
+- `docs/feature-index.md`
+- `docs/command-index.md`
 
 ## Movement Through The Docs
 

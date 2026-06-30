@@ -671,19 +671,6 @@ for file in \
   THIRD_PARTY_NOTICES.md \
   UPSTREAM.md \
   HVN-STATUS.md \
-  wiki/Home.md \
-  wiki/Getting-Started.md \
-  wiki/Core-Concepts.md \
-  wiki/Feature-Index.md \
-  wiki/Workflow-Index.md \
-  wiki/Commands.md \
-  wiki/Hosts-and-Harnesses.md \
-  wiki/Automation.md \
-  wiki/Examples.md \
-  wiki/FAQ.md \
-  wiki/_Sidebar.md \
-  wiki/_Footer.md \
-  wiki/Whats-New.md \
   schema/README.md \
   schema/versions/v1/onboarding-summary.schema.json \
   schema/versions/v1/spec.schema.json \
@@ -710,13 +697,6 @@ for file in \
   registry/harnesses/cursor.md \
   registry/harnesses/github-copilot.md \
   registry/harnesses/generic.md \
-  reports/ecosystem-sweep/automation.md \
-  reports/ecosystem-sweep/tracked-sources.md \
-  reports/ecosystem-sweep/latest.md \
-  reports/ecosystem-sweep/state.json \
-  reports/ecosystem-sweep/draft-issues/README.md \
-  reports/compatibility/latest.md \
-  reports/compatibility/2026-05-30.md \
   examples/evals/starter-set.md
 do
   [ -f "$file" ] || fail "missing reliability file: $file"

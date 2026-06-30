@@ -39,7 +39,7 @@ Status meanings:
 - [runtime adaptation](runtime-adaptation.md)
 - [harness compatibility](harness-compatibility.md)
 - [harness watch](harness-watch.md)
-- `reports/compatibility/latest.md`
+- generated compatibility reports should stay outside the tracked repository
 
 Reviewed compatibility knowledge informs runtime behavior only after maintainers accept the change. New research should not become an automatic runtime default until reviewed or classified as `Adopt now`.
 

@@ -48,11 +48,11 @@ No active shifts yet.
 
 ## Adopt-Now Compatibility Changes
 
-Link draft issues here when a compatibility shift should trigger a ORCA Framework update immediately.
+List compatibility shifts here when they should trigger an ORCA Framework update immediately.
 
-- [Refresh ORCA Framework Codex guidance for default goal support and newer governance surfaces](../reports/ecosystem-sweep/draft-issues/2026-05-31-codex-goal-guidance-refresh.md)
-- [Refresh ORCA Framework Linear setup guidance around the official Linear MCP server](../reports/ecosystem-sweep/draft-issues/2026-05-31-linear-mcp-setup-refresh.md)
-- [Split ORCA Framework OpenCode tracking between active docs/runtime behavior and the archived legacy repo](../reports/ecosystem-sweep/draft-issues/2026-05-31-opencode-source-tracking-split.md)
+- Refresh ORCA Framework Codex guidance for default goal support and newer governance surfaces.
+- Refresh ORCA Framework Linear setup guidance around the official Linear MCP server.
+- Split ORCA Framework OpenCode tracking between active docs/runtime behavior and the archived legacy repo.
 
 ## Compatibility Research Notes
 

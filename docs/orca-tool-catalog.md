@@ -7,6 +7,8 @@ End state:
 - ORCA owns catalog loading, picker UI, dependency/conflict checks, install orchestration, update/uninstall/status, verification, and attribution display.
 - Tools own their source, docs, install path, tests, and releases in standalone repos.
 - HVN Stack disappears after useful entries become tool repos or catalog entries.
+- ORCA manager-core pieces such as install, doctor, attribution, receipts, and registry bookkeeping stay in ORCA.
+- External skills should be invoked directly by the new picker/installer. Do not create ORCA wrapper repos for skills that already exist.
 
 ## Current Catalog
 
@@ -28,9 +30,3 @@ orca tools --json
 - `anti-ai-ui`: renamed external UI library.
 - `github-flow-manager`: standalone GitHub workflow skill.
 - `orca-goal-runner`: bounded goal-loop engine.
-- `orca-notion-bridge`: Notion/outbox adapter.
-- `orca-install-doctor`: install and diagnostics.
-- `orca-attribution`: attribution and provenance.
-- `orca-receipts`: execution receipt and handoff.
-- `orca-impeccable-wrapper`: thin Impeccable routing wrapper.
-- `orca-superpowers-wrapper`: thin Superpowers routing wrapper.

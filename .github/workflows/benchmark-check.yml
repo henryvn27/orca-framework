@@ -8,6 +8,6 @@ jobs:
   benchmark:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Validate benchmark and metrics assets
         run: ./scripts/check-improvement-systems.sh

@@ -1,18 +1,21 @@
 # Documentation Home
 
-Use this page when you want the canonical docs map.
+Use this page when you want the canonical route through Orca.
 
-ORCA documentation is layered on purpose. Start with the smallest surface that answers your question, then go deeper only when needed.
+Start with Mission Control, the executable product. The workflow and skill libraries are optional layers for agents that need more procedural help.
 
 ## Best Starting Points
 
 - [First 10 Minutes](first-10-minutes.md)
-- [Start Here](start-here.md)
+- [What Orca Is](intro.md)
 - [Quickstart](quickstart.md)
 - [First Workflow](first-workflow.md)
-- [Command Index](command-index.md)
-- [Feature Index](feature-index.md)
 
-## If You Want The Full Docs Map
+Together these pages cover the product loop: create a Mission, do the work with any executor, attach evidence, and pass the completion gate.
 
-Open `docs/README.md` in the repository.
+## Optional Extension Reference
+
+- [Product and workflow commands](commands.md)
+- [Optional skills](skills.md)
+- [Feature index](feature-index.md)
+- [Full documentation catalog](catalog.md)

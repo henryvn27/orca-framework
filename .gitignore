@@ -15,6 +15,7 @@ tmp/
 outputs/
 work/
 .playwright-mcp/
+.playwright-cli/
 site/
 
 # Local ORCA runtime state

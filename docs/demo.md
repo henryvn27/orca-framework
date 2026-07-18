@@ -1,16 +1,35 @@
-# ORCA Demo
+# Mission Control Demo
 
-Use `orca-demo` when you want the fastest impressive ORCA experience with very little input.
+The shortest honest Orca demo is a Mission whose gate visibly rejects incomplete work.
 
-## What It Does
+## Run It
 
-- asks a few high-leverage questions
-- chooses a personalized direction
-- turns that into a real ORCA `/goal` prompt
-- aims for a finishable output instead of a generic brainstorm
+From a Git repository:
 
-## Read Next
+```sh
+orca mission create "Demonstrate evidence-gated completion" \
+  --criterion "The repository has no whitespace errors" \
+  --criterion "The demo result is explained"
 
-- command contract: `commands/orca-demo.md`
-- first 10 minutes: [first-10-minutes.md](first-10-minutes.md)
-- proof and outcomes: [proof.md](proof.md)
+orca mission complete
+orca mission check AC-1 -- git diff --check
+orca mission satisfy AC-2 --evidence "Mission Control demo completed"
+orca mission status --json
+orca mission complete
+```
+
+The first completion attempt fails. The final one succeeds only after both criteria carry evidence. The completed Mission remains under `.orca/missions/` and in `orca mission list`.
+
+## What This Proves
+
+- Orca owns durable state rather than relying on chat memory.
+- A real command exit status becomes criterion evidence.
+- Readiness is derived from evidence, not asserted by an agent.
+- The same Mission has human-readable and JSON interfaces.
+- Completion is a guarded state transition.
+
+## Optional Agent Demo
+
+The repository also includes an [`orca-demo` workflow definition](../commands/orca-demo.md) that asks discovery questions and produces a goal prompt. That is an optional agent procedure, not the Mission Control product demo.
+
+Continue with [First 10 Minutes](first-10-minutes.md) or [Proof and Outcomes](proof.md).

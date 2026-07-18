@@ -22,7 +22,7 @@ done
 
 cd "$root"
 
-printf 'ORCA Framework doctor\n'
+printf 'Orca Mission Control doctor\n'
 
 for bin in sh find grep sed cp rm mkdir git ruby; do
   command -v "$bin" >/dev/null 2>&1 || { printf 'Missing dependency: %s\n' "$bin" >&2; exit 1; }

@@ -157,7 +157,7 @@ Primary audience:
 
 Primary pages:
 
-- `docs/README.md`
+- `docs/catalog.md`
 - `docs/start-here.md`
 - `docs/feature-index.md`
 - `docs/command-index.md`
@@ -174,7 +174,7 @@ Expected user path:
 Expected contributor path:
 
 1. `README.md`
-2. `docs/README.md`
+2. `docs/catalog.md`
 3. `docs/information-architecture.md`
 4. `docs/contributing-docs.md`
 5. targeted feature docs

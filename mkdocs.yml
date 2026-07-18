@@ -1,4 +1,4 @@
-site_name: ORCA Framework
+site_name: Orca Mission Control
 site_description: Local mission control for AI coding work
 site_url: https://henryvn27.github.io/orca-framework/
 repo_name: henryvn27/orca-framework
@@ -7,6 +7,7 @@ edit_uri: edit/main/docs/
 
 theme:
   name: material
+  custom_dir: overrides
   logo: assets/orca.png
   favicon: assets/orca.png
   features:
@@ -51,10 +52,22 @@ extra_css:
 plugins:
   - search
 
+hooks:
+  - scripts/mkdocs_repo_links.py
+
+extra:
+  repository_ref: main
+
+# The compact navigation is intentional; the full long-form corpus remains
+# discoverable through the documentation catalog and search.
+not_in_nav: |
+  **
+
 nav:
   - Home: index.md
   - Start Here:
       - Documentation Home: documentation-home.md
+      - Full Documentation Catalog: catalog.md
       - First 10 Minutes: first-10-minutes.md
       - What Orca Is: intro.md
       - Start Here: start-here.md
@@ -63,11 +76,11 @@ nav:
       - First Workflow: first-workflow.md
       - Beginners Guide: guides/beginners-guide.md
   - Demo And Proof:
-      - Demo Prompt: demo.md
+      - Mission Control Demo: demo.md
       - Proof And Outcomes: proof.md
       - Feature Index: feature-index.md
       - Command Index: command-index.md
-  - Core Workflow:
+  - Optional Workflows:
       - Choose Your Path: choose-your-path.md
       - Agent Orchestration: agent-orchestration.md
       - Goal Mode: guides/goal-mode-guide.md
@@ -82,9 +95,9 @@ nav:
       - Overview: wrapped-capability-packs.md
       - Impeccable: impeccable-pack.md
       - Superpowers: superpowers-pack.md
-  - Reference:
-      - Commands Catalog: commands.md
-      - Skills Catalog: skills.md
+  - Extension Reference:
+      - Product And Workflow Commands: commands.md
+      - Optional Skills: skills.md
       - Use Case Map: use-case-map.md
       - Glossary: glossary.md
       - Philosophy: philosophy.md

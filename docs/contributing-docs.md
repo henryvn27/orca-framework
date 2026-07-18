@@ -18,7 +18,7 @@ Check whether you also need to update:
 - `docs/feature-index.md`
 - `docs/command-index.md`
 - a guide under `docs/guides/`
-- `docs/README.md` and related docs indexes
+- `docs/catalog.md` and related docs indexes
 - `docs/whats-new.md`
 
 ## Required Companion Artifacts

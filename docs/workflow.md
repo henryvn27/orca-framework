@@ -148,4 +148,4 @@ If a missing integration blocks that next action, use [external tool setup](exte
 
 When harness capability matters, use [harness compatibility](harness-compatibility.md) and [compatibility matrix](compatibility-matrix.md) to choose the safest path.
 
-When the top-level user experience changes, update [docs/README.md](README.md), [start-here.md](start-here.md), [feature-index.md](feature-index.md), and [command-index.md](command-index.md) as part of the same iteration.
+When the top-level user experience changes, update the [full documentation catalog](catalog.md), [start-here.md](start-here.md), [feature-index.md](feature-index.md), and [command-index.md](command-index.md) as part of the same iteration.

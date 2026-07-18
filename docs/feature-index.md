@@ -8,17 +8,27 @@ Orca's product core is deliberately focused. Its optional extension library is b
 - explicit outcomes and acceptance criteria
 - command evidence with recorded exit status
 - explicit attestations for review evidence
-- blocker and resume transitions
+- actor attribution, notes, and append-only events
+- add/reset criterion correction path
+- blocker, resume, cancel, and reopen transitions
 - deterministic readiness and next action
 - guarded completion
-- human-readable and stable JSON status
-- completed Mission history
+- human-readable, browser, and stable JSON interfaces
+- completed and canceled Mission history
+- strict schema validation and atomic persistence
+- validated cross-machine export/import
+- secure loopback Mission Control dashboard
+- native POSIX, PowerShell, and Windows launchers
+- deterministic, attested release distribution
 
 Read:
 
 - [What Orca Is](intro.md)
 - [First Workflow](first-workflow.md)
 - [Product and Workflow Commands](commands.md)
+- [Mission Control](mission-control.md)
+- [Portability](portability.md)
+- [Releases](releases.md)
 
 Everything below is an optional execution or integration capability. None replaces the Mission contract.
 

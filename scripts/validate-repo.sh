@@ -24,6 +24,8 @@ need_grep_file() {
 }
 
 required_files="
+VERSION
+Formula/orca.rb
 README.md
 LICENSE
 NOTICE
@@ -37,6 +39,8 @@ SECURITY.md
 ROADMAP.md
 INSTALL.md
 bin/orca
+bin/orca.cmd
+bin/orca.ps1
 install/install.sh
 install/verify-install.sh
 install/doctor.sh
@@ -64,6 +68,13 @@ scripts/fixtures/notion/goal-event-unsupported-type.json
 scripts/fixtures/notion/adapter-doctor-token-missing.json
 scripts/orca-mission.rb
 scripts/check-mission-smoke.sh
+scripts/orca-dashboard.rb
+scripts/check-dashboard-smoke.sh
+scripts/package-release.py
+scripts/check-release-artifacts.sh
+dashboard/index.html
+dashboard/orca.css
+dashboard/orca.js
 scripts/mkdocs_repo_links.py
 overrides/partials/source.html
 "
@@ -77,6 +88,7 @@ integrations
 install
 scripts
 bin
+dashboard
 "
 
 for path in $required_files; do
@@ -99,8 +111,10 @@ need_grep_file "Skill   = guidance for how an agent might make it true" README.m
 need_grep_file "orca goal --packs" README.md
 need_grep_file "Orca Mission Control installed" install/install.sh
 need_grep_file "Orca Mission Control installed" install/install.ps1
-need_grep_file "0.2.0-dev" install/install.sh
-need_grep_file "0.2.0-dev" install/install.ps1
+need_grep_file "VERSION" install/install.sh
+need_grep_file "VERSION" install/install.ps1
+need_grep_file "orca dashboard" bin/orca
+need_grep_file "orca dashboard" bin/orca.ps1
 need_grep_file "Orca Mission Control doctor" install/doctor.sh
 need_grep_file "Orca Mission Control install verified" install/verify-install.sh
 
@@ -111,6 +125,11 @@ need_grep_file "Orca Mission Control install verified" install/verify-install.sh
 [ -x scripts/check-notion-adapter-smoke.sh ] || fail "scripts/check-notion-adapter-smoke.sh is not executable"
 [ -x scripts/orca-mission.rb ] || fail "scripts/orca-mission.rb is not executable"
 [ -x scripts/check-mission-smoke.sh ] || fail "scripts/check-mission-smoke.sh is not executable"
+[ -x scripts/orca-dashboard.rb ] || fail "scripts/orca-dashboard.rb is not executable"
+[ -x scripts/check-dashboard-smoke.sh ] || fail "scripts/check-dashboard-smoke.sh is not executable"
+[ -x scripts/package-release.py ] || fail "scripts/package-release.py is not executable"
+[ -x scripts/check-release-artifacts.sh ] || fail "scripts/check-release-artifacts.sh is not executable"
+[ "$(cat VERSION)" = "1.0.0" ] || fail "VERSION must be 1.0.0"
 
 if command -v git >/dev/null 2>&1 && git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
   command_count="$(git ls-files 'commands/orca-*.md' | wc -l | tr -d ' ')"
@@ -127,7 +146,7 @@ fi
 [ "$command_count" = "86" ] || fail "expected 86 commands, found $command_count"
 [ "$skill_count" = "72" ] || fail "expected 72 skills, found $skill_count"
 [ "$template_count" = "183" ] || fail "expected 183 templates, found $template_count"
-[ "$doc_count" = "456" ] || fail "expected 456 docs, found $doc_count"
+[ "$doc_count" = "460" ] || fail "expected 460 docs, found $doc_count"
 
 for command in install doctor onboard spec plan build review ship context research delegate checkpoint receipt status attribution help impeccable superpowers; do
   need_file "commands/orca-$command.md"
@@ -151,6 +170,8 @@ for wrapper in caveman efficient-frontier visual-plan visual-recap; do
 done
 
 if command -v ruby >/dev/null 2>&1; then
+  ruby -c Formula/orca.rb >/dev/null ||
+    fail "Homebrew formula syntax failed"
   RUBYOPT="${RUBYOPT:+$RUBYOPT }--disable-gems" ruby -rjson -e 'ARGV.each { |path| JSON.parse(File.read(path)) }' scripts/fixtures/notion/*.json ||
     fail "malformed Notion fixture JSON"
   RUBYOPT="${RUBYOPT:+$RUBYOPT }--disable-gems" ruby -rjson -e 'ARGV.each { |path| JSON.parse(File.read(path)) }' catalog/tools/*.json ||
@@ -171,6 +192,12 @@ fi
 
 ./scripts/check-mission-smoke.sh >/dev/null ||
   fail "mission smoke failed"
+
+./scripts/check-dashboard-smoke.sh >/dev/null ||
+  fail "dashboard smoke failed"
+
+./scripts/check-release-artifacts.sh >/dev/null ||
+  fail "release artifact acceptance failed"
 
 if command -v python3 >/dev/null 2>&1; then
   python3 scripts/mkdocs_repo_links.py --self-test >/dev/null ||

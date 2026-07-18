@@ -6,7 +6,7 @@ Start here if you need the shortest explanation of the setup system before choos
 
 ## What You Are Installing
 
-You are installing Orca Mission Control: the local runtime, its `orca mission` command surface, and the supporting documentation. The repository also includes optional agent workflows and skills.
+You are installing Orca Mission Control: the local runtime, secure dashboard, native launchers, product documentation, and optional agent workflow library.
 
 The install experience should answer one simple question:
 
@@ -24,9 +24,8 @@ Mission Control requires:
 
 - a supported operating system
 - git
-- a shell that can run the install scripts
-- Ruby from the operating system or package manager
-- this repository
+- Ruby 2.6 or newer
+- a release archive, Homebrew formula, or this repository
 
 Optional workflows may also need:
 

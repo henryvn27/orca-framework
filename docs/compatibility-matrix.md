@@ -1,5 +1,17 @@
 # Compatibility Matrix
 
+## Orca 1.0 Product Platforms
+
+| Platform | Native launcher | Installer | Mission lifecycle | Dashboard | Hosted installed-copy acceptance |
+| --- | --- | --- | --- | --- | --- |
+| macOS | POSIX `orca` | shell + Homebrew | supported | supported | required |
+| Linux | POSIX `orca` | shell + Homebrew | supported | supported | required |
+| Windows | `orca.cmd` + PowerShell | PowerShell | supported | supported | required |
+
+Ruby 2.6 or newer is the runtime contract. Mission Control and the dashboard use the Ruby standard library only.
+
+## Optional Agent Harnesses
+
 This matrix records harness-level compatibility conservatively. Do not assume parity across hosts. If evidence is weak or conflicting, use `unclear`.
 
 Status meanings:

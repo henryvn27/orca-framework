@@ -2,44 +2,57 @@
 
 Orca is a local control plane for agent-assisted software work.
 
-Coding agents are good at producing changes, but the surrounding work is easy to lose: what outcome was approved, what counted as done, which checks actually ran, why work stopped, and whether a later agent can trust the handoff. Orca makes that operating state durable.
+Coding agents can produce changes, but chat does not reliably preserve the surrounding contract: what outcome was approved, what counted as done, which checks actually passed, why work stopped, and whether another executor can trust the handoff. Orca makes that contract executable and durable.
 
-## The Core Model
+## One Product Object
+
+A Mission contains an outcome, acceptance criteria, evidence, blockers, notes, actors, readiness, and history. Exactly one Mission is current per project. Terminal Missions remain inspectable and can be reopened without erasing their prior state.
 
 ```text
 Human intent
     |
     v
-Orca Mission: outcome + acceptance criteria
+Mission: outcome + acceptance criteria
     |
     v
-Any agent or human performs the work
+Any human, agent, or CI system performs the work
     |
     v
-Orca records command evidence or explicit attestations
+Orca records command proof or explicit attestations
     |
     v
-Completion gate + durable mission history
+Validated completion gate + durable history
 ```
 
-The model is intentionally smaller than the full framework catalog. A Mission is the one product object. Everything else either executes it, helps execute it, or connects it to another system.
+The Mission is the product. Commands, skills, templates, and integrations are ways to execute or extend it.
 
 ## Orca Versus Skills
 
-A skill is reusable guidance loaded into an agent. It can teach review heuristics, planning structure, or a release procedure. Its effect depends on the agent following the instructions in that interaction.
+A skill is reusable guidance loaded into an agent. Its effect depends on the executor following that guidance in a particular interaction.
 
-Orca Mission Control is deterministic software around those interactions. It persists state, runs verification commands, records exit status, derives readiness, manages blockers, and rejects invalid lifecycle transitions.
+Orca is deterministic software around those interactions. It persists state, locks concurrent writes, validates a versioned schema, runs verification commands, attributes evidence, derives readiness, manages blockers, rejects invalid transitions, and exports/imports portable Mission files.
 
-That means an Orca Mission can use no skills, one skill, or many skills without changing its contract.
+A Mission can use no skills, one skill, or many skills without changing its contract.
 
-## What Orca Does Not Claim
+## Finished Local-First Boundary
 
-Orca does not write code by itself, judge every subjective criterion automatically, or make a local check equivalent to production proof. It records exactly which proof was supplied and leaves subjective attestations visible as attestations.
+Mission Control runs entirely on the user’s computer:
 
-Orca is local-first today. Hosted collaboration, remote workers, and sync are future delivery surfaces around the same Mission contract, not prerequisites for using the product.
+- the dashboard is a loopback-only web application;
+- state stays under the selected project’s `.orca/` directory;
+- no account, telemetry collector, hosted database, or background cloud worker is required;
+- validated export/import is the cross-machine transfer mechanism;
+- the human-readable CLI, dashboard, and JSON API all operate the same runtime.
+
+Hosted accounts, remote execution, and opaque synchronization are product non-goals. Orca coordinates local tools and the agent harnesses users already choose.
+
+## Honest Proof
+
+Orca does not claim to judge every subjective outcome. A command with exit code `0` is recorded as command evidence. A visual review or release decision is recorded as an attributable attestation. The evidence type stays visible so another person can evaluate its strength.
 
 ## Next
 
+- Launch [Mission Control](mission-control.md).
 - Run [the first workflow](first-workflow.md).
-- Read [the command boundary](commands.md).
+- Read [the command contract](commands.md).
 - See [where skills fit](skills.md).

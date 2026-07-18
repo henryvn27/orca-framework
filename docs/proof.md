@@ -13,6 +13,12 @@ This page answers one question: what observable behavior proves Orca is more tha
 | Blockers affect lifecycle | a blocked Mission rejects evidence changes and completion |
 | Completion is guarded | `mission complete` fails until every criterion has evidence |
 | History remains inspectable | completed Missions remain available through `mission list` |
+| Corrections are honest | `mission reset` removes stale evidence and records the reason |
+| Terminal decisions are reversible | canceled and completed Missions reopen without losing history |
+| State is portable without overwrite | validated export/import rejects collisions and active conflicts |
+| The dashboard is a product UI | every visual mutation calls the same validated runtime |
+| Local stays local | the server binds to loopback and token-protects writes |
+| Releases are verifiable | archives include file manifests, checksums, provenance, and attestation |
 
 Run the [Mission Control Demo](demo.md) to observe the completion gate directly, or complete [First Workflow](first-workflow.md) for the full blocker and history path.
 

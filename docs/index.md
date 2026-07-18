@@ -2,8 +2,8 @@
 
 <div class="orca-doc-intro">
   <p class="orca-kicker">ORCA</p>
-  <p class="orca-lead">Local mission control for AI coding work: explicit acceptance criteria, recorded evidence, guarded completion, and durable history.</p>
-  <p class="orca-meta"><strong>State:</strong> Project-local <span>•</span> <strong>Interface:</strong> Human + JSON <span>•</span> <strong>Agents:</strong> Any harness</p>
+  <p class="orca-lead">Local mission control for AI coding work: explicit acceptance criteria, attributable evidence, guarded completion, portable state, and durable history.</p>
+  <p class="orca-meta"><strong>State:</strong> Project-local <span>•</span> <strong>Interfaces:</strong> Dashboard + CLI + JSON <span>•</span> <strong>Agents:</strong> Any harness</p>
 </div>
 
 ## First Mission
@@ -17,7 +17,7 @@ orca mission satisfy AC-2 --evidence "README updated"
 orca mission complete
 ```
 
-Orca will refuse the last command until every criterion carries evidence and every blocker is resolved.
+Orca refuses the last command until every criterion carries evidence and every blocker is resolved. Run `orca dashboard` to operate the same Mission visually.
 
 ## The Product Boundary
 
@@ -35,9 +35,12 @@ The Mission remains inspectable even when the agent, skill, or harness changes.
 | prove Orca works | [First 10 Minutes](first-10-minutes.md) |
 | understand the product | [Intro](intro.md) |
 | run the complete product loop | [First Workflow](first-workflow.md) |
+| operate the browser application | [Mission Control](mission-control.md) |
+| move a Mission between machines | [Portability](portability.md) |
 | install Orca | [Quickstart](quickstart.md) |
 | use an agent procedure | [Commands](commands.md) |
 | understand skills | [Skills](skills.md) |
+| verify a release | [Releases](releases.md) |
 
 ## Beyond Mission Control
 

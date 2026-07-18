@@ -5,12 +5,85 @@ on:
   pull_request:
 
 jobs:
-  install:
-    runs-on: ubuntu-latest
+  unix-install:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v7
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
       - name: Local install
         run: |
-          ./install/install.sh --mode local --target /tmp/orca-local
-          ./install/verify-install.sh --target /tmp/orca-local
-          ./install/doctor.sh --target /tmp/orca-local --harness generic --services github,linear
+          target="$RUNNER_TEMP/orca-local"
+          project="$RUNNER_TEMP/orca-project"
+          ./install/install.sh --mode local --target "$target"
+          "$target/install/verify-install.sh" --target "$target"
+          "$target/install/doctor.sh" --target "$target" --harness generic --services github,linear
+          test "$("$target/bin/orca" version)" = "1.0.0"
+          mkdir -p "$project"
+          cd "$project"
+          "$target/bin/orca" mission create "Verify the installed product" --criterion "The installed lifecycle passes" --by "Hosted install test"
+          "$target/bin/orca" mission satisfy AC-1 --evidence "Installed runtime executed" --by "Hosted install test"
+          "$target/bin/orca" mission complete --by "Hosted install test"
+          "$target/bin/orca" mission validate
+          "$target/bin/orca" dashboard --help
+
+  windows-install:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+      - name: Native PowerShell install and lifecycle
+        shell: pwsh
+        run: |
+          $Target = Join-Path $env:RUNNER_TEMP "orca-local"
+          $Project = Join-Path $env:RUNNER_TEMP "orca-project"
+          & ./install/install.ps1 -Mode local -Target $Target
+          $Orca = Join-Path $Target "bin/orca.cmd"
+          if ((& $Orca version).Trim() -ne "1.0.0") { throw "Installed version is not 1.0.0" }
+          New-Item -ItemType Directory -Force -Path $Project | Out-Null
+          Push-Location $Project
+          try {
+            & $Orca mission create "Verify the native Windows product" --criterion "The native lifecycle passes" --by "Windows install test"
+            if ($LASTEXITCODE -ne 0) { throw "Mission create failed" }
+            & $Orca mission satisfy AC-1 --evidence "Native PowerShell launcher executed" --by "Windows install test"
+            if ($LASTEXITCODE -ne 0) { throw "Mission satisfy failed" }
+            & $Orca mission complete --by "Windows install test"
+            if ($LASTEXITCODE -ne 0) { throw "Mission complete failed" }
+            & $Orca mission validate
+            if ($LASTEXITCODE -ne 0) { throw "Mission validation failed" }
+          } finally {
+            Pop-Location
+          }
+
+          $Listener = [System.Net.Sockets.TcpListener]::new([System.Net.IPAddress]::Loopback, 0)
+          $Listener.Start()
+          $Port = ([System.Net.IPEndPoint]$Listener.LocalEndpoint).Port
+          $Listener.Stop()
+          $env:ORCA_DASHBOARD_TOKEN = "windows-install-test-token"
+          $Stdout = Join-Path $env:RUNNER_TEMP "orca-dashboard.out"
+          $Stderr = Join-Path $env:RUNNER_TEMP "orca-dashboard.err"
+          $Process = Start-Process -FilePath $Orca -ArgumentList @("dashboard", "--project", $Project, "--port", "$Port", "--no-open") -PassThru -RedirectStandardOutput $Stdout -RedirectStandardError $Stderr
+          try {
+            $Ready = $false
+            foreach ($Attempt in 1..100) {
+              if ($Process.HasExited) { throw "Dashboard exited early: $(Get-Content -Raw $Stderr)" }
+              try {
+                $Response = Invoke-WebRequest -UseBasicParsing -Uri "http://127.0.0.1:$Port/api/state"
+                if ($Response.StatusCode -eq 200) { $Ready = $true; break }
+              } catch {
+                Start-Sleep -Milliseconds 100
+              }
+            }
+            if (!$Ready) { throw "Dashboard did not become ready" }
+            $Payload = $Response.Content | ConvertFrom-Json
+            if (!$Payload.ok -or $Payload.current.status -ne "completed") { throw "Dashboard returned invalid mission state" }
+          } finally {
+            if (!$Process.HasExited) { Stop-Process -Id $Process.Id -Force }
+          }

@@ -9,14 +9,9 @@ script_name=$(basename -- "$0")
 usage() {
   cat <<'EOF'
 Usage:
-  orca mission create <outcome> --criterion TEXT [--criterion TEXT ...]
-  orca mission status [--json]
-  orca mission check AC-ID -- COMMAND [ARG ...]
-  orca mission satisfy AC-ID --evidence TEXT
-  orca mission block REASON
-  orca mission resume
-  orca mission complete
-  orca mission list [--json]
+  orca mission COMMAND [OPTIONS]
+  orca dashboard [--project PATH] [--port PORT] [--no-open]
+  orca version
   orca goal <outcome> [--pack NAME] [--auto] [--max-cycles N] [--until blocked|done] [--plan-only]
   orca goal --packs [--verbose]
   orca progress
@@ -49,6 +44,8 @@ Examples:
   orca mission satisfy AC-2 --evidence "Documented in CHANGELOG.md"
   orca mission status
   orca mission complete
+  orca dashboard
+  orca version
   orca goal --packs
   orca goal --packs --verbose
   orca goal "make this production ready" --pack release-ready
@@ -230,6 +227,14 @@ orca_mission() {
     return 1
   }
   ORCA_ROOT="$(orca_dir)" RUBYOPT="${RUBYOPT:+$RUBYOPT }--disable-gems" ruby "$root/scripts/orca-mission.rb" "$@"
+}
+
+orca_dashboard() {
+  command -v ruby >/dev/null 2>&1 || {
+    printf 'Orca Mission Control requires Ruby, but ruby was not found on PATH.\n' >&2
+    return 1
+  }
+  RUBYOPT="${RUBYOPT:+$RUBYOPT }--disable-gems" ruby "$root/scripts/orca-dashboard.rb" "$@"
 }
 
 json_escape() {
@@ -1514,6 +1519,10 @@ case "$subcommand" in
     usage
     exit 0
     ;;
+  version)
+    cat "$root/VERSION"
+    exit 0
+    ;;
   list)
     list_commands
     exit 0
@@ -1550,6 +1559,10 @@ if [ "$script_name" = "orca" ]; then
   case "$target_command" in
     mission)
       orca_mission "$@"
+      exit $?
+      ;;
+    dashboard)
+      orca_dashboard "$@"
       exit $?
       ;;
     goal|/goal)

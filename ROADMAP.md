@@ -1,33 +1,41 @@
-# Roadmap
+# Orca 1.0 Product Completion Record
 
-## 0.1
+Orca’s repository-owned 1.0 product scope is complete. This file records the delivered boundary instead of promising an unspecified backlog.
 
-- Publish complete framework repository.
-- Validate local and global installation paths.
-- Document command and skill usage.
-- Provide initial MCP examples.
-- Add Linear-first workflow docs, commands, skills, and comment templates.
-- Add Linear setup guide, command, skill, checklist, and local setup packet script.
-- Document opt-out mode for teams that do not use Linear.
+## Mission Runtime
 
-## 0.2
+- [x] Durable project-local Mission with strict schema validation.
+- [x] Human and stable JSON interfaces.
+- [x] Create, inspect, list, and event history.
+- [x] Add and reset acceptance criteria.
+- [x] Command proof and attributable attestations.
+- [x] Notes, blockers, resolution, cancellation, reopening, and guarded completion.
+- [x] Exclusive mutation lock and atomic mode-`0600` writes.
+- [x] Validated, collision-safe export and import.
 
-- Cut the accumulated reliability and coordination work into a reviewed minor release.
-- Add packaged release archives.
-- Add installer smoke tests across macOS, Linux, and Windows PowerShell.
-- Add more end-to-end examples for Linear-first web and iOS projects.
-- Add optional generated command indexes for agent clients.
+## Mission Control Application
 
-## 0.3
+- [x] Dependency-free dashboard over the canonical Mission runtime.
+- [x] Complete lifecycle operation and durable history selection.
+- [x] Loopback-only server, session-token writes, same-origin enforcement, and strict response headers.
+- [x] Responsive, keyboard-operable, reduced-motion-aware interface.
+- [x] Browser-operated visual and interaction proof.
 
-- Add richer QA report schemas.
-- Add state-mapping examples for common Linear workspaces.
-- Add migration notes for teams adopting ORCA Framework into existing issue trackers.
-- Add adapter guidance for GitHub Issues and document-first opt-out workflows.
+## Platforms And Distribution
 
-## Later
+- [x] POSIX launcher for macOS and Linux.
+- [x] Native PowerShell launcher and Windows `.cmd` entrypoint.
+- [x] Local/global shell and PowerShell installers.
+- [x] Hosted installed-copy acceptance on Linux, macOS, and Windows.
+- [x] Deterministic tar and zip archives.
+- [x] Embedded file manifest, SHA-256 checksums, commit/tree provenance, and GitHub build attestation.
+- [x] GitHub Release `v1.0.0` and Homebrew formula.
 
-- Explore signed releases.
-- Explore package-manager distribution.
-- Add community-contributed workflow packs after review.
-- Explore optional automation helpers for Linear comments and state recommendations.
+## Product Definition
+
+- [x] Mission Control is the product; skills and commands are optional execution strategies.
+- [x] Local-first privacy and explicit portable files are the finished collaboration boundary.
+- [x] Hosted accounts, remote execution, telemetry collection, and opaque sync are explicit non-goals.
+- [x] Architecture, security, install, lifecycle, portability, release, and command contracts are documented.
+
+New product work begins with a new evidence-backed proposal and version decision. Nothing in this completion record is a placeholder or deferred requirement for Orca 1.0.

@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Added Orca Mission Control as the primary product surface: durable acceptance criteria, evidence-backed readiness, blocker handling, guarded completion, mission history, and stable JSON output.
+- Added `orca mission create`, `status`, `list`, `check`, `satisfy`, `block`, `resume`, and `complete` with a deterministic end-to-end smoke suite.
+- Reframed skills and Markdown workflow commands as optional execution strategies inside a Mission rather than the Orca product itself.
 - Add a layered docs system with start-here flow, guide layer, wiki knowledge base, docs automation, staleness detection, and contributor doc maintenance rules.
 
 ### Added

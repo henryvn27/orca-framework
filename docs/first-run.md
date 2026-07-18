@@ -1,37 +1,27 @@
 # First Run
 
-The first run should remove uncertainty.
+The first run should prove Orca’s product contract with as little setup as possible.
 
-## Goal
+## Success Means
 
-Move from "it installed" to "I proved it works."
+- Orca creates a Mission in the target project.
+- At least one real verification command runs through Orca.
+- A failed check does not increase readiness.
+- Every satisfied criterion shows its evidence.
+- Completion is rejected until the contract is fulfilled.
+- The final Mission remains readable in `.orca/missions/` and through `--json`.
 
-## First Run Order
+## Recommended First Run
 
-1. confirm the repo or install target is present
-2. confirm validation passes
-3. answer the short setup interview so ORCA knows what path to teach
-4. open the starter docs
-5. choose either one small ORCA workflow or the personalized demo path
-6. record what worked
+Use [First Workflow](first-workflow.md) with a small project change whose verification command you already know.
 
-## Short Setup Interview
+Do not begin by configuring Notion, Linear, subagents, a hosted service, or the full skill set. Those may help later, but none is required to prove Mission Control works.
 
-Before the first real workflow, ORCA should usually ask:
+## After The First Mission
 
-- are you just proving ORCA works or setting up your long-term environment?
-- which harness do you actually want to use first?
-- do you need GitHub or Linear right now?
-- do you want beginner, standard, or technical guidance?
-- what is the first real task you want ORCA to help with?
-- how much explanation do you want during setup and first runs?
-- how technical can ORCA be?
-- how involved do you want to be once work starts?
-- should ORCA recommend `/goal` or background execution for safe bounded work, or ask first?
-- should ORCA ask more questions up front or keep the first pass minimal?
+Add only the layer the next Mission needs:
 
-## Read Next
-
-- [first-success-check.md](first-success-check.md)
-- [first-workflow.md](first-workflow.md)
-- [../commands/orca-demo.md](../commands/orca-demo.md)
+- an agent workflow from [Commands](commands.md);
+- a reusable procedure from [Skills](skills.md);
+- a host adapter from [Compatibility Matrix](compatibility-matrix.md);
+- an external integration from [Integrations Overview](integrations-overview.md).

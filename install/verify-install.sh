@@ -19,6 +19,7 @@ done
 [ -f "$target/skills/orca-install-help/SKILL.md" ] || { printf 'Missing orca-install-help skill\n' >&2; exit 1; }
 [ -f "$target/docs/install.md" ] || { printf 'Missing install guide\n' >&2; exit 1; }
 [ -x "$target/bin/orca" ] || { printf 'Missing executable orca launcher\n' >&2; exit 1; }
+[ -x "$target/scripts/orca-mission.rb" ] || { printf 'Missing executable mission runtime\n' >&2; exit 1; }
 [ -x "$target/bin/orca-onboard" ] || { printf 'Missing executable orca-onboard shim\n' >&2; exit 1; }
 [ -x "$target/install/doctor.sh" ] || { printf 'Missing executable install doctor\n' >&2; exit 1; }
 [ -x "$target/install/verify-install.sh" ] || { printf 'Missing executable install verifier\n' >&2; exit 1; }

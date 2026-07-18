@@ -1,70 +1,44 @@
-# Documentation Home
+# Orca Mission Control
 
 <div class="orca-doc-intro">
-  <p class="orca-kicker">ORCA Framework</p>
-  <p class="orca-lead">ORCA Framework is a workflow layer for Codex and Claude Code. It gives you a clearer first run, stronger orchestration, better long-running goal structure, and tighter review discipline without hiding the underlying harness.</p>
-  <p class="orca-meta"><strong>Hosts:</strong> Codex, Claude Code <span>•</span> <strong>Mode:</strong> Dark by default <span>•</span> <strong>Path:</strong> Setup-first docs</p>
+  <p class="orca-kicker">ORCA</p>
+  <p class="orca-lead">Local mission control for AI coding work: explicit acceptance criteria, recorded evidence, guarded completion, and durable history.</p>
+  <p class="orca-meta"><strong>State:</strong> Project-local <span>•</span> <strong>Interface:</strong> Human + JSON <span>•</span> <strong>Agents:</strong> Any harness</p>
 </div>
 
-## Start Fast
+## First Mission
+
+```sh
+orca mission create "Prepare this change for review" \
+  --criterion "The repository has no whitespace errors" \
+  --criterion "The change is documented"
+orca mission check AC-1 -- git diff --check
+orca mission satisfy AC-2 --evidence "README updated"
+orca mission complete
+```
+
+Orca will refuse the last command until every criterion carries evidence and every blocker is resolved.
+
+## The Product Boundary
+
+- A Mission owns the outcome, criteria, evidence, blockers, readiness, and lifecycle.
+- An agent performs the work.
+- A skill teaches the agent a useful procedure.
+- An integration connects an optional external system.
+
+The Mission remains inspectable even when the agent, skill, or harness changes.
+
+## Start Here
 
 | If you want to... | Open this |
 | --- | --- |
-| get from zero to first success | [First 10 Minutes](first-10-minutes.md) |
-| install ORCA cleanly | [Quickstart](quickstart.md) |
-| understand the big picture | [Start Here](start-here.md) |
-| run one impressive demo | [ORCA Demo](demo.md) |
-| browse the full capability map | [Feature Index](feature-index.md) |
+| prove Orca works | [First 10 Minutes](first-10-minutes.md) |
+| understand the product | [Intro](intro.md) |
+| run the complete product loop | [First Workflow](first-workflow.md) |
+| install Orca | [Quickstart](quickstart.md) |
+| use an agent procedure | [Commands](commands.md) |
+| understand skills | [Skills](skills.md) |
 
-## Documentation Paths
+## Beyond Mission Control
 
-<div class="orca-link-grid">
-  <a class="orca-link-card" href="first-10-minutes/">
-    <strong>Getting Started</strong>
-    <span>The shortest path from zero to first success.</span>
-  </a>
-  <a class="orca-link-card" href="start-here/">
-    <strong>Concepts</strong>
-    <span>The best first explanation of what ORCA is and how it works.</span>
-  </a>
-  <a class="orca-link-card" href="feature-index/">
-    <strong>Feature Index</strong>
-    <span>Browse what ORCA can actually do without reading the whole tree.</span>
-  </a>
-  <a class="orca-link-card" href="command-index/">
-    <strong>Command Index</strong>
-    <span>Use this when you know what you want to do but not which command fits.</span>
-  </a>
-  <a class="orca-link-card" href="agent-orchestration/">
-    <strong>Orchestration</strong>
-    <span>Controller, subagent, and handoff rules for multi-agent work.</span>
-  </a>
-  <a class="orca-link-card" href="proof/">
-    <strong>Proof And Outcomes</strong>
-    <span>See what ORCA should be able to demonstrate quickly.</span>
-  </a>
-</div>
-
-## Core Workflow
-
-The default ORCA path is:
-
-`orca-onboard -> orca-spec -> orca-plan -> orca-build -> orca-review`
-
-This is the main teaching path and the main production path.
-
-## What ORCA Adds
-
-- setup and onboarding that ask for the right context up front
-- host-aware routing for Codex and Claude Code features like `/goal` and side sessions
-- stronger subagent orchestration, handoff packets, and merge discipline
-- explain and side-session flows that do not derail the main run
-- better long-running work structure with bounded autonomy and clearer checkpoints
-
-## Best Next Pages
-
-- [First 10 Minutes](first-10-minutes.md)
-- [Start Here](start-here.md)
-- [Proof And Outcomes](proof.md)
-- [Command Index](command-index.md)
-- [Beginners Guide](guides/beginners-guide.md)
+Orca ships optional workflow definitions and skills for planning, building, review, QA, release work, and integrations. Those are extensions to the mission runtime, not substitutes for it. Start with one Mission; add a workflow only when it helps prove a criterion.

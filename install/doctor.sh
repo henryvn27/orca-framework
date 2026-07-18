@@ -24,11 +24,11 @@ cd "$root"
 
 printf 'ORCA Framework doctor\n'
 
-for bin in sh find grep sed cp rm mkdir git; do
+for bin in sh find grep sed cp rm mkdir git ruby; do
   command -v "$bin" >/dev/null 2>&1 || { printf 'Missing dependency: %s\n' "$bin" >&2; exit 1; }
 done
 
-printf 'Core shell dependencies: ok\n'
+printf 'Core runtime dependencies: ok\n'
 
 if [ -f "$root/ORCA-Framework.md" ] && [ -d "$root/docs" ] && [ -d "$root/commands" ]; then
   printf 'Repo layout: ok\n'

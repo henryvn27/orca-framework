@@ -1,241 +1,129 @@
-# ORCA
+# Orca
 
-ORCA is a closed-loop workflow layer for AI coding agents.
+Orca is local mission control for AI coding work.
 
-It turns a broad request into scoped work, verified implementation, durable state, readiness scoring, and a handoff you can resume later.
-
-```text
-/goal -> clarify -> plan -> apply -> unify -> loop pack -> readiness score -> handoff
-```
-
-ORCA is also being split into a manager/catalog layer. Standalone tools live in their own repos; ORCA references them through `catalog/tools/*.json` and exposes them with:
-
-```sh
-orca tools
-orca tools --json
-```
-
-See [docs/orca-tool-catalog.md](docs/orca-tool-catalog.md).
-
-## Start
-
-```sh
-orca goal "make this production ready" --pack release-ready
-orca progress
-orca unify
-```
-
-## Install With An Agent
-
-Copy this prompt into Codex or Claude Code:
+It gives any coding agent a durable contract for what “done” means, records the evidence behind each acceptance criterion, blocks false completion, and leaves a mission you can inspect or resume later.
 
 ```text
-Install ORCA Framework from https://github.com/henryvn27/orca-framework.
-
-Steps:
-1. Check that git and a POSIX shell are available.
-2. Clone https://github.com/henryvn27/orca-framework.git into a safe local folder, or use the existing clone if already present.
-3. Read README.md, INSTALL.md, and docs/install.md before choosing commands.
-4. Run ./scripts/validate-repo.sh from the ORCA repo before installing.
-5. Install globally by default:
-   ./install/install.sh --mode global
-6. Add $HOME/.orca-framework/bin to my shell PATH if it is not already available.
-7. Verify the install:
-   ./install/verify-install.sh --target $HOME/.orca-framework
-   ./install/doctor.sh --target $HOME/.orca-framework
-8. Open a new shell or reload PATH, then verify:
-   orca goal --packs
-   orca backend status
-
-If I ask for project-local install instead of global install, use:
-./install/install.sh --mode local --target ./.orca-framework
-export PATH="$(pwd)/.orca-framework/bin:$PATH"
-./install/verify-install.sh --target ./.orca-framework
-./install/doctor.sh --target ./.orca-framework
-
-Rules:
-- Preserve any unrelated dirty Git work.
-- Do not delete an existing ORCA install unless I approve it.
-- Do not invent a custom install process if the repo scripts work.
-- If a command fails, stop and show the exact failing command plus the shortest useful error.
-- Finish with installed path, PATH change made or still needed, verification results, and the first ORCA command I should run.
+request -> mission -> agent work -> evidence -> completion gate -> durable history
 ```
 
-Autonomous mode is bounded:
+Skills can tell an agent how to review code, plan a feature, or run QA. Orca is the product that owns the work itself: its outcome, acceptance criteria, lifecycle, blockers, evidence, readiness, and final state.
+
+## See It Work
+
+Create a mission in any project:
 
 ```sh
-orca goal "make this production ready" --pack release-ready --auto --max-cycles 5 --until blocked
+orca mission create "Prepare this change for review" \
+  --criterion "The repository has no whitespace errors" \
+  --criterion "The change is documented"
 ```
 
-It stops on completed acceptance criteria, no ready issues, repeated failures, low confidence, missing credentials/context, risky diff size, time/cycle budget, or required user approval. It is not infinite background execution.
+Orca writes a project-local mission and immediately names the next unproven criterion:
 
-## State
+```text
+ORCA MISSION  20260718t164706-prepare-this-change-for-review
+Prepare this change for review
+Status: ACTIVE  |  Readiness: 0/2 (0%)
 
-ORCA defaults to Notion for project management, docs, and issues when configured.
+Acceptance criteria
+[ ] AC-1  The repository has no whitespace errors
+[ ] AC-2  The change is documented
 
-Notion config is ID-free by default. Set project-specific IDs in `.orca/config.env`:
+Next: Prove AC-1: The repository has no whitespace errors
+```
+
+Let Orca run a real check:
 
 ```sh
-notion_project_page_id=<page-id>
-notion_issue_board_data_source_id=<collection-id>
-notion_sync_command=/path/to/notion-adapter
+orca mission check AC-1 -- git diff --check
 ```
 
-When those values exist, `orca goal`, `orca progress`, and `orca unify` treat Notion as canonical and write sync payloads under `.orca/notion/`. If `ORCA_NOTION_SYNC_COMMAND` or `notion_sync_command` is set, ORCA calls that adapter command with the payload path; the adapter owns the live Notion write. If the adapter is missing or fails, `.orca/notion/outbox/` remains the durable mirror to apply.
-
-Run queued Notion payloads explicitly:
+Record evidence that cannot be expressed as a command:
 
 ```sh
-orca notion outbox
-orca notion outbox --json
-orca notion payload --example
-orca notion payload --validate .orca/notion/outbox/2026-06-22T12:00:00Z-goal_unified-example-handoff-1.json
-orca notion adapter --check .orca/notion/outbox/2026-06-22T12:00:00Z-goal_unified-example-handoff-1.json
-orca notion adapter --json-check .orca/notion/outbox/2026-06-22T12:00:00Z-goal_unified-example-handoff-1.json
-orca notion adapter --doctor .orca/notion/outbox/2026-06-22T12:00:00Z-goal_unified-example-handoff-1.json
-orca notion adapter --dry-run .orca/notion/outbox/2026-06-22T12:00:00Z-goal_unified-example-handoff-1.json
-orca notion sync --dry-run --all
-orca notion sync --dry-run --json --all
-ORCA_NOTION_SYNC_COMMAND=/path/to/notion-adapter orca notion sync --all
-orca notion sync .orca/notion/outbox/2026-06-22T12:00:00Z-goal_unified-example-handoff-1.json
+orca mission satisfy AC-2 --evidence "README updated with the new behavior"
 ```
 
-Dry-run validates queued payloads without calling the adapter or moving files. Add `--json` when an agent or CI gate needs a machine-readable sync summary. `orca notion outbox --json` includes `ok:true` when the outbox can be read. Use `orca notion payload --example` to print a valid adapter payload example, and `orca notion payload --validate PATH [--json]` to check one payload without sync semantics. Payload validation also accepts stdin with `PATH` set to `-`. Payloads must include `schema_version: 1`, `payload_type: goal_event`, `action`, `canonical_backend`, `goal_slug`, `phase`, object-shaped `payload`, and `updated_at`. The adapter command receives one argument: the JSON payload path. ORCA moves a payload to `.orca/notion/synced/` only after the adapter exits `0`; missing config, adapter failure, and malformed payloads leave files in `.orca/notion/outbox/`.
-
-ORCA includes an optional Notion API adapter:
+Then inspect and complete the mission:
 
 ```sh
-export NOTION_TOKEN=<secret>
-export ORCA_NOTION_SYNC_COMMAND="$(pwd)/scripts/orca-notion-sync-adapter.sh"
-orca notion sync --all
+orca mission status
+orca mission complete
 ```
 
-The adapter reads `issue_board_data_source_id` from each payload, or `ORCA_NOTION_DATA_SOURCE_ID` when you need an override. It defaults to issue-board properties named `Issue`, `Status`, and `Completed Date`; set `ORCA_NOTION_TITLE_PROPERTY`, `ORCA_NOTION_STATUS_PROPERTY`, or `ORCA_NOTION_COMPLETED_DATE_PROPERTY` for a different board schema. Before creating, it queries the data source by title so repeated payloads update the existing page instead of creating duplicates. Set `ORCA_NOTION_MATCH_PROPERTY` if your board uses a different title property, or `ORCA_NOTION_EXISTING_PAGE_ID` when a caller already knows the target page. Test the create/update plan without network access:
+`orca mission complete` fails until every criterion has evidence and every blocker is resolved. Use `--json` with mission commands when an agent, CI job, or other tool needs stable machine-readable state.
 
-```sh
-orca notion adapter --dry-run .orca/notion/outbox/payload.json
-orca notion adapter --check .orca/notion/outbox/payload.json
-orca notion adapter --json-check .orca/notion/outbox/payload.json
-orca notion adapter --doctor .orca/notion/outbox/payload.json
+## What Makes Orca A Product
+
+| Orca Mission Control | A skill or prompt pack |
+| --- | --- |
+| Owns a durable mission and lifecycle | Influences one agent interaction |
+| Derives readiness from recorded evidence | Can claim work looks ready |
+| Executes verification commands and records exit status | Suggests commands for an agent to run |
+| Rejects premature completion | Relies on the agent to follow instructions |
+| Survives across agents, harnesses, and sessions | Usually lives inside one harness |
+| Exposes human and JSON control surfaces | Primarily exposes prose instructions |
+
+Orca does not replace Codex, Claude Code, or another coding agent. It gives them a shared, inspectable definition of success.
+
+## The Product Object: A Mission
+
+A Mission is a small state machine with one active instance per project:
+
+```text
+ACTIVE <-> BLOCKED -> COMPLETED
 ```
 
-Stable adapter fixtures live in `scripts/fixtures/notion/` for contract tests and integration examples. `scripts/fixtures/notion/adapter-doctor-token-missing.json` mirrors the `--doctor` token-missing readiness case shown below.
-Use `--doctor` when you need one read-only JSON preflight that combines backend readiness with adapter readiness. Its top-level `ok` means the payload is valid, ORCA's Notion backend is configured, and the adapter has live Notion sync readiness. A payload can pass `--json-check` while `--doctor` still reports `ok: false` when config or `NOTION_TOKEN` is missing.
+Each mission contains:
 
-Notion Issue Board date policy:
+- one outcome;
+- one or more acceptance criteria;
+- command evidence or explicit evidence notes;
+- blockers and their resolution history;
+- derived readiness and the next action;
+- an append-only event history;
+- timestamps and a versioned JSON schema.
 
-- New or active issues leave `Completed Date` blank.
-- When ORCA syncs a `Done` status, the adapter sets `Completed Date` to the local completion date only if the page has no existing completed date.
-- Replayed payloads and updates to pages with an existing `Completed Date` preserve that value.
-- `Last Updated Date` is Notion-managed/read-only and is never written by ORCA.
-- `ORCA_NOTION_COMPLETION_DATE=YYYY-MM-DD` exists for explicit corrections/tests; do not use it to guess historical dates.
-
-Example `--doctor` output when ORCA's backend config is ready but live Notion sync is not:
-
-```json
-{
-  "backend": {
-    "notion_issue_board_configured": true,
-    "notion_sync_command_status": "executable",
-    "ready": true
-  },
-  "adapter": {
-    "action": "create",
-    "data_source_id": "issue-board-123",
-    "token_present": false,
-    "live_ready": false,
-    "ok": true
-  },
-  "ok": false
-}
-```
-
-If Notion is unavailable, ORCA uses a local markdown fallback:
+Mission files live under `.orca/`:
 
 ```text
 .orca/
-  config.env
-  project.md
-  issues.md
-  decisions.md
-  docs/
-  runs/
-  handoffs/
-  packs/
-  loops/
-  notion/
+  active-mission
+  mission.lock
+  missions/
+    <mission-id>.json
 ```
 
-When live Notion or the Notion MCP is unavailable, queue a tracker handoff locally:
+The state is local, inspectable, atomic, and independent of a hosted account. Completed missions remain available through `orca mission list`.
 
-```sh
-orca notion handoff --issue "Update Notion issue after PR merge" --status Done --note "Live Notion unavailable; sync later."
-orca notion handoff --json --issue "Update Notion issue after PR merge" --status Done --note "Live Notion unavailable; sync later."
-orca notion outbox
-```
-
-This writes a valid payload to `.orca/notion/outbox/` without calling the live adapter. Use `--json` when an agent needs the payload path without scraping human output. Sync it later with `orca notion sync --all` once Notion config and credentials are available.
-
-Linear is still supported, but only when explicitly selected or configured as an adapter. It is not the default source of truth.
-
-Check current backend state:
-
-```sh
-orca backend status
-orca backend status --json
-orca notion doctor --json
-```
-
-Use text output for humans and JSON output for agents, CI, or release gates that need stable backend readiness fields without scraping prose. `orca backend status --json` includes `ok:true` when backend status can be read, and reports `notion_sync_status` as `outbox_mirror_only`, `executable`, or `configured_shell_command`. `orca notion doctor --json` includes `ok` as a stable alias for `ready`.
-
-## Tasks
-
-Every ORCA task should be acceptance-driven:
+## Mission Commands
 
 ```text
-Files: exact files or modules likely to change
-Action: specific implementation step
-Verify: command, check, or manual evidence
-Done: observable done condition
-ACs: linked acceptance criteria
+orca mission create OUTCOME --criterion TEXT [--criterion TEXT ...]
+orca mission status [--json]
+orca mission list [--json]
+orca mission check AC-ID [--json] -- COMMAND [ARG ...]
+orca mission satisfy AC-ID --evidence TEXT [--json]
+orca mission block REASON [--json]
+orca mission resume [--json]
+orca mission complete [--json]
 ```
 
-Vague tasks should be clarified before implementation starts.
+The deliberate constraint is one active mission per project. Orca refuses to overwrite unfinished work; after completion, creating the next mission preserves the previous one in history.
 
-## Loop Packs
+## Where Skills Fit
 
-A loop pack defines what "done" means for the goal.
-
-List available packs:
-
-```sh
-orca goal --packs
-orca goal --packs --verbose
-```
-
-Built-in packs:
-
-- `release-ready`
-- `app-store-ready`
-- `startup-mvp`
-- `security`
-- `performance`
-- `notion-hygiene`
-
-Each loop has a goal, measurement, action, stop condition, budget, and handoff. Loop evidence is stored in `.orca/loops/<goal>/`; readiness scores only count loops with pass evidence.
-
-## Core Commands
+The repository still includes reusable skills and workflow commands for planning, implementation, review, QA, release work, and integrations. They are optional execution strategies that an agent can use while pursuing a Mission.
 
 ```text
-orca goal
-orca progress
-orca unify
-orca notion sync
-orca backend status
-orca review
+Mission = what must become true and what proves it
+Skill   = guidance for how an agent might make it true
+Agent   = the executor that changes the project
 ```
 
-Existing command prompts remain available for compatibility:
+Inspect compatibility workflow definitions with:
 
 ```sh
 orca list
@@ -243,36 +131,51 @@ orca show orca-build
 orca run orca-build --print -- "Implement the approved plan"
 ```
 
+The earlier goal/loop-pack commands remain available for existing users, but Missions are the primary product path:
+
+```sh
+orca goal --packs
+orca progress
+orca unify
+```
+
 ## Install
+
+Orca currently requires Git, a POSIX shell, and Ruby. Ruby is used only from its standard library; there are no package dependencies for Mission Control.
 
 ```sh
 git clone https://github.com/henryvn27/orca-framework.git
 cd orca-framework
 ./scripts/validate-repo.sh
-./install/install.sh --mode local --target ./.orca-framework
-export PATH="$(pwd)/.orca-framework/bin:$PATH"
-./install/verify-install.sh --target ./.orca-framework
-./install/doctor.sh --target ./.orca-framework
+./install/install.sh --mode global
+export PATH="$HOME/.orca-framework/bin:$PATH"
+./install/verify-install.sh --target "$HOME/.orca-framework"
+./install/doctor.sh --target "$HOME/.orca-framework"
 ```
 
-If already inside an ORCA checkout, do not clone again.
+For a project-local install:
 
-For agent-assisted setup, use the copy-pastable Codex or Claude Code prompt near the top of this README.
+```sh
+./install/install.sh --mode local --target ./.orca-framework
+export PATH="$(pwd)/.orca-framework/bin:$PATH"
+```
 
-## Advanced Docs
+## Current Boundary
 
-- [docs/install.md](docs/install.md)
-- [docs/first-run.md](docs/first-run.md)
-- [docs/first-workflow.md](docs/first-workflow.md)
-- [docs/commands.md](docs/commands.md)
-- [docs/skills.md](docs/skills.md)
-- [docs/attribution.md](docs/attribution.md)
+Mission Control is real local software today. It creates state, executes checks, enforces transitions, and emits automation-safe JSON.
+
+Orca does not yet provide a hosted dashboard, remote worker, account system, or cross-machine sync. It also does not pretend to verify subjective work automatically: those criteria require an explicit evidence note whose author remains accountable for the claim.
+
+That boundary is intentional. The local contract is the product core; hosted collaboration can be added later without changing what a Mission means.
+
+## Documentation
+
+- [First workflow](docs/first-workflow.md)
+- [Commands](docs/commands.md)
+- [Skills and their boundary](docs/skills.md)
+- [Installation](docs/install.md)
+- [Attribution](docs/attribution.md)
 
 ## Attribution
 
-ORCA wraps or routes to upstream projects without claiming authorship. See:
-
-- [ACKNOWLEDGEMENTS.md](ACKNOWLEDGEMENTS.md)
-- [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)
-- [UPSTREAM.md](UPSTREAM.md)
-- [docs/attribution.md](docs/attribution.md)
+Orca routes to upstream projects without claiming authorship. See [ACKNOWLEDGEMENTS.md](ACKNOWLEDGEMENTS.md), [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md), and [UPSTREAM.md](UPSTREAM.md).

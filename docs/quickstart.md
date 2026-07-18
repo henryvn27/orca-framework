@@ -1,71 +1,42 @@
 # Quickstart
 
-This is the fastest safe path from zero to a working ORCA install.
+This is the shortest path from clone to a real Orca Mission.
 
-If you want more explanation, go to [install-for-beginners.md](install-for-beginners.md).
-If you want the full canonical version, go to [install.md](install.md).
-
-## 1. Clone The Repo
+## 1. Install
 
 ```sh
 git clone https://github.com/henryvn27/orca-framework.git
 cd orca-framework
-```
-
-Expected result:
-You are inside the ORCA repo.
-
-## 2. Validate The Repo
-
-```sh
 ./scripts/validate-repo.sh
-```
-
-Expected result:
-`validate-repo: ok`
-
-## 3. Install ORCA Locally
-
-```sh
 ./install/install.sh --mode local --target ./.orca-framework
-```
-
-Expected result:
-The script prints the install target and next-step docs.
-
-Add the installed command layer to your shell path:
-
-```sh
 export PATH="$(pwd)/.orca-framework/bin:$PATH"
+./install/verify-install.sh --target ./.orca-framework
 ```
 
-## 4. Verify The Install
+## 2. Enter A Project
+
+Change into a repository with one small outcome you can actually verify. Orca stores state in that project’s `.orca/` directory, not in the framework checkout.
+
+## 3. Create A Mission
 
 ```sh
-./install/verify-install.sh --target ./.orca-framework
-./install/doctor.sh --target ./.orca-framework
+orca mission create "Prepare this change for review" \
+  --criterion "The repository has no whitespace errors" \
+  --criterion "The behavior is documented"
 ```
 
-Expected result:
-You see `install verified` and `doctor: ok`.
+## 4. Prove The Criteria
 
-## 5. Run The First Success Flow
+```sh
+orca mission check AC-1 -- git diff --check
+orca mission satisfy AC-2 --evidence "README documents the behavior"
+```
 
-Read:
+## 5. Complete
 
-1. [first-run.md](first-run.md)
-2. [first-success-check.md](first-success-check.md)
-3. [first-workflow.md](first-workflow.md)
+```sh
+orca mission status
+orca mission complete
+```
 
-Then use the default ORCA path:
-
-1. `orca-onboard`
-2. `orca-spec`
-3. `orca-plan`
-4. `orca-build`
-5. `orca-review`
-
-If you want one personalized showcase instead of choosing your own task first, use `orca-demo`.
-
-These commands are available after install if `.orca-framework/bin` is on your `PATH`.
-Use `orca-onboard --print -- "describe the task"` to inspect the prompt, or run `orca-onboard --harness codex -- "describe the task"` when Codex CLI is installed.
+If completion is rejected, the error names the criteria or blocker that still needs proof. Continue with [the first workflow](first-workflow.md) for failure, blocker, history, and JSON behavior.

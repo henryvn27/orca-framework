@@ -1,70 +1,81 @@
 # First Workflow
 
-If you are new to ORCA Framework, do not start by learning every command.
+The first Orca workflow is one evidence-backed Mission. It works without an LLM, tracker, hosted account, or integration.
 
-Start with this one path:
+## 1. Create The Contract
 
-1. `orca-onboard`
-2. `orca-spec`
-3. `orca-plan`
-4. `orca-build`
-5. `orca-review`
+From a Git repository with a small real change:
 
-```mermaid
-flowchart LR
-    A["orca-onboard"] --> B["orca-spec"]
-    B --> C["orca-plan"]
-    C --> D["orca-build"]
-    D --> E["orca-review"]
+```sh
+orca mission create "Prepare this change for review" \
+  --criterion "The repository has no whitespace errors" \
+  --criterion "The behavior is documented"
 ```
 
-That is the default ORCA Framework intro workflow.
+Criteria should describe observable outcomes. Avoid task-shaped criteria such as “edit the code”; state what the edit must prove.
 
-These names are ORCA workflow commands and the install now provides matching `orca-*` shims in the installed `bin/` directory.
-If your host does not provide native `orca-*` slash commands, use the shipped shims or `orca run <command> --print` to reuse the exact workflow prompt.
+## 2. Let Any Agent Work
 
-This path is also the teaching path. It is meant to show a new user how the framework works while still being a real production path they can keep using later.
+Use Codex, Claude Code, another harness, or manual work. Orca does not hide or replace the executor.
 
-## What Each Step Does
+If the agent benefits from an Orca workflow definition, print or launch one:
 
-### 1. `orca-onboard`
+```sh
+orca run orca-build --print -- "Implement the current Mission"
+```
 
-Turn a vague task into a clear work item with constraints, intent, and scope.
+This step is optional. The Mission remains the authority even when no skill or workflow prompt is used.
 
-### 2. `orca-spec`
+## 3. Record Command Evidence
 
-Write the contract for what should happen and what should not.
+Ask Orca to run a check for a criterion:
 
-### 3. `orca-plan`
+```sh
+orca mission check AC-1 -- git diff --check
+```
 
-Break the spec into a concrete execution path.
+On exit `0`, Orca marks the criterion satisfied and records the exact command and exit status. On failure, the criterion remains open and the failed attempt is preserved in the mission event history.
 
-### 4. `orca-build`
+## 4. Record Non-Command Evidence
 
-Implement the approved plan.
+Some outcomes require review evidence rather than a shell check:
 
-### 5. `orca-review`
+```sh
+orca mission satisfy AC-2 --evidence "README documents the changed behavior"
+```
 
-Check for bugs, regressions, and obvious quality risks before going wider.
+This is an explicit attestation, not automatic proof. Keep it specific enough for another person or agent to inspect.
 
-## Why This Path Exists
+## 5. Handle A Blocker
 
-Most agent frameworks fail new users by showing a giant command catalog before they show a usable path.
+When work cannot continue truthfully:
 
-ORCA Framework should do the opposite:
+```sh
+orca mission block "Waiting for a production credential"
+orca mission status
+```
 
-- one work item
-- one path
-- one command per stage
-- one clear next move
+Orca prevents criterion changes and completion while blocked. After the blocker is actually resolved:
 
-## What To Do After This
+```sh
+orca mission resume
+```
 
-Only after this five-command path should you branch into:
+## 6. Complete The Mission
 
-- `orca-test-blind` for first-look QA
-- `orca-goal` for bounded long-running work
-- `orca-background` for unattended progress
-- `orca-demo` for a low-input personalized showcase that turns into a real `/goal`
-- `orca-idea` for upstream ideation instead of implementation
-- `orca-legacy` for inherited or fragile codebases
+```sh
+orca mission complete
+```
+
+Completion succeeds only when all criteria carry evidence and no blocker remains. The completed JSON stays under `.orca/missions/` and appears in `orca mission list` after the next Mission starts.
+
+## Automation
+
+Every mission command accepts `--json` before the check command separator:
+
+```sh
+orca mission status --json
+orca mission check AC-1 --json -- git diff --check
+```
+
+Command output goes to stderr in JSON mode so stdout remains a single parseable JSON result.

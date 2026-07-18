@@ -1,5 +1,5 @@
 site_name: ORCA Framework
-site_description: Orchestration framework for Codex and Claude Code
+site_description: Local mission control for AI coding work
 site_url: https://henryvn27.github.io/orca-framework/
 repo_name: henryvn27/orca-framework
 repo_url: https://github.com/henryvn27/orca-framework
@@ -41,7 +41,7 @@ markdown_extensions:
       permalink: true
   - pymdownx.highlight
   - pymdownx.inlinehilite
-  - pymdownx.superfences
+  - fenced_code
   - pymdownx.tabbed:
       alternate_style: true
 
@@ -56,6 +56,7 @@ nav:
   - Start Here:
       - Documentation Home: documentation-home.md
       - First 10 Minutes: first-10-minutes.md
+      - What Orca Is: intro.md
       - Start Here: start-here.md
       - Quickstart: quickstart.md
       - First Run: first-run.md

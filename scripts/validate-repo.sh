@@ -62,6 +62,8 @@ scripts/fixtures/notion/goal-event-missing-data-source.json
 scripts/fixtures/notion/goal-event-unsupported-schema.json
 scripts/fixtures/notion/goal-event-unsupported-type.json
 scripts/fixtures/notion/adapter-doctor-token-missing.json
+scripts/orca-mission.rb
+scripts/check-mission-smoke.sh
 "
 
 required_dirs="
@@ -83,25 +85,24 @@ for path in $required_dirs; do
   need_dir "$path"
 done
 
-need_grep_file "Install With An Agent" README.md
-need_grep_file "Copy this prompt into Codex or Claude Code" README.md
-need_grep_file "Install ORCA Framework from https://github.com/henryvn27/orca-framework" README.md
-need_grep_file "For agent-assisted setup, use the copy-pastable Codex or Claude Code prompt near the top" README.md
+need_grep_file "local mission control for AI coding work" README.md
 need_grep_file "https://github.com/henryvn27/orca-framework" README.md
+need_grep_file "orca mission create" README.md
+need_grep_file "orca mission check" README.md
+need_grep_file "orca mission satisfy" README.md
+need_grep_file "orca mission complete" README.md
+need_grep_file "fails until every criterion has evidence" README.md
+need_grep_file "Mission = what must become true and what proves it" README.md
+need_grep_file "Skill   = guidance for how an agent might make it true" README.md
 need_grep_file "orca goal --packs" README.md
-need_grep_file "orca goal --packs --verbose" README.md
-need_grep_file "orca notion handoff --issue" README.md
-need_grep_file "orca notion handoff --json" README.md
-need_grep_file "orca notion outbox --json.*ok:true" README.md
-need_grep_file "orca backend status --json.*ok:true" README.md
-need_grep_file "notion_sync_status.*outbox_mirror_only.*executable.*configured_shell_command" README.md
-need_grep_file "orca notion doctor --json.*ok.*ready" README.md
 
 [ -x bin/orca ] || fail "bin/orca is not executable"
 [ -x install/install.sh ] || fail "install/install.sh is not executable"
 [ -x install/verify-install.sh ] || fail "install/verify-install.sh is not executable"
 [ -x install/doctor.sh ] || fail "install/doctor.sh is not executable"
 [ -x scripts/check-notion-adapter-smoke.sh ] || fail "scripts/check-notion-adapter-smoke.sh is not executable"
+[ -x scripts/orca-mission.rb ] || fail "scripts/orca-mission.rb is not executable"
+[ -x scripts/check-mission-smoke.sh ] || fail "scripts/check-mission-smoke.sh is not executable"
 
 if command -v git >/dev/null 2>&1 && git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
   command_count="$(git ls-files 'commands/orca-*.md' | wc -l | tr -d ' ')"
@@ -159,6 +160,9 @@ fi
 
 ./scripts/check-notion-adapter-smoke.sh >/dev/null ||
   fail "Notion adapter smoke failed"
+
+./scripts/check-mission-smoke.sh >/dev/null ||
+  fail "mission smoke failed"
 
 if /usr/bin/find . -path './.git' -prune -o -name '.DS_Store' -print -quit | grep -q .; then
   fail "tracked tree still contains .DS_Store"

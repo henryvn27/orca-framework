@@ -61,7 +61,7 @@ done
 generate_bin_shims
 
 cat > "$target/VERSION" <<VERSION
-0.1.0
+0.2.0-dev
 VERSION
 
 printf 'ORCA Framework installed to %s\n' "$target"

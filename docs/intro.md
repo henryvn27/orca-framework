@@ -1,46 +1,45 @@
-# Intro
+# What Orca Is
 
-ORCA exists because agent-assisted software work breaks down at the workflow level more often than at the text-generation level. The formal repository and framework name is ORCA Framework. It is an orchestration framework for that work, not just a prompt layer around it.
+Orca is a local control plane for agent-assisted software work.
 
-It is intended to replace the older GStack or GSD-centered personal workflow, not run beside it. Those tools informed some early thinking, but ORCA is the coherent operating system this repo is now built around.
+Coding agents are good at producing changes, but the surrounding work is easy to lose: what outcome was approved, what counted as done, which checks actually ran, why work stopped, and whether a later agent can trust the handoff. Orca makes that operating state durable.
 
-## The Problem
+## The Core Model
 
-Teams do not usually fail because the model could not produce code at all. They fail because:
+```text
+Human intent
+    |
+    v
+Orca Mission: outcome + acceptance criteria
+    |
+    v
+Any agent or human performs the work
+    |
+    v
+Orca records command evidence or explicit attestations
+    |
+    v
+Completion gate + durable mission history
+```
 
-- the task started vague
-- the wrong harness assumptions were made
-- approvals were implicit
-- QA got contaminated or skipped
-- runs left no receipt or lineage
-- one agent could not hand off to another cleanly
+The model is intentionally smaller than the full framework catalog. A Mission is the one product object. Everything else either executes it, helps execute it, or connects it to another system.
 
-## The ORCA Answer
+## Orca Versus Skills
 
-ORCA turns those weak points into explicit workflow surfaces:
+A skill is reusable guidance loaded into an agent. It can teach review heuristics, planning structure, or a release procedure. Its effect depends on the agent following the instructions in that interaction.
 
-- onboarding and spec creation for clarity
-- commands and skills for repeatable operating paths
-- receipts, lineage, and shared state for inspectability
-- checkpoints and approvals for risk control
-- runtime adaptation for host differences
-- examples and guides for repeatability
-- adaptive guidance so users can improve without leaving the workflow
+Orca Mission Control is deterministic software around those interactions. It persists state, runs verification commands, records exit status, derives readiness, manages blockers, and rejects invalid lifecycle transitions.
 
-## What Makes It Different
+That means an Orca Mission can use no skills, one skill, or many skills without changing its contract.
 
-ORCA is not just a prompt library. It is a workflow framework with:
+## What Orca Does Not Claim
 
-- Linear-first coordination
-- blind QA and briefed QA separation
-- compatibility-aware runtime behavior
-- controller and executor integration
-- background and goal execution modes
-- portable artifacts, receipts, replay, and restore
+Orca does not write code by itself, judge every subjective criterion automatically, or make a local check equivalent to production proof. It records exactly which proof was supplied and leaves subjective attestations visible as attestations.
 
-## What To Read Next
+Orca is local-first today. Hosted collaboration, remote workers, and sync are future delivery surfaces around the same Mission contract, not prerequisites for using the product.
 
-- If you want to use it: [quickstart.md](quickstart.md)
-- If you want the routing map: [choose-your-path.md](choose-your-path.md)
-- If you want the capability map: [feature-index.md](feature-index.md)
-- If you want the glossary: [glossary.md](glossary.md)
+## Next
+
+- Run [the first workflow](first-workflow.md).
+- Read [the command boundary](commands.md).
+- See [where skills fit](skills.md).

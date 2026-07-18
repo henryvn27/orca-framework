@@ -1,92 +1,33 @@
 # Start Here
 
-If you are new to ORCA, read this page before you dive into feature docs.
+Orca is local mission control for AI coding work. Start with one Mission.
 
-## What ORCA Is
+## The Four Parts
 
-ORCA is an orchestration framework for running agent-assisted software work with a durable system of record. The formal repository and framework name is ORCA Framework. It combines spec-driven execution, workflow gating, QA discipline, host-aware behavior, and artifact tracking so agent runs stay inspectable and resumable.
+1. **Mission:** the durable outcome, acceptance criteria, blockers, evidence, and lifecycle.
+2. **Executor:** Codex, Claude Code, another agent, or a human doing the work.
+3. **Skills:** optional procedures that help the executor plan, build, review, or ship.
+4. **Integrations:** optional adapters for trackers, docs, and other external systems.
 
-It is also the primary workflow, not a companion layer for GStack or GSD. Those older tools helped inspire parts of the project, but ORCA is meant to replace that workflow with one clearer ORCA path.
+Only the Mission is required. This separation is what keeps Orca useful across harnesses instead of turning it into another directory of prompts.
 
-It should also teach that path. A new user should be able to start learning orchestration inside ORCA Framework itself instead of waiting for someone else to train them live.
+## The First Path
 
-Framework-wide rules:
+1. Install with [Quickstart](quickstart.md).
+2. Create one Mission with observable acceptance criteria.
+3. Let any executor make the change.
+4. Use `orca mission check` for command-verifiable criteria.
+5. Use `orca mission satisfy` for explicit review evidence.
+6. Resolve blockers and run `orca mission complete`.
 
-- ORCA should reduce friction, not create more setup work
-- ORCA should try the strongest safe path to resolution before escalating to the user
+The full walkthrough is in [First Workflow](first-workflow.md).
 
-## What It Solves
+## Choose The Next Layer Only When Needed
 
-Use ORCA Framework when the hard part is not "make the model write code," but:
+- Need an agent implementation procedure? See [Commands](commands.md).
+- Need reusable agent guidance? See [Skills](skills.md).
+- Need host-specific behavior? See [Compatibility Matrix](compatibility-matrix.md).
+- Need the larger capability catalog? See [Feature Index](feature-index.md).
+- Need the conceptual boundary? Read [What Orca Is](intro.md).
 
-- turning vague work into a usable spec
-- coordinating agents or handoffs without losing context
-- keeping QA, review, approvals, and receipts tied to the same work item
-- adapting to different harnesses and tool surfaces without pretending they are identical
-- onboarding users into orchestration and agent-management habits without a human guide
-- owning the real ship, QA, and feedback-repair lanes instead of stopping at "code changed"
-
-## The Core Mental Model
-
-ORCA is easiest to understand as five layers:
-
-1. a work item and workflow path
-2. feature-specific commands and skills
-3. artifacts that preserve state, decisions, and evidence
-4. runtime adaptation for the active harness
-5. verification, review, and maintenance loops
-
-## Start With One Workflow
-
-Do this first:
-
-1. [first-workflow.md](first-workflow.md)
-2. use `orca-onboard` as your first workflow step
-3. use `orca-spec`
-4. use `orca-plan`
-5. use `orca-build`
-6. use `orca-review`
-
-Important:
-
-- the install flow provides runnable `orca` and `orca-*` commands in the installed `bin/` directory
-- in a host like Codex CLI, the shipped wrappers can launch Codex directly or print the exact ORCA prompt with `--print`
-- if you prefer a different host-specific prompt layer, reuse `orca show <command>` or `orca run <command> --print`
-
-If that path feels clear, then widen into the rest of the framework.
-
-## Orchestration First Path
-
-If the job is primarily controller or subagent orchestration, start with:
-
-1. `orca-controller`
-2. `orca-orient`
-3. `orca-delegate`
-4. `orca-ingest`
-5. `orca-next`
-
-This is the shortest ORCA path for multi-harness or parent-worker work.
-
-## Read In This Order
-
-1. [intro.md](intro.md)
-2. [intro-guide.md](intro-guide.md)
-3. [first-workflow.md](first-workflow.md)
-4. [quickstart.md](quickstart.md)
-5. [choose-your-path.md](choose-your-path.md)
-6. [feature-index.md](feature-index.md) when you want the broader map
-
-## Best Next Page By Situation
-
-- I just want the clearest starter path: [first-workflow.md](first-workflow.md)
-- I feel overwhelmed by Codex or Claude Code: [guides/beginners-guide.md](guides/beginners-guide.md)
-- I need to install ORCA clearly: [install-overview.md](install-overview.md)
-- I just want to try it fast: [quickstart.md](quickstart.md)
-- I want to understand the big picture: [intro.md](intro.md)
-- I am moving off GStack or GSD: [guides/from-gstack-or-gsd-to-orca-framework.md](guides/from-gstack-or-gsd-to-orca-framework.md)
-- I want the controller/subagent path: [agent-orchestration.md](agent-orchestration.md)
-- I care about design quality and not looking AI-generated: [guides/visual-quality-guide.md](guides/visual-quality-guide.md)
-- I need a feature map: [feature-index.md](feature-index.md)
-- I need the right command: [command-index.md](command-index.md)
-- I want ORCA to explain what is happening: [explanation-mode.md](explanation-mode.md)
-- I need to know what ORCA should trust first: [truth-hierarchy.md](truth-hierarchy.md)
+The catalog is reference material. It is not the onboarding flow and it is not the definition of the product.

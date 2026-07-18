@@ -1,49 +1,49 @@
 # Commands
 
-ORCA commands are Markdown workflow definitions in `commands/`.
+Orca has two command layers with different responsibilities.
 
-Use the launcher as source of truth:
+## Product Commands
 
-```sh
-orca goal "Ship the next safe slice" --pack release-ready
-orca list
-orca show orca-build
-orca run orca-build --print -- "Implement the approved plan"
+Mission commands are executable product behavior. They own durable state and enforce lifecycle rules.
+
+```text
+orca mission create OUTCOME --criterion TEXT [--criterion TEXT ...]
+orca mission status [--json]
+orca mission list [--json]
+orca mission check AC-ID [--json] -- COMMAND [ARG ...]
+orca mission satisfy AC-ID --evidence TEXT [--json]
+orca mission block REASON [--json]
+orca mission resume [--json]
+orca mission complete [--json]
 ```
 
-`orca goal` and `orca /goal` are launcher subcommands, not Markdown command prompt files. They create/update ORCA state, issue rows, loop evidence, readiness score, and handoff artifacts.
+The backend and Notion commands are optional adapter surfaces:
 
-## Core Workflow
+```text
+orca backend status [--json]
+orca notion ...
+```
 
-- `orca-install`
-- `orca-doctor`
-- `orca-onboard`
-- `orca-spec`
-- `orca-plan`
-- `orca-build`
-- `orca-review`
-- `orca-ship`
-- `orca-receipt`
+The earlier goal/loop-pack runtime remains available for compatibility:
 
-## Context And Coordination
+```text
+orca goal ...
+orca progress
+orca unify
+```
 
-- `orca-context`
-- `orca-research`
-- `orca-delegate`
-- `orca-status`
-- `orca-checkpoint`
-- `orca-attribution`
-- `orca-help`
+## Agent Workflow Commands
 
-## Thin Wrapped Packs
+Markdown files under `commands/` are procedures for an agent. They do not own Mission state and should not be confused with the product runtime.
 
-- `orca-caveman`
-- `orca-efficient-frontier`
-- `orca-impeccable`
-- `orca-superpowers`
-- `orca-visual-plan`
-- `orca-visual-recap`
+Inspect or run them with:
 
-## Removed From ORCA Core
+```sh
+orca list
+orca show orca-build
+orca run orca-build --print -- "Implement the current Mission"
+```
 
-Background/Linear/test/update/design/security/demo/benchmark/corpus/graph/vendor commands were removed or moved to HVN Stack. `/goal` remains the primary launcher workflow in `bin/orca`. Use `https://github.com/henryvn27/hvn-stack` for Henry-specific workflow and stack surfaces.
+Installed shims such as `orca-build` call the same `orca run` compatibility layer.
+
+Use a workflow command when its procedure helps satisfy a Mission criterion. Do not create a Mission merely to browse a prompt, and do not treat a successful prompt run as completion evidence unless it produces a concrete check or attestation.

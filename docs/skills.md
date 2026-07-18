@@ -1,6 +1,15 @@
 # Skills
 
-Skills are reusable operating procedures stored in `skills/*/SKILL.md`. They define trigger rules, inputs, workflow, outputs, quality bar, common failure modes, and relationships to other ORCA Framework skills.
+Skills are optional operating procedures for agents. They are not the Orca product runtime and do not own Mission state.
+
+The boundary is simple:
+
+```text
+Mission = what must become true and what proves it
+Skill   = how an agent can approach part of the work
+```
+
+Skills are stored in `skills/*/SKILL.md`. They define trigger rules, inputs, workflow, outputs, quality bars, common failure modes, and relationships to other skills. A Mission can use any combination of them—or none—while keeping the same evidence and completion contract.
 
 ORCA is moving these skills toward standalone tool repos. Catalog entries for extracted and external tools live in `catalog/tools/*.json`; use `orca tools` to list them.
 

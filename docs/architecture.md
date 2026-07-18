@@ -16,7 +16,7 @@ If a user opts out of Linear, ORCA Framework requires a declared alternative rec
 
 ## Installable Layers
 
-- `ORCA-Framework.md` is the master operating manual.
+- `ORCA-Framework.md` is the compatibility manual for optional workflow extensions.
 - `commands/` contains entry-point prompts for workflows and Linear comment operations.
 - `skills/` contains reusable procedures that commands invoke.
 - `templates/` contains durable artifacts and Linear-ready comment formats.

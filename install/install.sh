@@ -6,11 +6,11 @@ target=""
 
 print_next_steps() {
   printf '\nNext steps:\n'
-  printf '1. Read the install guide: %s\n' "$target/docs/install.md"
-  printf '2. Pick a path: %s\n' "$target/docs/install-paths.md"
-  printf '3. Add ORCA commands to PATH: export PATH="%s/bin:$PATH"\n' "$target"
-  printf '4. Run install verification: %s/verify-install.sh --target %s\n' "$target/install" "$target"
-  printf '5. Run doctor when you want a broader check: %s/doctor.sh --target %s\n' "$target/install" "$target"
+  printf '1. Add Orca to PATH: export PATH="%s/bin:$PATH"\n' "$target"
+  printf '2. Verify the install: %s/verify-install.sh --target %s\n' "$target/install" "$target"
+  printf '3. Run the doctor: %s/doctor.sh --target %s\n' "$target/install" "$target"
+  printf '4. Create your first Mission: orca mission create "Outcome" --criterion "Observable proof"\n'
+  printf '5. Follow the product walkthrough: %s\n' "$target/docs/first-workflow.md"
 }
 
 generate_bin_shims() {
@@ -64,10 +64,9 @@ cat > "$target/VERSION" <<VERSION
 0.2.0-dev
 VERSION
 
-printf 'ORCA Framework installed to %s\n' "$target"
+printf 'Orca Mission Control installed to %s\n' "$target"
 printf 'Install overview: %s\n' "$target/docs/install-overview.md"
 printf 'Beginner path: %s\n' "$target/docs/install-for-beginners.md"
 printf 'Technical path: %s\n' "$target/docs/install-for-technical-users.md"
-printf 'Linear-first guidance: %s\n' "$target/docs/linear-guidance.md"
-printf 'Opt-out mode: choose a durable system of record and map ORCA Framework gates there.\n'
+printf 'Optional tracker integration: %s\n' "$target/docs/linear-guidance.md"
 print_next_steps

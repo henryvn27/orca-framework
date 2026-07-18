@@ -9,7 +9,7 @@ The docs automation layer keeps the top-level docs and routing pages aligned wit
 ## Inputs
 
 - `README.md`
-- `docs/README.md`
+- `docs/catalog.md`
 - `docs/information-architecture.md`
 - `docs/feature-index.md`
 - `docs/command-index.md`

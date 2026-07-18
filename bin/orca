@@ -142,7 +142,7 @@ emit_prompt() {
   file="$2"
   context="$3"
 
-  printf 'Follow the ORCA Framework workflow command `%s`.\n\n' "$name"
+  printf 'Follow the optional Orca workflow definition `%s`.\n\n' "$name"
   printf 'Execution rules:\n'
   printf -- '- Prefer Notion-backed PM/docs/issues when configured.\n'
   printf -- '- If Notion is unavailable, continue with `.orca/` markdown fallback and say so explicitly.\n'

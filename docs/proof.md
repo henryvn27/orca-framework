@@ -1,56 +1,38 @@
 # Proof And Outcomes
 
-This page exists to answer one question fast: what can ORCA actually get done?
+This page answers one question: what observable behavior proves Orca is more than a prompt or skill pack?
 
-## What ORCA Should Demonstrate Quickly
+## Product Proof
 
-- a clean install path
-- a first workflow that ends in a real artifact
-- a personalized demo path that does more than just brainstorm
-- orchestration that feels structured instead of chaotic
-- host-aware behavior across Codex and Claude Code
+| Claim | Observable proof |
+| --- | --- |
+| Mission state is durable | `.orca/missions/<id>.json` survives process and agent changes |
+| Evidence is real data | `mission check` records the command and exit status |
+| Failed work stays incomplete | a nonzero check leaves its criterion open |
+| Readiness is deterministic | human and JSON status derive the same satisfied count |
+| Blockers affect lifecycle | a blocked Mission rejects evidence changes and completion |
+| Completion is guarded | `mission complete` fails until every criterion has evidence |
+| History remains inspectable | completed Missions remain available through `mission list` |
 
-## Strong Quick Proofs
+Run the [Mission Control Demo](demo.md) to observe the completion gate directly, or complete [First Workflow](first-workflow.md) for the full blocker and history path.
 
-### Personalized Demo
+## Integration Proof
 
-Run [ORCA Demo](demo.md) and let ORCA ask a few questions, choose a direction, and build a real `/goal` prompt that aims for a finishable output.
+Orca is executor-agnostic. The same local Mission can be advanced by a human, Codex, Claude Code, CI, or another tool because the contract lives in project state rather than in a harness prompt.
 
-### Project Breakdown
-
-Use:
-
-`orca-onboard -> orca-spec -> orca-plan`
-
-This proves ORCA can turn a vague idea into a reviewable execution plan.
-
-### Real Execution Slice
-
-Use:
-
-`orca-build -> orca-review`
-
-This proves ORCA can move from approved scope to an implemented and reviewed result.
-
-### Orchestration Proof
-
-Use:
-
-`orca-controller -> orca-orient -> orca-delegate -> orca-ingest -> orca-next`
-
-This proves ORCA can coordinate subagents without losing ownership or state.
+Optional workflows can still demonstrate planning, building, review, QA, orchestration, and release procedures. Their output counts only when it becomes concrete Mission evidence.
 
 ## What Good Proof Looks Like
 
-- the output is specific
-- the next step is obvious
-- the user did not need to micromanage every step
-- the work leaves behind artifacts or evidence
-- a beginner could understand what just happened
+- The acceptance criterion is observable.
+- The evidence identifies the command or artifact that supports it.
+- Failed attempts remain visible instead of being rewritten as success.
+- Subjective evidence is labeled as an explicit attestation.
+- Another executor can inspect the state without reading the original chat.
 
 ## Best Next Pages
 
 - [First 10 Minutes](first-10-minutes.md)
-- [Feature Index](feature-index.md)
-- [Command Index](command-index.md)
-- [Agent Orchestration](agent-orchestration.md)
+- [What Orca Is](intro.md)
+- [Product and Workflow Commands](commands.md)
+- [Optional Skills](skills.md)

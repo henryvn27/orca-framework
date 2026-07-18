@@ -1,17 +1,19 @@
-# ORCA Framework Operating Manual
+# Orca Workflow Extension Manual
 
-ORCA is the master operating policy for rigorous agentic software development. The formal repository and framework name is ORCA Framework. It defines how agents onboard, specify, plan, build, review, test, and ship work through a durable coordination layer.
+This historical filename is retained for compatibility. The product is **Orca Mission Control**: executable local software that owns a Mission's outcome, acceptance criteria, evidence, blockers, readiness, and lifecycle. [README.md](README.md) and [docs/intro.md](docs/intro.md) define that product boundary.
 
-ORCA is Linear-first by default. Linear is the preferred system of record for issue intake, scope clarification, status transitions, agent handoffs, implementation plans, QA runs, review findings, ship readiness, and retrospectives. If the user opts out of Linear, ORCA maps the same gates and artifacts to the user's chosen system of record.
+This manual describes the optional workflow definitions that agents may use to plan, build, review, test, and ship work inside a Mission. Those procedures are extensions, not the product's source of truth.
 
-ORCA should be treated as the primary workflow, not as an add-on beside GStack or GSD. Those earlier systems helped shape some of the ideas behind this project, but the operating model in this repository is now fully ORCA-centered.
+Linear is a preferred integration for tracker-backed extension workflows, not a requirement for Mission Control. A local Mission works without Linear, Notion, an agent harness, or a hosted account. When an external system is used, it should mirror or link to the Mission contract rather than silently replace it.
+
+Orca Mission Control should be treated as the authority for completion. GStack, GSD, Orca workflow definitions, and other procedures may help an executor produce evidence, but none can bypass the Mission gate.
 
 ORCA command names such as `orca-onboard` and `orca-build` are workflow definitions in this repository.
 The install flow now also generates runnable `orca` and `orca-*` command shims under the installed `bin/` directory so users can inspect or launch the workflow directly.
 
 ## Principles
 
-1. **System of record first:** every meaningful action should be recoverable from Linear or the declared opt-out record.
+1. **Mission contract first:** the outcome, criteria, evidence, blockers, and lifecycle must remain locally inspectable; external systems may mirror or link to that state.
 2. **Spec first:** implementation follows a written contract.
 3. **Evidence over confidence:** agents verify behavior rather than relying on plausible reasoning.
 4. **Context is a tool:** context is disclosed deliberately, especially during QA.
@@ -42,10 +44,11 @@ The install flow now also generates runnable `orca` and `orca-*` command shims u
 
 ## Coordination Modes
 
+- **Mission-only mode:** a local Mission is the complete system of record; any human or agent may execute against it.
 - **Linear-first mode:** work starts from a Linear issue or project. Agents read issue context and post specs, plans, reports, and ship checks back to the issue.
 - **Opt-out mode:** the user chooses another system of record. Agents preserve the same gates in GitHub Issues, docs, local files, PR comments, or another tracker.
 
-Do not force Linear when the user explicitly opts out. Do not silently drop ORCA Framework gates when Linear is unavailable.
+Do not force Linear for Mission Control. When an optional workflow uses an external tracker, do not silently drop the Mission's evidence and completion gates.
 
 ## Linear Mapping
 

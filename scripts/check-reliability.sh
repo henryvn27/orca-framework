@@ -25,7 +25,7 @@ for file in \
   docs/ci-quality.md \
   docs/run-memory.md \
   docs/spec-driven-workflow.md \
-  docs/README.md \
+  docs/catalog.md \
   docs/information-architecture.md \
   docs/start-here.md \
   docs/first-workflow.md \

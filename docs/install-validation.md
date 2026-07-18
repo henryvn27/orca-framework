@@ -5,10 +5,10 @@ Install validation is the check layer that tells the user whether ORCA is actual
 ## What It Checks
 
 - required files exist
-- docs, commands, skills, and templates were copied
+- Mission Control runtime, docs, commands, skills, and templates were copied
 - runnable `orca` and `orca-*` command shims exist in `bin/`
 - install scripts are present
-- core shell dependencies exist
+- core shell and Ruby dependencies exist
 - optional harness and service checks are routed correctly
 
 ## Validation Commands

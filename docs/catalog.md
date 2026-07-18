@@ -1,19 +1,20 @@
-# Documentation Home
+# Full Documentation Catalog
 
-ORCA documentation is layered on purpose. Start with the smallest surface that answers your question, then go deeper only when needed.
+This is the complete map of Orca's supporting documentation. For the product path, start with [Orca Mission Control](index.md), then use this catalog only when you need a deeper workflow or policy reference.
 
-If you want the polished docs-site version instead of browsing raw markdown, use the GitHub Pages docs site once enabled for this repo:
+The published version is available at:
 
 - `https://henryvn27.github.io/orca-framework/`
 
 ## Start Here
 
-- [start-here.md](start-here.md): the best first page for most readers
+- [index.md](index.md): Orca Mission Control product home
+- [first-10-minutes.md](first-10-minutes.md): the fastest executable proof
+- [start-here.md](start-here.md): the product boundary and first path
 - [intro-guide.md](intro-guide.md): the shortest explanation of the ORCA approach
-- [first-workflow.md](first-workflow.md): one five-command ORCA path for the first real session
-- [../commands/orca-demo.md](../commands/orca-demo.md): low-input personalized showcase that becomes a real `/goal`
-- [demo.md](demo.md): docs-site routing page for the ORCA demo path
-- [quickstart.md](quickstart.md): shortest path to installing and trying ORCA Framework
+- [first-workflow.md](first-workflow.md): one complete evidence-backed Mission
+- [demo.md](demo.md): the Mission Control completion-gate demo
+- [quickstart.md](quickstart.md): shortest path to installing and trying Orca
 - [install-overview.md](install-overview.md): how the install system is organized
 - [install.md](install.md): canonical step-by-step install guide
 - [auto-updates.md](auto-updates.md): how ORCA checks, verifies, applies, and recovers updates

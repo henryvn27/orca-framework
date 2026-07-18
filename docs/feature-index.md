@@ -1,6 +1,26 @@
 # Feature Index
 
-ORCA is broad. This page groups features into practical buckets.
+Orca's product core is deliberately focused. Its optional extension library is broad. This page keeps those two surfaces distinct.
+
+## Mission Control Product
+
+- durable project-local Missions
+- explicit outcomes and acceptance criteria
+- command evidence with recorded exit status
+- explicit attestations for review evidence
+- blocker and resume transitions
+- deterministic readiness and next action
+- guarded completion
+- human-readable and stable JSON status
+- completed Mission history
+
+Read:
+
+- [What Orca Is](intro.md)
+- [First Workflow](first-workflow.md)
+- [Product and Workflow Commands](commands.md)
+
+Everything below is an optional execution or integration capability. None replaces the Mission contract.
 
 ## Intake And Planning
 

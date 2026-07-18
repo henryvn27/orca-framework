@@ -64,6 +64,8 @@ scripts/fixtures/notion/goal-event-unsupported-type.json
 scripts/fixtures/notion/adapter-doctor-token-missing.json
 scripts/orca-mission.rb
 scripts/check-mission-smoke.sh
+scripts/mkdocs_repo_links.py
+overrides/partials/source.html
 "
 
 required_dirs="
@@ -95,6 +97,12 @@ need_grep_file "fails until every criterion has evidence" README.md
 need_grep_file "Mission = what must become true and what proves it" README.md
 need_grep_file "Skill   = guidance for how an agent might make it true" README.md
 need_grep_file "orca goal --packs" README.md
+need_grep_file "Orca Mission Control installed" install/install.sh
+need_grep_file "Orca Mission Control installed" install/install.ps1
+need_grep_file "0.2.0-dev" install/install.sh
+need_grep_file "0.2.0-dev" install/install.ps1
+need_grep_file "Orca Mission Control doctor" install/doctor.sh
+need_grep_file "Orca Mission Control install verified" install/verify-install.sh
 
 [ -x bin/orca ] || fail "bin/orca is not executable"
 [ -x install/install.sh ] || fail "install/install.sh is not executable"
@@ -163,6 +171,11 @@ fi
 
 ./scripts/check-mission-smoke.sh >/dev/null ||
   fail "mission smoke failed"
+
+if command -v python3 >/dev/null 2>&1; then
+  python3 scripts/mkdocs_repo_links.py --self-test >/dev/null ||
+    fail "MkDocs repository-link renderer self-test failed"
+fi
 
 if /usr/bin/find . -path './.git' -prune -o -name '.DS_Store' -print -quit | grep -q .; then
   fail "tracked tree still contains .DS_Store"

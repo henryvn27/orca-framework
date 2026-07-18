@@ -1,15 +1,14 @@
-# Beginner's Guide To ORCA
+# Beginner's Guide To Orca
 
 This guide is for someone who has used a vibe-coding tool like Lovable, but feels overwhelmed by Codex or Claude Code.
 
 You do not need to become a terminal power user before ORCA is useful.
-The point of ORCA is to give you one stable workflow so you are not trying to learn:
+The point of Orca is to give you one stable definition of success so you are not trying to learn:
 
 - your project
 - Codex or Claude Code
 - agent prompting
-- planning
-- QA
+- planning and QA procedures
 
 all at once.
 
@@ -17,43 +16,33 @@ all at once.
 
 Think of the stack like this:
 
-- Codex or Claude Code: the engine
-- ORCA: the workflow and coaching layer
+- Codex, Claude Code, or a human: the executor
+- Orca Mission Control: the outcome, evidence, and completion gate
+- skills and workflow definitions: optional guidance for the executor
 - your project: the thing you actually care about
 
 If you are new, do not try to learn every harness command first.
-Learn the ORCA path first.
+Learn the Mission path first.
 
 ## The Only Path You Need At First
 
-Start here:
+1. Create a Mission with the outcome you want and observable acceptance criteria.
+2. Let Codex, Claude Code, another agent, or a human do the work.
+3. Use `orca mission check` for criteria a command can prove.
+4. Use `orca mission satisfy` for explicit review evidence.
+5. Run `orca mission complete`; if something is still unproven, Orca tells you exactly what is missing.
 
-`orca-onboard -> orca-spec -> orca-plan -> orca-build -> orca-review`
-
-What those mean in plain English:
-
-1. `orca-onboard`
-   ORCA figures out what you are actually trying to do.
-2. `orca-spec`
-   ORCA writes down what should happen and what should not.
-3. `orca-plan`
-   ORCA breaks that into steps.
-4. `orca-build`
-   ORCA does the implementation work.
-5. `orca-review`
-   ORCA checks for obvious bugs, regressions, and quality problems.
-
-If you only remember one thing, remember this path.
+If you remember one thing, remember this: the executor does the work; the Mission decides whether the evidence is complete.
 
 ## What To Expect As A Beginner
 
-At first, ORCA should:
+At first, Orca should:
 
 - ask a few useful setup questions
 - explain terms briefly
 - hide most optional features
 - give you one next step instead of five
-- tell you what "done" means for the current phase
+- tell you what "done" means for the current Mission
 
 It should not:
 
@@ -64,7 +53,7 @@ It should not:
 
 ## Good Beginner Preferences
 
-If ORCA asks how you want it to behave, good starting answers are:
+If an agent asks how you want it to behave, good starting answers are:
 
 - explanation: `explain briefly`
 - jargon: `plain language` or `mixed`
@@ -85,16 +74,13 @@ Use this rule:
 
 Example:
 
-- first learn `orca-onboard`
-- after that feels normal, learn `orca-spec`
-- after you complete the five-command path once, then learn one extra thing such as:
-  - `orca-test-blind`
-  - `orca-goal`
-  - `orca-explain`
+- first learn `orca mission create`
+- then learn `orca mission check` and `orca mission complete`
+- after you complete one Mission, add one optional agent procedure such as `orca-plan`, `orca-review`, or `orca-test-blind`
 
 Do not try to learn delegation, background mode, evals, and integrations on day one.
 
-## What To Say To ORCA
+## What To Say To Your Agent
 
 Good beginner prompts:
 
@@ -112,7 +98,7 @@ Good correction prompts:
 - `show me options`
 - `do not explain unless I ask`
 
-You do not need perfect prompting. ORCA should adapt.
+You do not need perfect prompting. The agent can adapt while the Mission keeps the outcome stable.
 
 ## When Codex Or Claude Code Feels Overwhelming
 
@@ -123,35 +109,34 @@ That usually means one of these:
 - too much tool or setup detail before the real task is clear
 
 The fix is usually not "learn the host better first."
-The fix is to return to the ORCA path and reduce scope:
+The fix is to return to the Mission and reduce scope:
 
-1. `orca-onboard`
-2. `orca-spec`
-3. `orca-plan`
-4. do one small build
+1. restate one small outcome
+2. write observable criteria
+3. do one small build
+4. prove only those criteria
 
 ## How You Become Advanced
 
-ORCA should make you better through repetition.
+Orca should make success easier to inspect through repetition.
 
 You are moving up when:
 
 - you need less explanation
 - you can spot a vague task and tighten it quickly
-- you know whether to spec, plan, build, or review next
+- you can write criteria that distinguish work from proof
 - you start asking for more advanced paths like QA, goal mode, or delegation
 
-You should not need to "graduate" from ORCA.
-The same system should still work when you become experienced.
+You should not need to "graduate" from Orca. The same Mission contract should work when you become experienced, even if your executor and procedures change.
 
 ## If You Want To Be Very Hands-On Or Very Hands-Off
 
-ORCA should support both ends cleanly.
+Orca should support both ends cleanly.
 
 If you want to stay very involved:
 
 - ask for reviewable checkpoints
-- ask ORCA to explain changes as it goes
+- ask the agent to explain changes as it goes
 - avoid goal mode for work you want to inspect step by step
 
 If you want ORCA to run with less supervision:

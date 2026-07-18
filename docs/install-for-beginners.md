@@ -1,33 +1,32 @@
 # Install For Beginners
 
-Use this page if you want ORCA explained in plain language and in the safest order.
+Use this page if you want Orca explained in plain language and in the safest order.
 
 ## What You Are Doing
 
-You are installing ORCA so you can use its commands and docs without guessing how the framework is supposed to work.
+You are installing Orca Mission Control so you can create an outcome, record proof, and know when the work is actually complete.
 
 You do not need to understand every feature before you start.
 
 ## Beginner Path
 
-1. Answer the short setup interview.
-2. Read [install-prerequisites.md](install-prerequisites.md).
-3. Download the repo with git.
-4. Run local install into `./.orca-framework`.
-5. Run the verification command.
-6. Skip plugins unless you already know you need one.
-7. Skip harness setup unless you already know which harness you use.
-8. Run [first-run.md](first-run.md).
+1. Read [install-prerequisites.md](install-prerequisites.md).
+2. Download the repository with Git.
+3. Run local install into `./.orca-framework`.
+4. Add the installed `bin/` directory to `PATH`.
+5. Run verification and the doctor.
+6. Skip trackers, plugins, and agent setup unless your first Mission needs them.
+7. Run [first-run.md](first-run.md).
 
 ## Short Setup Interview
 
 Answer these before you start:
 
-1. Are you just trying ORCA, or do you want a setup you will keep using?
-2. Which harness do you plan to use first?
-3. Do you need GitHub or Linear on day one?
-4. Do you want the safest guided path or the fastest path?
-5. What is the first real task you want ORCA to help with?
+1. Are you just trying Orca, or do you want a setup you will keep using?
+2. What is the first outcome you want a Mission to track?
+3. Which command or artifact could prove that outcome?
+4. Will a human do the work, or do you want Codex, Claude Code, or another agent?
+5. Does that Mission actually need GitHub, Linear, or another integration?
 
 ## Exact Commands
 
@@ -35,6 +34,7 @@ Answer these before you start:
 git clone https://github.com/henryvn27/orca-framework.git
 cd orca-framework
 ./install/install.sh --mode local --target ./.orca-framework
+export PATH="$(pwd)/.orca-framework/bin:$PATH"
 ./install/verify-install.sh --target ./.orca-framework
 ./install/doctor.sh --target ./.orca-framework
 ```

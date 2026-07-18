@@ -1,16 +1,16 @@
 # Install Overview
 
-ORCA installation should feel linear, not like a scavenger hunt.
+Orca installation should lead directly to a working Mission, not a framework scavenger hunt.
 
 Start here if you need the shortest explanation of the setup system before choosing a path.
 
 ## What You Are Installing
 
-ORCA is the working surface.
+You are installing Orca Mission Control: the local runtime, its `orca mission` command surface, and the supporting documentation. The repository also includes optional agent workflows and skills.
 
-The repository name is ORCA Framework, but the install experience should answer one simple question:
+The install experience should answer one simple question:
 
-> How do I get ORCA installed and working without guessing?
+> How do I create and complete my first evidence-backed Mission without guessing?
 
 ## The Three Install Paths
 
@@ -20,14 +20,15 @@ The repository name is ORCA Framework, but the install experience should answer 
 
 ## What Is Required
 
-Core install requires:
+Mission Control requires:
 
 - a supported operating system
 - git
 - a shell that can run the install scripts
+- Ruby from the operating system or package manager
 - this repository
 
-Some workflows also need:
+Optional workflows may also need:
 
 - a harness such as Codex or Claude Code
 - service connections such as GitHub or Linear

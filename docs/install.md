@@ -24,16 +24,16 @@ Start with a short setup interview before giving commands.
 Do this:
 
 1. Decide whether you just want to try ORCA, use it in one project, or install it globally.
-2. Decide which harness you actually plan to use first.
-3. Decide whether you need GitHub, Linear, a harness, or optional plugins right now.
+2. Name the first outcome you want a Mission to track and how it can be proved.
+3. Decide whether a human will execute it or whether you need a harness.
 4. Decide whether you want beginner, standard, or technical guidance.
 5. Keep optional setup out of the critical path unless you already know you need it.
 
 Suggested questions:
 
 - Are you trying ORCA once, using it in one repo, or setting up your default multi-project environment?
-- Which harness matters first?
-- Do GitHub or Linear matter on day one?
+- What observable criterion would prove the first Mission?
+- Does that Mission require GitHub, Linear, or an agent harness?
 - Do you want the safest beginner path or the fastest technical path?
 - What is the first real task you want ORCA to help with after install?
 - Do you expect design-heavy frontend work where ORCA should use Impeccable when it is the strongest fit?
@@ -64,22 +64,25 @@ Do this:
 
 1. Install git if it is missing.
 2. Make sure you have a POSIX shell if you are using macOS or Linux.
-3. Make sure you can run local shell scripts.
+3. Install Ruby if it is missing.
+4. Make sure you can run local shell scripts.
 
 Examples:
 
 ```sh
 git --version
+ruby --version
 sh --version || true
 ```
 
 Expected result:
-The machine can run git and shell commands.
+The machine can run Git, shell commands, and the Ruby Mission runtime.
 
 Verify:
 
 ```sh
 git --version
+ruby --version
 ```
 
 If this fails:
@@ -88,7 +91,7 @@ Use [install-troubleshooting.md](install-troubleshooting.md) and [common-install
 ## 3. Get ORCA
 
 Purpose:
-Get a clean copy of the framework before you try to install or validate it.
+Get a clean copy of Orca before you try to install or validate it.
 
 Do this:
 
@@ -201,7 +204,7 @@ Only connect services that the next real workflow needs.
 Core services:
 
 - GitHub when you need PRs, issues, or checks
-- Linear when you need ORCA's default system of record
+- Linear when a Mission needs optional tracker-backed coordination
 
 Do this:
 
@@ -283,12 +286,13 @@ Do this:
 2. Run the first success flow in [first-success-check.md](first-success-check.md).
 
 Expected result:
-You complete one small ORCA workflow without guessing what to do next.
+You complete one evidence-backed Mission and can still inspect its history.
 
 Important:
 
-- ORCA installs docs, templates, commands, and skills
-- ORCA also installs a runnable `bin/orca` launcher plus generated `bin/orca-*` shims
+- Orca installs the Mission runtime, docs, templates, commands, and skills
+- Orca installs a runnable `bin/orca` launcher plus generated compatibility shims
+- start with `orca mission create`, not the workflow catalog
 - use `orca show <command>` or `orca run <command> --print` when you want the exact prompt without executing it
 - in a host like Codex CLI, the shims can launch `codex exec` with the currently supported flag surface and `--ignore-user-config`
 

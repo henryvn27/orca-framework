@@ -6,7 +6,7 @@ This page is retained as historical guidance for avoiding a second docs tree.
 
 ## Current Rules
 
-- keep `docs/README.md` and `docs/start-here.md` current
+- keep `docs/catalog.md` and `docs/start-here.md` current
 - keep docs indexes aligned with the current information architecture
 - use summary pages to route, not to mirror every command contract
 - refresh top-level docs when the feature map or start-here path changes
@@ -25,7 +25,7 @@ This page is retained as historical guidance for avoiding a second docs tree.
 
 ## Refresh Targets
 
-- `docs/README.md`
+- `docs/catalog.md`
 - `docs/start-here.md`
 - `docs/feature-index.md`
 - `docs/command-index.md`

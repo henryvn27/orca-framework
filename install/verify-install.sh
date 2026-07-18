@@ -24,4 +24,4 @@ done
 [ -x "$target/install/doctor.sh" ] || { printf 'Missing executable install doctor\n' >&2; exit 1; }
 [ -x "$target/install/verify-install.sh" ] || { printf 'Missing executable install verifier\n' >&2; exit 1; }
 
-printf 'ORCA Framework install verified at %s\n' "$target"
+printf 'Orca Mission Control install verified at %s\n' "$target"

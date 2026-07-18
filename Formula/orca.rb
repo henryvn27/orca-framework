@@ -9,7 +9,7 @@ class Orca < Formula
 
   def install
     libexec.install Dir["*"]
-    bin.write_env_script libexec/"bin/orca", PATH: "#{Formula["ruby"].opt_bin}:$PATH"
+    (bin/"orca").write_env_script libexec/"bin/orca", PATH: "#{Formula["ruby"].opt_bin}:$PATH"
   end
 
   test do

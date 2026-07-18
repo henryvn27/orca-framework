@@ -42,6 +42,7 @@ jobs:
       - name: Install and exercise the public formula
         run: |
           brew tap henryvn27/orca-framework https://github.com/henryvn27/orca-framework
+          cp "$GITHUB_WORKSPACE/Formula/orca.rb" "$(brew --repository henryvn27/orca-framework)/Formula/orca.rb"
           brew install henryvn27/orca-framework/orca
           test "$(orca version)" = "1.0.0"
           project="$RUNNER_TEMP/orca-homebrew-project"

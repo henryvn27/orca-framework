@@ -1,49 +1,73 @@
 # Commands
 
-Orca has two command layers with different responsibilities.
+Orca has an executable product layer and an optional agent-workflow library.
 
-## Product Commands
+## Mission Product Commands
 
-Mission commands are executable product behavior. They own durable state and enforce lifecycle rules.
+Every mutation accepts `--by ACTOR`. `ORCA_ACTOR` and then the current OS user are the fallbacks. Read and mutation commands accept `--json` unless the command’s help says otherwise.
+
+| Command | Purpose |
+| --- | --- |
+| `mission create OUTCOME --criterion TEXT...` | create the only current Mission |
+| `mission status` | inspect the current Mission |
+| `mission show [MISSION-ID]` | inspect current or historical state |
+| `mission list` | list all durable Missions |
+| `mission events [MISSION-ID]` | inspect attributable history |
+| `mission add --criterion TEXT` | extend the active acceptance contract |
+| `mission reset AC-ID --reason TEXT` | remove stale evidence and reopen a criterion |
+| `mission check AC-ID -- COMMAND...` | run a command directly and record its exit status |
+| `mission satisfy AC-ID --evidence TEXT` | record an explicit attestation |
+| `mission note TEXT` | add context without changing readiness |
+| `mission block REASON` | stop mutations with a visible cause |
+| `mission resume [--reason TEXT]` | resolve current blockers and continue |
+| `mission cancel REASON` | end without claiming completion |
+| `mission reopen MISSION-ID --reason TEXT` | return a terminal Mission to active |
+| `mission complete` | complete only when every criterion has proof |
+| `mission validate [MISSION-ID]` | check the full schema and invariant set |
+| `mission export [MISSION-ID] --output PATH` | write a portable envelope |
+| `mission import PATH` | safely import portable Mission state |
+
+Use `orca mission help` for exact option placement.
+
+## Dashboard
 
 ```text
-orca mission create OUTCOME --criterion TEXT [--criterion TEXT ...]
-orca mission status [--json]
-orca mission list [--json]
-orca mission check AC-ID [--json] -- COMMAND [ARG ...]
-orca mission satisfy AC-ID --evidence TEXT [--json]
-orca mission block REASON [--json]
-orca mission resume [--json]
-orca mission complete [--json]
+orca dashboard [--project PATH] [--port PORT] [--no-open]
 ```
 
-The backend and Notion commands are optional adapter surfaces:
+The dashboard binds to loopback, opens the browser by default, and operates the same Mission runtime. `--port 0` chooses an available port. `--project` selects the project whose `.orca/` state is shown.
+
+## Version
 
 ```text
-orca backend status [--json]
-orca notion ...
+orca version
 ```
 
-The earlier goal/loop-pack runtime remains available for compatibility:
+The value comes from the installed `VERSION` file.
 
-```text
-orca goal ...
-orca progress
-orca unify
+## JSON Automation
+
+Place `--json` before the separator used by `check`:
+
+```sh
+orca mission status --json
+orca mission check AC-1 --by CI --json -- git diff --check
 ```
 
-## Agent Workflow Commands
+In JSON mode, the checked command writes to stderr and stdout remains one parseable result object. Errors use `{"ok":false,"error":"..."}` and a nonzero process exit.
 
-Markdown files under `commands/` are procedures for an agent. They do not own Mission state and should not be confused with the product runtime.
+## Workflow Library
 
-Inspect or run them with:
+Markdown files under `commands/` are optional agent procedures. They do not own Mission state.
 
 ```sh
 orca list
 orca show orca-build
+orca path orca-build
 orca run orca-build --print -- "Implement the current Mission"
+orca run orca-build --target /path/to/project -- "Implement the current Mission"
 ```
 
-Installed shims such as `orca-build` call the same `orca run` compatibility layer.
+Installed POSIX shims such as `orca-build` and Windows shims such as `orca-build.cmd` route to the same prompt execution layer.
 
-Use a workflow command when its procedure helps satisfy a Mission criterion. Do not create a Mission merely to browse a prompt, and do not treat a successful prompt run as completion evidence unless it produces a concrete check or attestation.
+Use a workflow when it helps satisfy a criterion. A prompt run is not completion evidence until it produces a concrete check or attributable attestation.

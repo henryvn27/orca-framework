@@ -71,13 +71,13 @@ Use categories when useful:
 
 ## Versioning Policy
 
-ORCA Framework uses simple semantic versioning:
+Orca uses semantic versioning:
 
 - patch: wording fixes, broken links, narrow template fixes
 - minor: new commands, skills, templates, docs, or workflow capabilities
 - major: incompatible workflow model or install behavior changes
 
-The current public release candidate starts at `0.1.0`. Iterations that add framework capabilities should accumulate under `Unreleased` until maintainers choose the next tag.
+The current product release is `1.0.0`. User-visible changes accumulate under `Unreleased` after that tag until the next version is selected.
 
 ## Validation Before PR Or Push
 

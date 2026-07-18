@@ -1,53 +1,92 @@
 # Architecture
 
-ORCA Framework is organized around a coordination record and four installable layers.
+Orca 1.0 has a small product core surrounded by optional execution content.
 
-## Coordination Record
+```text
+                     browser / human UI
+                              |
+                              v
+agent or human ----> Mission runtime <---- CI / JSON automation
+                              |
+                lock + validate + atomic write
+                              |
+                              v
+                    project-local .orca/
 
-Linear is the default coordination record:
+optional commands / skills / integrations help executors satisfy the Mission
+```
 
-- Linear issue = unit of work
-- Linear project = initiative or epic
-- Linear state = workflow gate
-- Linear comment = status update, spec, plan, QA report, review finding, or ship checklist
-- Linear linked artifact = durable supporting evidence
+## Mission Runtime
 
-If a user opts out of Linear, ORCA Framework requires a declared alternative record. The architecture remains the same; the storage target changes.
+`scripts/orca-mission.rb` is the canonical state machine. Every human and JSON command passes through the same transition and invariant checks.
 
-## Installable Layers
+Responsibilities:
 
-- `ORCA-Framework.md` is the compatibility manual for optional workflow extensions.
-- `commands/` contains entry-point prompts for workflows and Linear comment operations.
-- `skills/` contains reusable procedures that commands invoke.
-- `templates/` contains durable artifacts and Linear-ready comment formats.
+- create, inspect, list, and validate Missions;
+- add and reset acceptance criteria;
+- record command evidence, attestations, notes, actors, and events;
+- block, resume, cancel, reopen, and complete;
+- reject premature or conflicting mutations;
+- export and import validated portable envelopes;
+- write state atomically under an exclusive project lock.
 
-Docs explain the system, examples show finished flows, and scripts validate that the repository remains coherent.
+Mission files use schema `1.0.0`. Derived readiness and next action are calculated from canonical state.
 
-## Why Commands And Skills Are Separate
+## Mission Control Server
 
-Commands answer "what workflow should start now?" Skills answer "how should this behavior be performed?" A Linear issue state may trigger a command, and the command may invoke one or more skills.
+`scripts/orca-dashboard.rb` is a standard-library HTTP adapter around the Mission runtime. It does not implement a second state machine.
 
-Example:
+Security boundary:
 
-- State `In QA` with label `blind-qa` triggers `orca-test-blind`.
-- `orca-test-blind` invokes `orca-blind-qa`, `orca-web-qa` or `orca-ios-sim-qa`, and `orca-linear-qa`.
+- binds only to `127.0.0.1`;
+- emits a per-process random session token;
+- requires that token and the exact same origin for every write;
+- enforces JSON content type and bounded request bodies;
+- serves a strict content security policy and disables caching/framing;
+- maps a fixed action allowlist to argument arrays without invoking a shell.
 
-## Why Blind QA Is Separate
+The HTML, CSS, and JavaScript under `dashboard/` are dependency-free static assets.
 
-Blind QA is intentionally separated from informed QA because hidden knowledge changes the tester's behavior. Once a tester knows the intended flow, confusing UI may look obvious. ORCA Framework protects the first-look pass by limiting context to issue ID, platform, launch instructions, and optional one-sentence mission.
+## Storage
 
-## Context Briefer
+```text
+.orca/
+  active-mission
+  mission.lock
+  missions/
+    <mission-id>.json
+```
 
-The context briefer creates bounded packets for retesting. It lists exactly what is included and withheld.
+The active pointer identifies the current Mission. Terminal files are retained. Mutations take an exclusive lock, validate the resulting state, write through a mode-`0600` temporary file, flush it, and rename it atomically.
 
-Layered QA:
+## Portability
 
-- Blind pass for first impression
-- Briefed pass for target behavior
-- Informed pass for implementation-level verification
+An export is a versioned envelope containing validated public Mission state. Import rejects:
 
-The briefer preserves first-look integrity by preparing context only after the blind report is saved to the issue or opt-out record.
+- unknown format or schema versions;
+- malformed Mission invariants;
+- a different Mission with the same ID;
+- an active Mission that would overwrite other active work.
 
-## Linear Opt-Out Boundary
+Importing identical state is idempotent.
 
-Linear is a default, not a trap. If the user opts out, the agent must ask where to store specs, plans, QA reports, review findings, and ship checks. Work should not proceed with private chat as the only durable record for non-trivial tasks.
+## Native Launchers
+
+- `bin/orca` is the POSIX launcher.
+- `bin/orca.ps1` is the native PowerShell launcher.
+- `bin/orca.cmd` makes `orca` discoverable through normal Windows `PATH` rules.
+
+All launchers expose Mission Control, dashboard, version, workflow discovery, prompt inspection, and prompt execution. The POSIX launcher also retains legacy goal/adapter compatibility commands.
+
+## Optional Execution Library
+
+- `commands/` contains inspectable agent workflow definitions.
+- `skills/` contains reusable procedures.
+- `templates/` and `schema/` contain portable working artifacts.
+- `integrations/` and `mcp/` contain optional connection guidance.
+
+These layers can help an executor satisfy a criterion. They cannot bypass Mission validation or completion.
+
+## Release Supply Chain
+
+`scripts/package-release.py` builds normalized tar and zip archives from tracked product files. It fixes ordering, timestamps, ownership, and permissions; embeds a per-file SHA-256 manifest; and emits checksums plus commit/tree provenance. The tag workflow validates the source, install-tests archives, creates a GitHub build attestation, and publishes the release.

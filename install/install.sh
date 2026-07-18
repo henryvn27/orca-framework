@@ -52,17 +52,13 @@ esac
 root="$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)"
 mkdir -p "$target"
 
-for item in ORCA-Framework.md README.md commands skills templates docs mcp install scripts bin; do
+for item in VERSION ORCA-Framework.md README.md commands skills templates docs dashboard mcp install scripts bin; do
   [ -e "$root/$item" ] || { printf 'Missing source item: %s\n' "$item" >&2; exit 1; }
   rm -rf "$target/$item"
   cp -R "$root/$item" "$target/$item"
 done
 
 generate_bin_shims
-
-cat > "$target/VERSION" <<VERSION
-0.2.0-dev
-VERSION
 
 printf 'Orca Mission Control installed to %s\n' "$target"
 printf 'Install overview: %s\n' "$target/docs/install-overview.md"

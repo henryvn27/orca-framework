@@ -70,16 +70,19 @@ nav:
       - Full Documentation Catalog: catalog.md
       - First 10 Minutes: first-10-minutes.md
       - What Orca Is: intro.md
+      - Mission Control Dashboard: mission-control.md
       - Start Here: start-here.md
       - Quickstart: quickstart.md
       - First Run: first-run.md
       - First Workflow: first-workflow.md
+      - Mission Portability: portability.md
       - Beginners Guide: guides/beginners-guide.md
   - Demo And Proof:
       - Mission Control Demo: demo.md
       - Proof And Outcomes: proof.md
       - Feature Index: feature-index.md
       - Command Index: command-index.md
+      - Releases And Verification: releases.md
   - Optional Workflows:
       - Choose Your Path: choose-your-path.md
       - Agent Orchestration: agent-orchestration.md
@@ -96,6 +99,7 @@ nav:
       - Impeccable: impeccable-pack.md
       - Superpowers: superpowers-pack.md
   - Extension Reference:
+      - Architecture: architecture.md
       - Product And Workflow Commands: commands.md
       - Optional Skills: skills.md
       - Use Case Map: use-case-map.md

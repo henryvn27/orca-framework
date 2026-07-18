@@ -1,23 +1,32 @@
 # Quickstart
 
-This is the shortest path from clone to a real Orca Mission.
-
 ## 1. Install
 
+Homebrew:
+
 ```sh
-git clone https://github.com/henryvn27/orca-framework.git
-cd orca-framework
-./scripts/validate-repo.sh
-./install/install.sh --mode local --target ./.orca-framework
-export PATH="$(pwd)/.orca-framework/bin:$PATH"
-./install/verify-install.sh --target ./.orca-framework
+brew install --formula https://raw.githubusercontent.com/henryvn27/orca-framework/main/Formula/orca.rb
+```
+
+Or use the verified [archive, PowerShell, or source path](install.md).
+
+Confirm:
+
+```sh
+orca version
 ```
 
 ## 2. Enter A Project
 
-Change into a repository with one small outcome you can actually verify. Orca stores state in that project’s `.orca/` directory, not in the framework checkout.
+Change into the repository whose outcome you want to manage. Orca writes `.orca/` there.
 
-## 3. Create A Mission
+## 3. Launch Mission Control
+
+```sh
+orca dashboard
+```
+
+Create one outcome and its observable proofs in the browser, or use the CLI:
 
 ```sh
 orca mission create "Prepare this change for review" \
@@ -25,7 +34,7 @@ orca mission create "Prepare this change for review" \
   --criterion "The behavior is documented"
 ```
 
-## 4. Prove The Criteria
+## 4. Record Proof
 
 ```sh
 orca mission check AC-1 -- git diff --check
@@ -35,8 +44,8 @@ orca mission satisfy AC-2 --evidence "README documents the behavior"
 ## 5. Complete
 
 ```sh
-orca mission status
 orca mission complete
+orca mission validate
 ```
 
-If completion is rejected, the error names the criteria or blocker that still needs proof. Continue with [the first workflow](first-workflow.md) for failure, blocker, history, and JSON behavior.
+If completion is rejected, the error and dashboard next action identify the missing proof or blocker. Continue with [the complete first workflow](first-workflow.md).

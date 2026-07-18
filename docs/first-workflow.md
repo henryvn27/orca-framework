@@ -1,81 +1,114 @@
 # First Workflow
 
-The first Orca workflow is one evidence-backed Mission. It works without an LLM, tracker, hosted account, or integration.
+The first Orca workflow is one complete, evidence-backed Mission. It requires no LLM, tracker, account, or integration.
 
-## 1. Create The Contract
+## 1. Open Mission Control
 
-From a Git repository with a small real change:
+From the project whose outcome you want to manage:
+
+```sh
+orca dashboard
+```
+
+Choose **New**, or create the same contract from the CLI.
+
+## 2. Create The Contract
 
 ```sh
 orca mission create "Prepare this change for review" \
   --criterion "The repository has no whitespace errors" \
-  --criterion "The behavior is documented"
+  --criterion "The behavior is documented" \
+  --by "Change owner"
 ```
 
-Criteria should describe observable outcomes. Avoid task-shaped criteria such as “edit the code”; state what the edit must prove.
+Criteria describe observable outcomes. “Edit the code” is a task; “the regression test passes” is a criterion.
 
-## 2. Let Any Agent Work
+## 3. Let Any Executor Work
 
-Use Codex, Claude Code, another harness, or manual work. Orca does not hide or replace the executor.
+Use a human, Codex, Claude Code, another agent, or CI. Orca does not hide or replace the executor.
 
-If the agent benefits from an Orca workflow definition, print or launch one:
+An optional workflow definition can help:
 
 ```sh
 orca run orca-build --print -- "Implement the current Mission"
 ```
 
-This step is optional. The Mission remains the authority even when no skill or workflow prompt is used.
+The Mission remains authoritative even when no workflow or skill is used.
 
-## 3. Record Command Evidence
-
-Ask Orca to run a check for a criterion:
+## 4. Record Command Evidence
 
 ```sh
-orca mission check AC-1 -- git diff --check
+orca mission check AC-1 --by "Local verification" -- git diff --check
 ```
 
-On exit `0`, Orca marks the criterion satisfied and records the exact command and exit status. On failure, the criterion remains open and the failed attempt is preserved in the mission event history.
+Exit `0` satisfies the criterion and records command, timing, actor, and exit status. A failure leaves the criterion open and records the failed attempt.
 
-## 4. Record Non-Command Evidence
-
-Some outcomes require review evidence rather than a shell check:
+## 5. Record Review Evidence
 
 ```sh
-orca mission satisfy AC-2 --evidence "README documents the changed behavior"
+orca mission satisfy AC-2 \
+  --evidence "README documents the changed behavior" \
+  --by "Reviewer"
 ```
 
-This is an explicit attestation, not automatic proof. Keep it specific enough for another person or agent to inspect.
+This is an explicit attestation. Keep it precise enough for another executor to inspect.
 
-## 5. Handle A Blocker
-
-When work cannot continue truthfully:
+## 6. Correct Evidence When Reality Changes
 
 ```sh
-orca mission block "Waiting for a production credential"
+orca mission reset AC-2 \
+  --reason "The behavior changed after review" \
+  --by "Change owner"
+```
+
+Reset removes the criterion’s stale evidence, returns it to open, and preserves the reason in history. Record replacement proof before completion.
+
+## 7. Handle A Blocker
+
+```sh
+orca mission block "Waiting for the production credential" --by "Change owner"
 orca mission status
+orca mission resume --reason "Credential granted" --by "Change owner"
 ```
 
-Orca prevents criterion changes and completion while blocked. After the blocker is actually resolved:
+Blocked Missions reject criterion mutations and completion.
+
+## 8. Complete Or Cancel
 
 ```sh
-orca mission resume
+orca mission complete --by "Change owner"
 ```
 
-## 6. Complete The Mission
+Completion succeeds only when every criterion has evidence and no blocker remains. If the outcome should end without that claim:
 
 ```sh
-orca mission complete
+orca mission cancel "Outcome superseded" --by "Change owner"
 ```
 
-Completion succeeds only when all criteria carry evidence and no blocker remains. The completed JSON stays under `.orca/missions/` and appears in `orca mission list` after the next Mission starts.
+Both states remain inspectable. Either can be reopened with an attributable reason.
+
+## 9. Inspect And Move The Mission
+
+```sh
+orca mission list
+orca mission events
+orca mission validate
+orca mission export --output mission.orca.json
+```
+
+On another machine or clean project root:
+
+```sh
+orca mission import mission.orca.json
+```
+
+Import is idempotent for identical state and refuses conflicts.
 
 ## Automation
 
-Every mission command accepts `--json` before the check command separator:
-
 ```sh
 orca mission status --json
-orca mission check AC-1 --json -- git diff --check
+orca mission check AC-1 --by CI --json -- git diff --check
 ```
 
-Command output goes to stderr in JSON mode so stdout remains a single parseable JSON result.
+Command output goes to stderr in JSON mode so stdout remains parseable.

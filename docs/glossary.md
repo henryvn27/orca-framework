@@ -1,5 +1,17 @@
 # Glossary
 
+## Mission
+
+Orca’s durable product object: one outcome, its acceptance criteria, evidence, blockers, notes, actors, readiness, lifecycle, and history.
+
+## Mission Control
+
+The Orca product: the validated Mission runtime plus its CLI, JSON, browser, portability, installation, and release surfaces.
+
+## Skill
+
+Optional guidance for how an agent may approach work inside a Mission. A skill cannot own Mission state or bypass completion.
+
 ## Approval Gate
 
 An explicit decision point before risky work continues.

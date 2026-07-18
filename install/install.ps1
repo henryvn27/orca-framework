@@ -17,7 +17,7 @@ if ($Target -eq "") {
 
 New-Item -ItemType Directory -Force -Path $Target | Out-Null
 
-foreach ($Item in @("ORCA-Framework.md", "README.md", "commands", "skills", "templates", "docs", "mcp", "install", "scripts", "bin")) {
+foreach ($Item in @("VERSION", "ORCA-Framework.md", "README.md", "commands", "skills", "templates", "docs", "dashboard", "mcp", "install", "scripts", "bin")) {
   $Source = Join-Path $Root $Item
   $Destination = Join-Path $Target $Item
   if (!(Test-Path $Source)) {
@@ -30,7 +30,6 @@ foreach ($Item in @("ORCA-Framework.md", "README.md", "commands", "skills", "tem
 }
 
 $BinDir = Join-Path $Target "bin"
-$OrcaScript = Join-Path $BinDir "orca"
 foreach ($CommandFile in Get-ChildItem -Path (Join-Path $Target "commands") -Filter "orca-*.md") {
   $CommandName = [System.IO.Path]::GetFileNameWithoutExtension($CommandFile.Name)
   $ShimPath = Join-Path $BinDir $CommandName
@@ -39,10 +38,14 @@ foreach ($CommandFile in Get-ChildItem -Path (Join-Path $Target "commands") -Fil
 set -eu
 script_dir=`$(CDPATH= cd -- "`$(dirname -- "`$0")" && pwd)
 exec "`$script_dir/orca" "$CommandName" "`$@"
-"@ | Set-Content -NoNewline -Path $ShimPath
+"@ | Set-Content -NoNewline -Encoding ASCII -Path $ShimPath
+  @"
+@echo off
+"%~dp0orca.cmd" run "$CommandName" %*
+exit /b %ERRORLEVEL%
+"@ | Set-Content -NoNewline -Encoding ASCII -Path "$ShimPath.cmd"
 }
 
-Set-Content -Path (Join-Path $Target "VERSION") -Value "0.2.0-dev"
 Write-Host "Orca Mission Control installed to $Target"
 Write-Host "Install overview: $(Join-Path $Target 'docs/install-overview.md')"
 Write-Host "Beginner path: $(Join-Path $Target 'docs/install-for-beginners.md')"
@@ -50,8 +53,9 @@ Write-Host "Technical path: $(Join-Path $Target 'docs/install-for-technical-user
 Write-Host "Optional tracker integration: $(Join-Path $Target 'docs/linear-guidance.md')"
 Write-Host ""
 Write-Host "Next steps:"
-Write-Host "1. Add Orca to PATH: export PATH=""$(Join-Path $Target 'bin'):`$PATH"""
-Write-Host "2. Verify the install: $(Join-Path $Target 'install/verify-install.sh') --target $Target"
-Write-Host "3. Run the doctor: $(Join-Path $Target 'install/doctor.sh') --target $Target"
+$PathCommand = '$env:PATH = "' + (Join-Path $Target 'bin') + ';$env:PATH"'
+Write-Host "1. Add Orca to PATH for this session: $PathCommand"
+Write-Host "2. Verify the install: & $(Join-Path $Target 'bin/orca.cmd') version"
+Write-Host "3. Open Mission Control: & $(Join-Path $Target 'bin/orca.cmd') dashboard"
 Write-Host '4. Create your first Mission: orca mission create "Outcome" --criterion "Observable proof"'
 Write-Host "5. Follow the product walkthrough: $(Join-Path $Target 'docs/first-workflow.md')"

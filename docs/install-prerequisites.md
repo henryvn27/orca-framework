@@ -1,50 +1,32 @@
 # Install Prerequisites
 
-Be explicit here. If a requirement is optional, say so.
-
 ## Supported Operating Systems
 
-Current documented paths:
+- macOS: supported by Homebrew, tar archive, or source installer
+- Linux: supported by Homebrew, tar archive, or source installer
+- Windows: supported by zip archive and native PowerShell installer/launcher
 
-- macOS: supported
-- Linux: supported for shell-based install paths
-- Windows: partial support through PowerShell install and manual verification
+Hosted installed-copy acceptance exercises all three platforms on every product change.
 
 ## Required Items
 
 | Item | Required | Why |
 | --- | --- | --- |
-| git | yes | needed to clone the repo |
-| shell access | yes for macOS/Linux | needed to run install and validation scripts |
-| Ruby | yes | runs Mission Control using only the Ruby standard library |
-| this repository | yes | source of the Mission runtime, launcher, docs, and optional extensions |
+| Ruby 2.6+ | yes | Mission runtime and local dashboard |
+| terminal access | yes | launch and operate Orca |
+| write permission | yes | install product and write project-local Mission state |
+| Git | source install only | clone and validate the repository |
+| Homebrew | Homebrew path only | install formula and Ruby dependency |
 
-## Optional But Common
+Mission Control uses only the Ruby standard library.
+
+## Optional Items
 
 | Item | Required | Why |
 | --- | --- | --- |
-| GitHub auth | only if your workflow needs GitHub actions | PRs, issues, checks |
-| Linear access | only if you want tracker-backed workflow extensions | optional issue integration |
-| harness install | only if you want an agent to execute the work | Codex, Claude Code, VS Code |
-| plugins | no | only for specific workflows |
+| GitHub auth | no | PRs, issues, checks, release attestation verification |
+| Linear access | no | optional tracker-backed workflow extensions |
+| agent harness | no | only when an agent executes Mission work |
+| plugins | no | specialized optional workflows |
 
-## Accounts You May Need
-
-- GitHub account: only if you need GitHub-integrated workflows
-- Linear account: only if a Mission needs the optional Linear integration
-- harness account or login: only if the chosen harness requires it
-
-## Permissions
-
-You may need:
-
-- permission to clone the repo
-- permission to run local scripts
-- permission to sign into GitHub or Linear if your workflow needs them
-
-## Safe To Skip On Day One
-
-- plugins
-- optional integrations
-- advanced harness setup
-- global install
+No Orca account or hosted service login exists or is required.

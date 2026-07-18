@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="dark">
+    <meta name="orca-session-token" content="{{ORCA_SESSION_TOKEN}}">
+    <title>Orca Mission Control</title>
+    <link rel="stylesheet" href="/orca.css">
+    <script src="/orca.js" defer></script>
+  </head>
+  <body>
+    <!--
+      Product flow:
+      1. Mission rail — create or select durable mission history.
+      2. Mission focus — see outcome, readiness, blocker, and exact next action.
+      3. Proof lane — satisfy, run, reset, or add acceptance criteria.
+      4. Operations — note, block/resume, cancel/reopen, and complete.
+      5. Activity log — inspect attributable state transitions.
+
+      State lives in the Orca Mission runtime. This interface only renders it and
+      sends explicit, session-authorized actions back to the loopback server.
+    -->
+    <a class="skip-link" href="#mission-main">Skip to mission</a>
+
+    <div class="shell">
+      <header class="topbar">
+        <a class="brand" href="/" aria-label="Orca Mission Control home">
+          <span class="brand-mark" aria-hidden="true"><span></span></span>
+          <span class="brand-copy"><strong>ORCA</strong><small>Mission Control</small></span>
+        </a>
+        <div class="local-status" title="This dashboard is available only on this computer">
+          <span class="pulse" aria-hidden="true"></span>
+          Local / private
+        </div>
+        <button class="icon-button refresh-button" type="button" aria-label="Refresh mission state" title="Refresh mission state">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8.1 8.1 0 0 0-15.5-2M4 5v4h4M4 13a8.1 8.1 0 0 0 15.5 2M20 19v-4h-4"/></svg>
+        </button>
+      </header>
+
+      <aside class="mission-rail" aria-label="Mission history">
+        <div class="rail-heading">
+          <div>
+            <p class="eyebrow">Mission log</p>
+            <h2>Outcomes</h2>
+          </div>
+          <button class="small-button new-mission-button" type="button">New</button>
+        </div>
+        <div class="mission-list" role="list" aria-live="polite"></div>
+        <div class="rail-empty" hidden>
+          <p>No missions recorded.</p>
+          <button class="text-button empty-create-button" type="button">Create the first mission</button>
+        </div>
+        <footer class="rail-footer">
+          <span class="rail-project-label">Project</span>
+          <code class="project-path">Loading…</code>
+        </footer>
+      </aside>
+
+      <main id="mission-main" class="mission-main" tabindex="-1">
+        <section class="loading-view" aria-live="polite">
+          <div class="sonar" aria-hidden="true"><span></span></div>
+          <p>Reading mission state…</p>
+        </section>
+
+        <section class="empty-view" hidden>
+          <p class="eyebrow">No active outcome</p>
+          <h1>Give Orca something<br>observable to finish.</h1>
+          <p>A Mission connects one outcome to acceptance criteria, evidence, blockers, and a durable decision history.</p>
+          <button class="primary-button empty-primary-button" type="button">Create a mission</button>
+        </section>
+
+        <div class="mission-view" hidden>
+          <section class="mission-hero" aria-labelledby="mission-outcome">
+            <div class="mission-heading">
+              <div class="status-line">
+                <span class="status-badge">Active</span>
+                <span class="mission-id"></span>
+                <span class="revision-label"></span>
+              </div>
+              <h1 id="mission-outcome"></h1>
+              <p class="next-action"></p>
+            </div>
+            <div class="readiness" aria-label="Mission readiness">
+              <div class="readiness-ring" aria-hidden="true">
+                <span class="readiness-percent">0%</span>
+              </div>
+              <div>
+                <span class="readiness-count">0 / 0</span>
+                <small>proofs recorded</small>
+              </div>
+            </div>
+          </section>
+
+          <section class="blocker-banner" hidden aria-live="polite">
+            <div class="blocker-icon" aria-hidden="true">!</div>
+            <div>
+              <p class="eyebrow">Current blocker</p>
+              <strong class="blocker-reason"></strong>
+            </div>
+            <button class="secondary-button resume-button" type="button">Resolve &amp; resume</button>
+          </section>
+
+          <section class="mission-actions" aria-label="Mission actions">
+            <button class="primary-button complete-button" type="button">Complete mission</button>
+            <button class="secondary-button add-criterion-button" type="button">Add criterion</button>
+            <button class="secondary-button add-note-button" type="button">Add note</button>
+            <button class="secondary-button block-button" type="button">Block</button>
+            <button class="secondary-button reopen-button" type="button">Reopen</button>
+            <button class="danger-button cancel-button" type="button">Cancel</button>
+          </section>
+
+          <div class="mission-grid">
+            <section class="proof-section" aria-labelledby="proof-heading">
+              <div class="section-heading">
+                <div>
+                  <p class="eyebrow">Acceptance contract</p>
+                  <h2 id="proof-heading">Proof lane</h2>
+                </div>
+                <span class="criteria-summary"></span>
+              </div>
+              <div class="criteria-list"></div>
+            </section>
+
+            <aside class="activity-section" aria-labelledby="activity-heading">
+              <div class="section-heading">
+                <div>
+                  <p class="eyebrow">Attributable history</p>
+                  <h2 id="activity-heading">Activity</h2>
+                </div>
+              </div>
+              <ol class="activity-list"></ol>
+            </aside>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <div class="modal-backdrop" hidden>
+      <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-description">
+        <div class="modal-header">
+          <div>
+            <p class="eyebrow modal-kicker">Mission operation</p>
+            <h2 id="modal-title">Action</h2>
+            <p id="modal-description"></p>
+          </div>
+          <button class="icon-button modal-close" type="button" aria-label="Close dialog">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+          </button>
+        </div>
+        <form class="action-form" novalidate>
+          <div class="form-fields"></div>
+          <p id="form-error" class="form-error" role="alert" hidden></p>
+          <div class="modal-footer">
+            <label class="actor-field">
+              <span>Recorded as (required)</span>
+              <input class="actor-input" name="actor" type="text" value="Mission Control" autocomplete="name" required>
+            </label>
+            <div class="modal-buttons">
+              <button class="text-button modal-cancel" type="button">Back</button>
+              <button class="primary-button modal-submit" type="submit">Save</button>
+            </div>
+          </div>
+        </form>
+      </section>
+    </div>
+
+    <div class="toast-region" aria-live="polite" aria-atomic="true"></div>
+
+    <template id="criterion-template">
+      <article class="criterion-row">
+        <div class="criterion-state" aria-hidden="true"><span></span></div>
+        <div class="criterion-copy">
+          <div class="criterion-heading"><code></code><strong></strong></div>
+          <div class="criterion-evidence"></div>
+        </div>
+        <div class="criterion-actions"></div>
+      </article>
+    </template>
+  </body>
+</html>

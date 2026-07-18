@@ -11,7 +11,7 @@ Skill   = how an agent can approach part of the work
 
 Skills are stored in `skills/*/SKILL.md`. They define trigger rules, inputs, workflow, outputs, quality bars, common failure modes, and relationships to other skills. A Mission can use any combination of them—or none—while keeping the same evidence and completion contract.
 
-ORCA is moving these skills toward standalone tool repos. Catalog entries for extracted and external tools live in `catalog/tools/*.json`; use `orca tools` to list them.
+Catalog entries for extracted and external tools live in `catalog/tools/*.json`; use `orca tools` to list them. The repository-owned skill library is complete as an optional 1.0 execution surface and is not required by Mission Control.
 
 ## Linear Skills
 

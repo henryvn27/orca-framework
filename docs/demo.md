@@ -2,7 +2,15 @@
 
 The shortest honest Orca demo is a Mission whose gate visibly rejects incomplete work.
 
-## Run It
+## Run It In Mission Control
+
+```sh
+orca dashboard
+```
+
+Create the two-criterion Mission below, try **Complete mission** before recording proof, then satisfy the criteria. The primary completion action remains disabled until readiness reaches 100%.
+
+## Run The Same Demo In The CLI
 
 From a Git repository:
 
@@ -27,6 +35,7 @@ The first completion attempt fails. The final one succeeds only after both crite
 - Readiness is derived from evidence, not asserted by an agent.
 - The same Mission has human-readable and JSON interfaces.
 - Completion is a guarded state transition.
+- Browser and CLI state cannot drift because both call the same runtime.
 
 ## Optional Agent Demo
 

@@ -1,8 +1,14 @@
 # Install For Technical Users
 
-Use this page if you want the compact path.
+## Homebrew
 
-## Fast Path
+```sh
+brew install --formula https://raw.githubusercontent.com/henryvn27/orca-framework/main/Formula/orca.rb
+orca version
+orca dashboard
+```
+
+## Source
 
 ```sh
 git clone https://github.com/henryvn27/orca-framework.git
@@ -11,24 +17,16 @@ cd orca-framework
 ./install/install.sh --mode local --target ./.orca-framework
 export PATH="$(pwd)/.orca-framework/bin:$PATH"
 ./install/verify-install.sh --target ./.orca-framework
-./install/doctor.sh --target ./.orca-framework
-orca mission create "First verifiable outcome" --criterion "A real check passes"
+orca version
 ```
 
-## Choose Only What You Need
+## Windows
 
-- Stay in repo mode if you are contributing.
-- Use local install for one project.
-- Use global install only if you actually want a user-level copy.
+```powershell
+& .\install\install.ps1 -Mode local -Target .\.orca-framework
+$env:PATH = "$(Resolve-Path .\.orca-framework\bin);$env:PATH"
+orca version
+orca dashboard
+```
 
-## Additions
-
-- Need GitHub or Linear for a specific Mission: [external-tool-setup.md](external-tool-setup.md)
-- Need a harness: [harness-installation.md](harness-installation.md)
-- Need optional plugins: [plugin-installation.md](plugin-installation.md)
-
-## Canonical Truth
-
-This page is the short form.
-
-The canonical install contract is still [install.md](install.md).
+Release checksums, attestations, archive layout, and deterministic reproduction are documented in [releases.md](releases.md). The complete canonical contract is [install.md](install.md).

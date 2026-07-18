@@ -32,6 +32,28 @@ jobs:
           "$target/bin/orca" mission validate
           "$target/bin/orca" dashboard --help
 
+  homebrew-release:
+    runs-on: macos-latest
+    env:
+      HOMEBREW_NO_ANALYTICS: "1"
+      HOMEBREW_NO_AUTO_UPDATE: "1"
+    steps:
+      - uses: actions/checkout@v7
+      - name: Install and exercise the public formula
+        run: |
+          brew tap henryvn27/orca-framework https://github.com/henryvn27/orca-framework
+          brew install henryvn27/orca-framework/orca
+          test "$(orca version)" = "1.0.0"
+          project="$RUNNER_TEMP/orca-homebrew-project"
+          mkdir -p "$project"
+          cd "$project"
+          orca mission create "Verify the public Homebrew release" --criterion "The formula lifecycle passes" --by "Homebrew release test"
+          orca mission satisfy AC-1 --evidence "Public formula executed" --by "Homebrew release test"
+          orca mission complete --by "Homebrew release test"
+          orca mission validate
+          orca dashboard --help
+          brew test henryvn27/orca-framework/orca
+
   windows-install:
     runs-on: windows-latest
     steps:

@@ -1,6 +1,6 @@
-> Historical example only (retired 2026-09-24). Do not follow its tracker commands; active engineering work uses GitHub Issues and GitHub Projects.
+# Linear Feature Flow (Historical)
 
-# Linear Feature Flow
+> Retired 2026-09-24. Do not follow its tracker commands; active engineering work uses GitHub Issues and GitHub Projects.
 
 ## Initial Issue
 

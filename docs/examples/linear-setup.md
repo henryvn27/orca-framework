@@ -1,6 +1,6 @@
-> Historical example only (retired 2026-09-24). Do not follow its tracker commands; active engineering work uses GitHub Issues and GitHub Projects.
+# Linear Setup Example (Historical)
 
-# Linear Setup Example
+> Retired 2026-09-24. Do not follow its tracker commands; active engineering work uses GitHub Issues and GitHub Projects.
 
 ## Situation
 

@@ -1,6 +1,6 @@
-> Current degraded-mode example. GitHub Issues and Projects remain canonical; missing write access never authorizes a fallback to Linear.
-
 # Runtime Example: GitHub Read-Only
+
+> Current degraded-mode example. GitHub Issues and Projects remain canonical; missing write access never authorizes a fallback to Linear.
 
 ## Situation
 

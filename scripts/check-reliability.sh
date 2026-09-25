@@ -212,7 +212,6 @@ for file in \
   docs/echo-chamber-avoidance.md \
   docs/stage-budgets.md \
   docs/integrations/github.md \
-  docs/integrations/linear.md \
   docs/legacy-modernization.md \
   docs/repo-archaeology.md \
   docs/onboarding.md \
@@ -313,7 +312,7 @@ for file in \
   templates/notebooklm-setup-checklist.md \
   templates/notebooklm-usage-pattern.md \
   templates/github-setup-checklist.md \
-  templates/linear-setup-checklist.md \
+  templates/github-issue-update.md \
   templates/setup-guidance-quick.md \
   templates/setup-guidance-guided.md \
   templates/harness-capability-profile.md \
@@ -591,6 +590,7 @@ for file in \
   skills/orca-portability/SKILL.md \
   skills/orca-docs-system/SKILL.md \
   skills/orca-integrations/SKILL.md \
+  skills/orca-github-core/SKILL.md \
   skills/orca-friction-policy/SKILL.md \
   skills/orca-adaptive-guidance/SKILL.md \
   skills/orca-agent-orchestration/SKILL.md \
@@ -612,15 +612,13 @@ for file in \
   docs/examples/mcp-server-review.md \
   docs/examples/high-risk-tool-approval.md \
   docs/examples/github-setup.md \
-  docs/examples/linear-setup.md \
   docs/examples/setup-github-codex.md \
-  docs/examples/setup-linear-claude-code.md \
   docs/examples/setup-fallback-manual.md \
   docs/examples/integration-health-check.md \
   docs/examples/optional-tool-not-required.md \
+  docs/examples/runtime-github-read-only.md \
   docs/examples/runtime-codex-goal.md \
   docs/examples/runtime-claude-manual-fallback.md \
-  docs/examples/runtime-no-linear.md \
   docs/examples/runtime-unknown-harness.md \
   docs/examples/runtime-strict-compatibility.md \
   docs/examples/execution-receipt.md \

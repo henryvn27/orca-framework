@@ -31,7 +31,7 @@ Do not use for native-only apps unless they expose a web surface.
 ## Exact Workflow
 
 1. State the QA mode.
-2. In Linear-first mode, read only issue context allowed for that pass.
+2. In GitHub-first mode, read only issue context allowed for that pass.
 3. Prefer the CLI-first browser-driving path when `npx` is available:
    - use `scripts/playwright_cli.sh`
    - keep artifacts in `output/playwright/`

@@ -14,7 +14,7 @@ Use when the product needs iterative reload-and-recheck debugging, persistent br
 
 ## Optional Inputs
 
-- Linear issue ID or opt-out work item
+- GitHub issue URL or number or opt-out work item
 - Browser or Electron target
 - Viewports
 - Functional checklist

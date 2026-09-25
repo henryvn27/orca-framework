@@ -26,7 +26,7 @@ Answer these before you start:
 2. What is the first outcome you want a Mission to track?
 3. Which command or artifact could prove that outcome?
 4. Will a human do the work, or do you want Codex, Claude Code, or another agent?
-5. Does that Mission actually need GitHub, Linear, or another integration?
+5. Does that Mission need authenticated GitHub issue or Project access, or can it start as a local Mission?
 
 ## Exact Commands
 

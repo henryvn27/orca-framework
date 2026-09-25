@@ -1,6 +1,6 @@
 # External Tool Setup
 
-External tools are services or local capabilities ORCA Framework can use to coordinate, inspect, or publish work outside the immediate repository. Examples include GitHub, Linear, browser automation, CI, release systems, and MCP servers.
+External tools are services or local capabilities ORCA Framework can use to coordinate, inspect, or publish work outside the immediate repository. Examples include GitHub Issues/Projects, browser automation, CI, release systems, and MCP servers.
 
 Read [install.md](install.md) first if core ORCA install is not finished yet. External tool setup should not outrun the base install.
 
@@ -12,10 +12,9 @@ A tool is required only when the next ORCA Framework action cannot be completed 
 
 Examples:
 
-- Linear is required when the workflow must read or update a Linear issue directly.
-- GitHub is required when the workflow must open a PR, inspect PR checks, or create a GitHub issue directly.
-- GitHub is optional when the local repo already contains the needed source and the user can manually file the issue or PR later.
-- Linear is optional when the user can paste issue context and accept local handoff artifacts.
+- GitHub access is required to read or update the canonical engineering issue or Project directly, and to open a PR or inspect its checks.
+- GitHub access may be deferred for a local Mission-only action when the user explicitly requests local-only work.
+- Use the authenticated GitHub connector or CLI with only the scopes needed for the current action; do not put tokens in repository files.
 
 Do not tell the user to install a tool unless it is required for the next action.
 
@@ -23,7 +22,7 @@ Do not tell the user to install a tool unless it is required for the next action
 
 Keep these separate:
 
-- Service integration: the external service, such as GitHub or Linear.
+- Service integration: the external service, normally GitHub for engineering work.
 - Transport or integration method: native connector, MCP server, API token, plugin, CLI helper, or manual copy/paste.
 - Harness or host surface: Codex, Claude Code, VS Code, or a generic terminal/editor.
 
@@ -45,9 +44,8 @@ Runtime adaptation should choose the shortest valid setup path for the active ho
 
 Fallbacks should be explicit and practical:
 
-- no Linear connection: paste issue title, description, comments, and desired state manually
-- no GitHub integration: use the local repo, manual PR/issue creation, and pasted CI output
+- no GitHub connection: continue only safe local work, preserve the exact missing capability, and do not claim tracker updates or delivery
 - no MCP support: use CLI, browser, or manual artifact workflows
 - insufficient write scope: read what is available and ask the user to perform the write step
 
-Record the fallback in the setup status so later agents do not assume full integration.
+Record the fallback in the setup status so later agents do not assume full integration. Linear references retained in imported history are provenance only and are not a supported execution path.

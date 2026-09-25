@@ -1,12 +1,12 @@
 # Blind QA
 
-Blind QA is a zero-context first-look test. In Linear-first mode, it is coordinated through the Linear issue. In opt-out mode, it is coordinated through the declared work item or artifact.
+Blind QA is a zero-context first-look test. In GitHub-first mode, it is coordinated through the GitHub issue. A Mission-only run is supported only when the user explicitly chooses local tracking.
 
-## Linear First-Look Model
+## GitHub First-Look Model
 
 A blind QA agent receives only:
 
-- Linear issue ID
+- GitHub issue URL or number
 - Platform
 - Launch instructions
 - Optional one-sentence user mission
@@ -44,7 +44,7 @@ The brief should satisfy the QA brief contract in `templates/contracts/qa-brief-
 
 ## Output
 
-Use `templates/blind-qa-report.md` for full artifacts or `templates/linear-blind-qa-comment.md` for issue-thread comments. The report should include:
+Use `templates/blind-qa-report.md` for full artifacts or `templates/github-issue-update.md` for the issue comment. The report should include:
 
 - Product inference
 - First impression

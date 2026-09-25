@@ -20,7 +20,7 @@ Use for inherited repos, older applications, under-documented systems, fragile m
 - Runtime or deployment context
 - Existing architecture notes
 
-## Linear Context
+## GitHub Context
 
 - Expects: issue ID, target repo or module, modernization goal, constraints, labels, linked incidents or docs
 - Reads: issue history, existing docs, prior QA or regression findings, test evidence, deployment context

@@ -13,17 +13,11 @@ Skills are stored in `skills/*/SKILL.md`. They define trigger rules, inputs, wor
 
 Catalog entries for extracted and external tools live in `catalog/tools/*.json`; use `orca tools` to list them. The repository-owned skill library is complete as an optional 1.0 execution surface and is not required by Mission Control.
 
-## Linear Skills
+## GitHub Work Ledger
 
-- `orca-linear-setup`
-- `orca-linear-core`
-- `orca-linear-triage`
-- `orca-linear-planner`
-- `orca-linear-executor`
-- `orca-linear-qa`
-- `orca-linear-release`
+- `orca-github-core` is the default issue and Project workflow for engineering work.
 
-These skills coordinate issue-native work in Linear. If the user opts out of Linear, use the same behaviors against the chosen system of record.
+The former `orca-linear-*` files are compatibility stubs retained for historical names; they redirect to GitHub and must not access or update Linear.
 
 ## Core Skill Groups
 
@@ -36,6 +30,7 @@ These skills coordinate issue-native work in Linear. If the user opts out of Lin
 - Reliability: `orca-observability`, `orca-eval`, `orca-approval-gate`, `orca-benchmark`, `orca-accounting`, `orca-portability`, `orca-regression-task`, `orca-shared-state`, `orca-checkpoint`, `orca-tool-governance`, `orca-tool-setup`, `orca-runtime-adaptation`, `orca-receipts`, `orca-next-step`, `orca-delegation`, `orca-ci`, `orca-pr-feedback`, `orca-context`
 - Platform release packs: `orca-testflight-release`, `orca-testflight-ops`
 - Web deploy packs: `orca-vercel-deploy`
+- Work ledger: `orca-github-core`
 - Gates: `orca-review`, `orca-design`, `orca-security`, `orca-ship`
 - QA: `orca-blind-qa`, `orca-context-brief`, `orca-ios-sim-qa`, `orca-web-qa`, `orca-ui-debug`, `orca-screenshot`
 - Learning: `orca-retro`, `orca-session-improvement`, `orca-friction-policy`
@@ -43,7 +38,7 @@ These skills coordinate issue-native work in Linear. If the user opts out of Lin
 
 ## Skill Installation
 
-Skills can be installed into agent clients that support skill directories, or read directly by agents using repo mode. Linear guidance can be installed separately into workspace, team, or project instructions.
+Skills can be installed into agent clients that support skill directories, or read directly by agents using repo mode. GitHub work guidance belongs in the repository and agent instructions that govern the active work.
 
 Reliability skills should be treated as cross-cutting helpers:
 
@@ -66,7 +61,7 @@ Reliability skills should be treated as cross-cutting helpers:
 - `orca-shared-state` for current multi-role coordination
 - `orca-checkpoint` for explicit pause, inspect, approve, reject, and resume flows
 - `orca-tool-governance` for external tool and MCP server trust decisions
-- `orca-tool-setup` for harness-aware GitHub, Linear, connector, MCP, CLI, and fallback setup
+- `orca-tool-setup` for harness-aware GitHub, connector, MCP, CLI, and fallback setup
 - `orca-runtime-adaptation` for capability-based routing, policy switches, and safe degraded behavior by harness
 - `orca-receipts` for compact execution summaries that support review, replay, and restore decisions
 - `orca-legacy` for repo archaeology, business logic extraction, and staged modernization planning

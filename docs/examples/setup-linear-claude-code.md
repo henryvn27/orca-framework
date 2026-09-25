@@ -1,3 +1,5 @@
+> Historical example only (retired 2026-09-24). Do not follow its tracker commands; active engineering work uses GitHub Issues and GitHub Projects.
+
 # Setup Linear In Claude Code
 
 ## Situation

@@ -82,7 +82,7 @@ Claude Code supports MCP-based tool setup, but individual service availability a
 | Service | Preferred methods | Verification | Fallback |
 | --- | --- | --- | --- |
 | GitHub | Claude-supported MCP or host connector when configured | read target repo, issue, or PR before writing | local repo plus manual issue or PR text |
-| Linear | Claude-supported MCP path, including Linear's documented MCP option when approved | read target issue before posting comments | pasted Linear issue plus local comment artifacts |
+| GitHub Projects | authenticated GitHub connector or approved CLI/MCP path | verify Project read/write scope separately from repository issue access | continue safe local work and retain an issue/Project update draft without claiming it was posted |
 
 Use conservative setup language. If MCP auth fails or the server is unavailable, switch to manual artifacts instead of blocking unrelated local work.
 

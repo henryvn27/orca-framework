@@ -36,8 +36,7 @@ Default bias:
 - Railway
 - Postgres
 - Clerk
-- GitHub
-- Linear
+- GitHub Issues and Projects
 
 ## AI Product
 
@@ -62,8 +61,7 @@ Default bias:
 
 Default bias:
 
-- GitHub
-- Linear
+- GitHub Issues and Projects
 - Notion
 - Slack
 - n8n or Zapier

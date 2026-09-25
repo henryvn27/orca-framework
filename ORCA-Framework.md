@@ -4,7 +4,7 @@ This historical filename is retained for compatibility. The product is **Orca Mi
 
 This manual describes the optional workflow definitions that agents may use to plan, build, review, test, and ship work inside a Mission. Those procedures are extensions, not the product's source of truth.
 
-Linear is a preferred integration for tracker-backed extension workflows, not a requirement for Mission Control. A local Mission works without Linear, Notion, an agent harness, or a hosted account. When an external system is used, it should mirror or link to the Mission contract rather than silently replace it.
+GitHub Issues and GitHub Projects are the default work ledger for tracker-backed ORCA workflows. A local Mission remains the execution contract for its scoped outcome, criteria, and evidence; the GitHub issue owns the cross-task work item and project status. A Mission can still run locally without a hosted account when the user explicitly chooses a local-only workflow.
 
 Orca Mission Control should be treated as the authority for completion. GStack, GSD, Orca workflow definitions, and other procedures may help an executor produce evidence, but none can bypass the Mission gate.
 
@@ -44,27 +44,27 @@ The install flow now also generates runnable `orca` and `orca-*` command shims u
 
 ## Coordination Modes
 
-- **Mission-only mode:** a local Mission is the complete system of record; any human or agent may execute against it.
-- **Linear-first mode:** work starts from a Linear issue or project. Agents read issue context and post specs, plans, reports, and ship checks back to the issue.
-- **Opt-out mode:** the user chooses another system of record. Agents preserve the same gates in GitHub Issues, docs, local files, PR comments, or another tracker.
+- **GitHub-first mode (default):** GitHub Issues hold engineering work items; GitHub Projects hold cross-repository project membership and workflow fields. Local Mission artifacts carry the scoped execution contract and evidence and link back to the issue.
+- **Mission-only mode (explicit):** a local Mission is the work record when the user deliberately chooses not to use a hosted tracker. Keep the same acceptance, review, QA, and release gates.
+- **Historical references:** Linear IDs and URLs may appear in imported issue provenance. They are not live work items or an instruction to access Linear.
 
-Do not force Linear for Mission Control. When an optional workflow uses an external tracker, do not silently drop the Mission's evidence and completion gates.
+Do not silently replace the GitHub work item or weaken Mission evidence and completion gates.
 
-## Linear Mapping
+## GitHub Mapping
 
-- Linear issue = unit of work
-- Linear project = initiative or epic
-- Linear state = workflow gate
-- Linear label = routing, risk, platform, or QA signal
-- Linear comment = status update, spec, plan, QA report, review finding, or ship checklist
-- Linear linked artifact = durable spec, plan, report, PR, screenshot, build, or release note
-- Linear agent delegation = trigger for ORCA Framework command or mode execution
+- GitHub issue = unit of work, including purpose, scope, acceptance criteria, dependencies, and verification evidence
+- GitHub Project = project/roadmap view across one or more repositories
+- Project Status = workflow gate; preserve the repository's existing field values where they are established
+- Priority and labels = urgency plus routing, risk, platform, type, or QA signals
+- Issue comments = dated progress, plans, review findings, QA reports, and release evidence
+- Sub-issues and issue dependencies = parent/child and blocker relationships; retain a readable relationship section when native links are unavailable
+- Branches and pull requests = implementation and review artifacts linked from the issue
 
 ## Workflow Modes
 
-- **Linear intake mode:** normalize issue context, labels, and next gate.
+- **GitHub intake mode:** normalize issue context, labels, dependencies, project membership, and next gate.
 - **Business ideation mode:** structure a startup idea, pressure-test it, and decide what to validate next.
-- **Linear setup mode:** configure or validate Linear states, labels, guidance, permissions, smoke-test issue, and opt-out mapping.
+- **GitHub setup mode:** discover the repository and Project, validate issue/Project access, map existing fields, and create a smoke-test issue only when the user authorizes it.
 - **Onboarding mode:** collect intent through adaptive questions and produce an intake summary.
 - **Discovery mode:** inspect code, product shape, dependencies, constraints, and risks.
 - **Legacy mode:** reverse-engineer old systems, extract business logic, and create modernization artifacts.
@@ -105,7 +105,7 @@ Do not force Linear for Mission Control. When an optional workflow uses an exter
 
 ## Required Artifacts
 
-- Intake summary or Linear intake comment
+- Intake summary and GitHub issue update when tracker-backed work is active
 - Idea intake or one-pager when the work begins as an opportunity instead of an implementation request
 - Discovery notes when code or constraints are inspected
 - Idea scorecard, evidence map, opportunity memo, validation plan, or decision note when the work is still upstream of product definition
@@ -114,8 +114,8 @@ Do not force Linear for Mission Control. When an optional workflow uses an exter
 - Integration checklist or validation artifact when stack choices or platform-specific setup matter
 - Runtime detection, route, or status artifact when harness capability materially changes behavior
 - Legacy audit, risk report, or modernization spec when working on inherited systems
-- Spec or Linear spec comment
-- Implementation plan or Linear plan comment
+- Spec or GitHub issue comment/link
+- Implementation plan or GitHub issue comment/link
 - Next-step guidance after major phase completion when useful
 - Project orientation artifact when a controller needs a fast repo entry point
 - Goal contract and status when using host-native or fallback goal mode
@@ -132,37 +132,28 @@ Do not force Linear for Mission Control. When an optional workflow uses an exter
 - Run inspection artifact when a run is paused, blocked, or needs explicit review
 - Tool or MCP registry entry when new external execution surfaces are introduced
 - Upstream attribution or notice updates when a feature adds a meaningful new external dependency or influence
-- Review report or Linear review comment
-- QA report or Linear QA comment
+- Review report or GitHub issue/PR comment
+- QA report or GitHub issue comment
 - Regression task when a finding is strong enough to preserve
 - Benchmark report when onboarding or spec quality is being compared
 - Eval report when validating framework behavior or release confidence
 - Replay case when comparing old and new workflow behavior
-- Ship checklist or Linear ship comment
+- Ship checklist or GitHub issue/PR comment
 - Retrospective for completed larger efforts
 - Session improvement review, worthiness check, and issue draft when the session exposed reusable framework friction
 - Session quality signal note or score when quality problems materially shaped the session
 
-## Linear Lifecycle
+## GitHub Lifecycle
 
-Before relying on Linear-first execution, run setup:
+Before tracker-backed execution, identify the repository, existing GitHub Project, issue templates, labels, status field, branch policy, and required review gates. Preserve established names and protections. If the issue or Project cannot be read or updated, record the exact missing scope and continue only with safe local work.
 
-1. Choose workspace, team, or project scope.
-2. Map states to ORCA Framework gates.
-3. Configure or document labels.
-4. Install agent guidance.
-5. Decide whether agents may change states or only recommend transitions.
-6. Validate required GitHub or Linear integration paths for the active harness.
-7. Run a smoke-test issue.
-8. Record opt-out rules.
-
-Then use the standard lifecycle:
+Use the standard lifecycle:
 
 1. Issue enters inbox or triage.
 2. `orca-idea` or `orca-evaluate-idea` runs first if the work item is still an opportunity rather than a product contract.
 3. `orca-plan-idea` or `orca-validate-idea` converts the surviving idea into a memo, decision, and next experiment.
 4. Onboard or discover agent clarifies ambiguity.
-5. Setup mode checks required GitHub, Linear, MCP, connector, or CLI dependencies when the next phase needs them.
+5. Setup mode checks required GitHub issue/Project access and any MCP, connector, or CLI dependency when the next phase needs it.
 6. Legacy mode runs when the system is inherited, under-documented, or fragile.
 7. Spec is generated and attached or summarized back to the issue.
 8. Plan is posted to the issue.
@@ -195,11 +186,11 @@ Use subagents when independence improves quality:
 - Context briefer subagents prepare bounded packets for retesting.
 - Release subagents validate done-state evidence.
 
-Subagents must state what context they received. They must not imply they observed UI, logs, tests, screenshots, Linear comments, or linked artifacts unless they actually did.
+Subagents must state what context they received. They must not imply they observed UI, logs, tests, screenshots, GitHub issue comments, or linked artifacts unless they actually did.
 
 ## Verification Policy
 
-Every build phase needs verification proportional to risk. Prefer automated tests, linting, validation scripts, screenshots, simulator runs, browser runs, and direct artifact checks. If verification cannot run, record the reason and remaining risk in Linear or the opt-out record.
+Every build phase needs verification proportional to risk. Prefer automated tests, linting, validation scripts, screenshots, simulator runs, browser runs, and direct artifact checks. If verification cannot run, record the reason and remaining risk on the GitHub issue or the explicit Mission-only record.
 
 ## Approval Policy
 
@@ -247,7 +238,7 @@ When ORCA Framework borrows a concept, wraps a service, targets a host, or redis
 
 ## External Tool Setup Policy
 
-Before requiring GitHub, Linear, MCP, connectors, plugins, API tokens, or CLI helpers, decide whether the tool is required or optional for the current phase. Validate the active harness, auth, scope, and fallback. Continue in degraded mode when direct integration is unavailable but the work can proceed safely.
+GitHub is the default work-management integration. Before requiring an MCP server, connector, plugin, API token, or CLI helper, decide whether it is required for the current phase. Validate the active harness, authentication, scope, and fallback. Continue in degraded mode when direct integration is unavailable but the work can proceed safely; never put credentials in issue bodies or repository files.
 
 ## Runtime Adaptation Policy
 
@@ -281,17 +272,17 @@ The blind pass is never retroactively edited after context is disclosed. Later f
 
 ## Onboarding
 
-Onboarding is an adaptive subagent interview. In Linear-first mode, the issue description and comments are the starting prompt. Ask high-leverage questions about users, jobs, constraints, success signals, platform, data, risks, and non-goals. Stop when the next question is unlikely to change the first useful spec. Output unresolved questions instead of forcing certainty.
+Onboarding is an adaptive subagent interview. In GitHub-first mode, the issue body, Project fields, dependencies, and relevant comments are the starting context. Ask high-leverage questions about users, jobs, constraints, success signals, platform, data, risks, and non-goals. Stop when the next question is unlikely to change the first useful spec. Output unresolved questions instead of forcing certainty.
 
 ## Definition Of Done
 
 Work is done when:
 
 - The spec's acceptance criteria are satisfied or explicitly revised.
-- Required artifacts are present in Linear or the opt-out system of record.
+- Required artifacts are linked from the GitHub issue or the explicit Mission-only record.
 - Tests or validation appropriate to the risk have run.
 - Review findings are resolved or documented.
 - QA mode and results are documented.
 - Shipping instructions and rollback considerations are clear.
-- The issue or work item contains evidence for the done transition.
+- The issue or work item contains evidence for the done transition; close only after its acceptance criteria and required gates pass.
 - No hidden placeholders or unsupported claims remain.

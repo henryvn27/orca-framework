@@ -20,7 +20,7 @@ Use for risky actions, ambiguous verification outcomes, architecture pivots, des
 - Approval request link
 - Tool or MCP registry entry
 
-## Linear Context
+## GitHub Context
 
 - Expects: issue ID, current phase, risk reason, linked evidence, active blockers
 - Reads: shared state, traces, metrics, approval context, tool or MCP registry entries, QA or eval artifacts

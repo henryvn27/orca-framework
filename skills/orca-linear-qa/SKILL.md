@@ -1,59 +1,10 @@
 ---
 name: orca-linear-qa
-description: Coordinate blind, guided, and regression QA through Linear comments and bounded context packets.
+description: Retired compatibility stub; route active engineering work to GitHub Issues and GitHub Projects.
 ---
 
-# ORCA Framework Linear QA
+# Retired skill compatibility: `orca-linear-qa`
 
-## What This Skill Is
+This old skill name remains for compatibility only. Do not connect to or update Linear. GitHub Issues and GitHub Projects are the active engineering ledger.
 
-The Linear-aware QA workflow for first-look, guided, and regression testing.
-
-## Trigger
-
-Use for issues in QA states or labeled `blind-qa`, `guided-qa`, or `regression`.
-
-## Do Not Trigger
-
-Do not call a pass blind if the tester has already read hidden spec, plan, code, or design rationale.
-
-## Required Inputs
-
-- Issue ID
-- QA mode
-- Platform and launch instructions
-
-## Optional Inputs
-
-- One-sentence user mission for blind QA
-- Context packet for guided QA
-- Screenshots or logs
-
-## Exact Workflow
-
-1. Confirm pass type and context boundaries.
-2. For blind QA, provide only issue ID, platform, launch instructions, and optional one-sentence mission.
-3. Run browser, simulator, CLI, or manual QA.
-4. Post findings with evidence and confidence limits.
-5. For second pass, create or consume a minimal context brief.
-6. Surface the difference between blind and briefed outcomes.
-
-## Expected Outputs
-
-- Linear blind QA comment
-- Linear guided QA comment
-- Regression comment when applicable
-
-## Quality Bar
-
-The issue thread should preserve the first-look report and keep later context separate.
-
-## Common Failure Modes
-
-- Contaminating blind QA with the spec.
-- Posting findings without reproduction steps.
-- Collapsing blind and guided outcomes into one report.
-
-## Relationship To Other ORCA Framework Skills And Commands
-
-Pairs with `orca-blind-qa`, `orca-context-brief`, `orca-ios-sim-qa`, and `orca-web-qa`.
+Use `orca-github-core` for intake, planning, execution updates, QA evidence, review, and verified closure.

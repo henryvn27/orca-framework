@@ -51,7 +51,7 @@ ORCA Framework should describe itself honestly:
 
 - original in the way it combines its artifact system, gate model, QA philosophy, rollout discipline, and cross-harness coordination
 - not original in the broad idea of spec-driven software workflows, host integrations, or customer-discovery thinking
-- often a structured layer around existing services such as Linear, GitHub, or agent hosts
+- often a structured layer around existing services such as GitHub or agent hosts
 
 ## Maintenance Rule
 

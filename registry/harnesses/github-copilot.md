@@ -15,7 +15,7 @@ GitHub Copilot
 
 ## Partial Capabilities
 
-- Linear integration
+- GitHub Projects access (validate separately from repository and issue access)
 - approval and governance patterns
 
 ## Unsupported Capabilities

@@ -21,17 +21,17 @@ Each entry records:
 
 ## Upstream Entries
 
-### Linear
+### Linear (historical)
 
 - Link: [linear.app](https://linear.app/)
 - Maintainer or org: Linear
 - License: proprietary service
 - Relationship type: direct wrapper or integration
-- What ORCA Framework uses or borrows: issue-first workflow, project coordination, comments as durable records, state-gated progression, and tracker-native execution paths
-- ORCA Framework relationship detail: wraps and integrates the service through Linear-first commands, setup guidance, and runtime routing; no Linear source code is redistributed in this repo
+- What ORCA Framework used or borrowed: issue-first workflow, project coordination, comments as durable records, state-gated progression, and tracker-native execution paths
+- ORCA Framework relationship detail: formerly integrated through Linear-first commands and setup guidance; that workflow is retired and no Linear source code is redistributed in this repo
 - Special notices required: none known for service interoperability alone
 - Related ORCA Framework areas: `docs/linear-*`, `commands/orca-linear-*`, setup docs, runtime docs
-- Status notes: active primary system-of-record integration
+- Status notes: retired historical integration. GitHub Issues and GitHub Projects are the active engineering work ledger.
 
 ### GitHub
 
@@ -57,7 +57,7 @@ Each entry records:
 - Related ORCA Framework areas: `docs/integrations/github.md`, `docs/mcp-governance.md`, `registry/mcp-servers/`
 - Status notes: active optional integration path
 
-### Linear MCP
+### Linear MCP (historical)
 
 - Link: [Linear MCP docs](https://linear.app/docs/mcp)
 - Maintainer or org: Linear
@@ -67,7 +67,7 @@ Each entry records:
 - ORCA Framework relationship detail: integration target and setup method; no bundled Linear MCP server code in this repo
 - Special notices required: none known for interoperability documentation
 - Related ORCA Framework areas: `docs/integrations/linear.md`, setup docs, MCP governance docs
-- Status notes: active optional integration path
+- Status notes: retired; retained only to document historical integration research. GitHub Issues and Projects are the active work ledger.
 
 ### OpenAI Codex CLI
 
@@ -136,7 +136,7 @@ Each entry records:
 - License: see upstream repository
 - Relationship type: workflow influenced by
 - What ORCA Framework uses or borrows: spec-driven workflow framing, artifact sequencing, and the idea that AI-assisted delivery benefits from explicit spec and plan stages
-- ORCA Framework relationship detail: ORCA Framework adapts the broader spec-driven mindset into its own Linear-first, QA-layered, multi-harness framework; no Spec Kit code is known to be redistributed in this repo
+- ORCA Framework relationship detail: ORCA Framework formerly paired the broader spec-driven mindset with a Linear-first, QA-layered, multi-harness workflow; no Spec Kit code is known to be redistributed in this repo
 - Special notices required: none known from conceptual influence alone
 - Related ORCA Framework areas: `docs/spec-driven-workflow.md`, workflow docs, ecosystem sweep
 - Status notes: conceptual workflow influence, not a runtime dependency

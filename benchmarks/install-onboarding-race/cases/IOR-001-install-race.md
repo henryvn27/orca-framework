@@ -27,7 +27,7 @@ A first-time user wants to get a framework installed and ready for one real task
 
 - install scope: trial, one-repo, or durable setup
 - first harness
-- whether integrations such as GitHub or Linear are needed on day one
+- whether integrations such as GitHub Issues/Projects are needed on day one
 - first real task after install
 
 ## Expected Scope Separation

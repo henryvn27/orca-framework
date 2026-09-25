@@ -10,9 +10,9 @@ Bloomberg Beta's public manual is an inspiration and reference influence for the
 
 ## Wrapper
 
-Linear is a direct wrapper or integration target.
+GitHub is the active wrapper and integration target.
 
-- ORCA Framework has Linear-first commands, setup docs, and workflow expectations.
+- ORCA Framework has GitHub-first commands, setup docs, and workflow expectations.
 - The external service materially affects how the framework operates.
 - Auth, permissions, and host compatibility matter operationally.
 

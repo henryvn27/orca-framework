@@ -20,7 +20,7 @@ Use for destructive actions, broad refactors, installer changes, dependency upgr
 - Deadline or blocker note
 - Tool or MCP registry entry
 
-## Linear Context
+## GitHub Context
 
 - Expects: issue ID, spec or plan context, risk labels, current state, affected systems
 - Reads: approved scope, prior decisions, linked artifacts, release context

@@ -72,7 +72,7 @@ These are teaching-oriented pages for common paths:
 - [install.md](install.md)
 - [auto-updates.md](auto-updates.md)
 - [compatibility-matrix.md](compatibility-matrix.md)
-- [linear-workflow.md](linear-workflow.md)
+- [GitHub work ledger](workflow.md) and [GitHub integration](../integrations/github.md)
 - [corpus-settings.md](corpus-settings.md)
 - [corpus-writeback.md](corpus-writeback.md)
 - [corpus-privacy.md](corpus-privacy.md)

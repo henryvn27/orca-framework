@@ -23,14 +23,14 @@ Do not use when the user explicitly asks only for a review or explanation.
 
 ## Optional Inputs
 
-- Linear issue ID or opt-out work item
+- GitHub issue URL/number and Project (default), or an explicitly requested Mission-only work item
 - Discovery notes
 - Verification commands
 - Risk areas
 
 ## Exact Workflow
 
-1. Read the spec from Linear or the opt-out record.
+1. Read the spec from GitHub or the opt-out record.
 2. If the scope is project-sized, split it into milestone-sized phases before discussing implementation details.
 3. Break the work into small phases with one reviewable outcome each.
 4. Name expected files or system areas.
@@ -49,7 +49,7 @@ Do not use when the user explicitly asks only for a review or explanation.
 - Filled `templates/plan.md`
 - Goal candidate note when a phase is suitable for `orca-goal-create`
 - Approval request shape from `templates/approval-request.md` when risk requires it
-- `templates/linear-plan-comment.md` when Linear-first mode is active
+- `templates/github-issue-update.md` when GitHub-first mode is active
 
 ## Quality Bar
 

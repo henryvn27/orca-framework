@@ -20,7 +20,7 @@ Use for meaningful runs, eval passes, QA-heavy workflows, repeated tasks, or any
 - Retry breakdown by stage
 - Trace artifact
 
-## Linear Context
+## GitHub Context
 
 - Expects: issue ID, workflow stage, trace or artifact links, outcome state
 - Reads: traces, QA reports, review findings, and run notes

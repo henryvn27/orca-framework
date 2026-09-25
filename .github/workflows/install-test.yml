@@ -22,7 +22,7 @@ jobs:
           project="$RUNNER_TEMP/orca-project"
           ./install/install.sh --mode local --target "$target"
           "$target/install/verify-install.sh" --target "$target"
-          "$target/install/doctor.sh" --target "$target" --harness generic --services github,linear
+          "$target/install/doctor.sh" --target "$target" --harness generic --services github
           test "$("$target/bin/orca" version)" = "1.0.0"
           mkdir -p "$project"
           cd "$project"

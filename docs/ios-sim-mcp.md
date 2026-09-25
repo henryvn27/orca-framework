@@ -2,16 +2,16 @@
 
 ORCA Framework can use an iOS simulator MCP server when available. The framework does not require a specific server implementation, but the QA workflow assumes the agent can build or launch the app, interact with simulator UI, inspect accessibility-visible elements, and capture screenshots or logs when supported.
 
-## Linear Coordination
+## GitHub Coordination
 
-In Linear-first mode, the issue should provide:
+The GitHub issue should provide:
 
 - Issue ID
 - App or scheme launch instructions
 - Simulator target when relevant
 - Optional one-sentence user mission for blind QA
 
-The blind tester should not receive the spec, code, implementation plan, design rationale, or PR discussion. It posts findings back to the issue using `templates/linear-blind-qa-comment.md`.
+The blind tester should not receive the spec, code, implementation plan, design rationale, or PR discussion. It posts findings back to the issue using `templates/github-issue-update.md` after the blind report is saved.
 
 ## Blind Pass
 
@@ -23,4 +23,4 @@ During a briefed pass, the tester receives a context packet from `orca-context-b
 
 ## Report
 
-Use `templates/blind-qa-report.md` for blind iOS passes and `templates/guided-qa-report.md` for briefed passes. In Linear-first mode, post concise versions with the Linear QA comment templates. Include simulator model, OS version, app build source, interactions attempted, screenshots captured, accessibility observations, and reproduction steps.
+Use `templates/blind-qa-report.md` for blind iOS passes and `templates/guided-qa-report.md` for briefed passes. Post a concise issue update after the report is saved. Include simulator model, OS version, app build source, interactions attempted, screenshots captured, accessibility observations, and reproduction steps.

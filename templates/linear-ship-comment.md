@@ -1,35 +1,5 @@
-# Linear Ship Comment
+# Historical reference: Linear Ship Comment
 
-## ORCA Framework Ship Readiness (Can We Ship?)
+This file path is retained for historical links. Its former Linear workflow is retired and is not an active instruction or supported integration. Do not access or update Linear.
 
-**Issue:** `ISSUE-ID`
-
-**Release summary:** What changed, for who, on what surface?
-
-**Release surface:** App Store/TestFlight build, Vercel URL, tag, binary, etc.
-
-**Release state:** local build / archive / export / uploaded or deployed / visible / distributed
-
-**Evidence posted:**
-
-- Spec (link)
-- Plan approval (link or “n/a”)
-- Implementation PR/commit (link)
-- Review (link)
-- QA (blind + guided if applicable)
-- Security review (if applicable)
-- Validation commands (exact)
-
-**Distribution or deploy ops:**
-
-- TestFlight groups/testers/public link
-- ASC/TestFlight metadata status
-- Preview vs production deploy status
-
-**Known risks:** What could still bite us? Be blunt.
-
-**Rollback or recovery:** First action if something is broken.
-
-**Follow-ups:** Link the next issues or explicitly “none”.
-
-**Decision:** Ready to ship / blocked / needs another gate.
+For current engineering work, use GitHub Issues and GitHub Projects. Read `docs/workflow.md`, `integrations/github.md`, and `skills/orca-github-core/SKILL.md`.

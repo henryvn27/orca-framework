@@ -15,11 +15,11 @@ Use when a finding is important enough that the same issue should be less likely
 
 ## Optional Inputs
 
-- Related issue or Linear issue
+- Related issue or GitHub issue
 - Fix summary
 - Reproduction evidence
 
-## Linear Context
+## GitHub Context
 
 - Expects: issue ID, source finding, QA or review comment, affected surface, related fix if available
 - Reads: prior QA reports, regression scope, acceptance criteria, debugging notes

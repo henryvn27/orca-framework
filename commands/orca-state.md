@@ -20,7 +20,7 @@ Use when planner, builder, reviewer, QA, or coordinator roles need a common phas
 - Checkpoint status
 - Artifact links
 
-## Linear Context
+## GitHub Context
 
 - Expects: issue ID, active phase, linked artifacts, blockers, role ownership
 - Reads: spec, plan, trace, metrics, checkpoint, QA, or eval artifacts

@@ -14,7 +14,7 @@ Use when a PR exists and review feedback must be triaged or addressed before mer
 
 ## Optional Inputs
 
-- Linear issue ID or opt-out work item
+- GitHub issue URL or number or opt-out work item
 - subset of threads to address
 
 ## Workflow
@@ -41,4 +41,4 @@ Use when a PR exists and review feedback must be triaged or addressed before mer
 ## Related Commands And Skills
 
 - Commands: `orca-build`, `orca-review`, `orca-ship`
-- Skills: `orca-delegation`, `orca-linear-core`
+- Skills: `orca-delegation`, `orca-github-core`

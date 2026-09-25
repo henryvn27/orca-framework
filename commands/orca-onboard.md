@@ -6,11 +6,11 @@ Run adaptive onboarding to understand a product, feature, or project before writ
 
 ## When To Use
 
-Use at the start of a new project, significant feature, unclear Notion issue, or markdown fallback task.
+Use at the start of a new project, significant feature, unclear GitHub issue, or explicitly local-only Mission.
 
 ## Required Inputs
 
-- Initial user request, Notion issue description, `.orca/` task, or explicit Linear issue
+- Initial user request or GitHub issue description (default); `.orca/` task only for explicit Mission-only work
 
 ## Optional Inputs
 
@@ -21,9 +21,9 @@ Use at the start of a new project, significant feature, unclear Notion issue, or
 
 ## Backend Context
 
-- Notion mode: read/write the project page and Issue Board as canonical state.
-- Markdown mode: use `.orca/` files as canonical fallback.
-- Linear mode: use Linear only when explicitly selected.
+- GitHub mode: read the issue and Project as the canonical engineering ledger.
+- Mission-only mode: use `.orca/` files when the user explicitly chooses local-only tracking.
+- Notion remains an optional linked reference and does not replace the GitHub issue or Project.
 
 ## Workflow
 
@@ -35,7 +35,7 @@ Use at the start of a new project, significant feature, unclear Notion issue, or
 4. Ask follow-up questions one at a time or in small groups only where the answers would materially change the first spec.
 5. Stop when more questions would not materially improve the first spec.
 6. Produce intake summary, operator preference summary, unresolved questions, recommended workflow, and draft spec skeleton.
-7. Sync the result to Notion, `.orca/`, or explicit Linear record.
+7. Record the result on the GitHub issue and link any local Mission artifacts; use `.orca/` alone only for an explicit local-only workflow.
 
 ## First-Pass Interview
 
@@ -63,9 +63,8 @@ For new projects, first runs, or vague requests, the default first pass should u
 - `templates/intake.md`
 - optional `templates/user-guidance-profile.md` when a durable preference is explicit
 - Draft `templates/spec.md` skeleton
-- Notion issue update when Notion mode is active
-- Markdown intake update when `.orca/` fallback is active
-- Linear intake comment when Linear mode is explicitly active
+- GitHub issue intake update and Project status when a substantive tracker update is useful
+- Markdown intake update only when `.orca/` Mission-only mode is explicit
 - host-native captured answers when the harness provides a structured question surface
 
 ## Failure Cases
@@ -77,5 +76,5 @@ For new projects, first runs, or vague requests, the default first pass should u
 
 ## Related Commands And Skills
 
-- Commands: `orca-linear-intake`, `orca-spec`, `orca-discover`
-- Skills: `orca-onboard`, `orca-linear-triage`, `orca-core`
+- Commands: `orca-onboard`, `orca-spec`, `orca-discover`
+- Skills: `orca-onboard`, `orca-github-core`, `orca-core`

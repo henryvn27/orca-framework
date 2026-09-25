@@ -13,7 +13,7 @@
 | Service | Reachable | Authenticated | Scope Sufficient | Harness Capable | Status |
 | --- | --- | --- | --- | --- | --- |
 | GitHub |  |  |  |  |  |
-| Linear |  |  |  |  |  |
+| GitHub Projects |  |  |  |  |  |
 
 ## Failure Detail
 

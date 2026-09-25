@@ -7,4 +7,4 @@ Default ORCA Framework recommendation:
 - Postgres
 - Clerk
 - GitHub
-- Linear
+- GitHub Issues and Projects for engineering work

@@ -46,16 +46,9 @@ Then re-run your Node/Playwright script.
 
 If you do not actually need in-repo Node resolution, prefer the harness-native Playwright tooling (for example Playwright-MCP) instead of pulling Playwright into every repo.
 
-## 4) Linear 401 in Codex
+## 4) GitHub Project scope in Codex
 
-If Linear returns `401: Reauthentication required`, treat Linear as blocked and continue only if the next phase is local-only.
-
-Fix path depends on the integration method:
-
-- Native connector: re-authenticate via the host connector UI.
-- Remote MCP (recommended): follow the Codex-specific setup in [`docs/linear-setup.md`](../linear-setup.md) and run `codex mcp login linear` again.
-
-Record exactly what should be posted back to Linear once auth is restored.
+GitHub repository access does not prove GitHub Projects access. Validate Project reads and writes with the authenticated connector or `gh` CLI using the required `project` scope. If the scope is absent, continue safe local work and retain a Project update draft; do not claim the Project changed.
 
 ## 5) Ecosystem drift: Tailwind v4 scaffold mismatch
 

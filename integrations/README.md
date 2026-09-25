@@ -38,7 +38,6 @@ Each pack should answer:
 ### Delivery And Ops
 
 - [github.md](github.md)
-- [linear.md](linear.md)
 - [playwright.md](playwright.md)
 - [github-actions.md](github-actions.md)
 

@@ -4,9 +4,9 @@
 
 | Service | Reachable | Authenticated | Scope Sufficient | Harness Capable | Status |
 | --- | --- | --- | --- | --- | --- |
-| GitHub | yes | yes | read only | yes | available via fallback method |
-| Linear | no | unknown | unknown | yes | missing |
+| GitHub Issues and Projects | yes | yes | read only | yes | available read-only |
+| Linear | retired | disabled | not applicable | not applicable | historical only |
 
 ## Recommendation
 
-Continue local repo work. Ask the user to paste Linear issue context. Use GitHub read access for context, but prepare PR or issue writes as local drafts.
+Continue local repository work using the available GitHub issue context. Because GitHub write access is read-only, do not claim to have updated issues or Projects and do not fall back to Linear. Prepare the scoped changes and verification evidence, then report the missing GitHub write permission.

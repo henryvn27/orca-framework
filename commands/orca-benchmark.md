@@ -18,7 +18,7 @@ Use when validating a workflow change, comparing framework versions, or reviewin
 - Prior benchmark report
 - Generated artifacts from the workflow under test
 
-## Linear Context
+## GitHub Context
 
 - Expects: issue or project context when the benchmark is tied to real work
 - Reads: spec artifacts, onboarding notes, traces, and prior benchmark results

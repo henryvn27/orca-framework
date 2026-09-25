@@ -9,6 +9,6 @@
 - Validation steps: app or webhook reachable, target channel confirmed
 - Common failure modes: wrong channel, missing scopes, noisy automation
 - Related ORCA Framework commands or docs: `orca-integration`, `improvement-backlog.md`
-- Related integrations: GitHub, Linear, n8n
+- Related integrations: GitHub Projects, n8n
 - Risk notes: alert spam erodes signal quickly
 - Web, mobile, or platform caveats: business workflow layer

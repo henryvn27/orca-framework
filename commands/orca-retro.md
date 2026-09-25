@@ -14,13 +14,13 @@ Use after a release, major feature, incident, or meaningful agent workflow.
 
 ## Optional Inputs
 
-- Linear issue ID, project ID, or opt-out work item
+- GitHub issue URL or number, project ID, or opt-out work item
 - Review findings
 - QA reports
 - Release notes
 - User feedback
 
-## Linear Context
+## GitHub Context
 
 - Expects: issue or project thread, ship checklist, QA and review comments, follow-up links
 - Reads: completed scope, blockers, evidence, surprises, deferred work
@@ -52,5 +52,5 @@ Store the retrospective in the selected record or project documentation.
 
 ## Related Commands And Skills
 
-- Commands: `orca-onboard`, `orca-plan`, `orca-linear-sync`, `orca-improve-framework`
-- Skills: `orca-retro`, `orca-session-improvement`, `orca-linear-core`
+- Commands: `orca-onboard`, `orca-plan`, `orca-github-core`, `orca-improve-framework`
+- Skills: `orca-retro`, `orca-session-improvement`, `orca-github-core`

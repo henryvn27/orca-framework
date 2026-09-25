@@ -8,12 +8,14 @@ Use the strongest live operating evidence first.
 
 For ORCA positioning and workflow guidance, that usually means:
 
-1. the user’s vault or declared knowledge base
-2. active repo artifacts and docs
-3. the declared system of record such as Linear
-4. direct statements in the current request
+1. the direct statement in the current request
+2. the active GitHub issue and GitHub Project fields for engineering work
+3. current repository artifacts, instructions, and verification evidence
+4. the user’s vault or declared knowledge base
 5. external primary sources
 6. generic industry advice
+
+GitHub Issues and GitHub Projects are the canonical queue and status record for active engineering work. A local ORCA Mission records the execution contract and evidence for its scoped run and should link to the issue; it does not replace the cross-task queue.
 
 ## README And Intro Implication
 

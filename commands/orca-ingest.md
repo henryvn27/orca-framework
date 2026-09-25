@@ -18,9 +18,9 @@ Use after delegated work returns from Codex, Claude Code, another harness, or a 
 - linked trace
 - required approval or QA context
 
-## Linear Context
+## GitHub Context
 
-- Expects: prior delegation brief, returned worker result, and linked issue or project state when Linear-first mode is active
+- Expects: prior delegation brief, returned worker result, and linked issue or project state when GitHub-first mode is active
 - Reads: what was requested, what came back, and which gate is next
 - Posts: ingestion summary, unresolved risk, and recommended next state
 - Human approval: required only if the ingested result triggers an approval gate

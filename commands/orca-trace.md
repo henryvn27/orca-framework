@@ -19,7 +19,7 @@ Use for non-trivial runs, debugging, risky execution, handoff-heavy work, and ev
 - Timing data
 - Token or cost data
 
-## Linear Context
+## GitHub Context
 
 - Expects: issue ID, project, command or skill used, linked artifacts, notable decisions
 - Reads: issue comments, linked specs, plans, QA reports, and relevant evidence

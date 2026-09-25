@@ -1,8 +1,6 @@
 {
-  "mcpServers": {
-    "linear": {
-      "command": "npx",
-      "args": ["-y", "mcp-remote", "https://mcp.linear.app/mcp"]
-    }
-  }
+  "historical": true,
+  "notice": "Retired example. Do not install or use for active work.",
+  "currentWorkLedger": "GitHub Issues and GitHub Projects",
+  "guide": "../integrations/github.md"
 }

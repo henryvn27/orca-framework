@@ -29,7 +29,7 @@ Do not use as a substitute for blind QA.
 
 ## Exact Workflow
 
-1. Read approved scope, diff, and verification evidence from Linear or the opt-out record.
+1. Read approved scope, diff, and verification evidence from GitHub or the opt-out record.
 2. Inspect changed behavior and contracts.
 3. Identify likely bugs and regressions.
 4. Check test and validation coverage.
@@ -42,7 +42,7 @@ Do not use as a substitute for blind QA.
 ## Expected Outputs
 
 - Filled `templates/review-report.md`
-- `templates/linear-review-comment.md` when Linear-first mode is active
+- `templates/github-issue-update.md` when GitHub-first mode is active
 
 ## Quality Bar
 

@@ -4,7 +4,7 @@ ORCA Framework is its own framework, but it did not appear in a vacuum.
 
 Thanks to the teams and communities whose tools, docs, and public thinking made parts of this project clearer:
 
-- Linear, for making issue-native software coordination unusually clean and for giving ORCA Framework a strong default system of record
+- Linear, for its historical influence on ORCA Framework's issue-native coordination patterns
 - GitHub, for the repository, issue, PR, checks, and automation surfaces ORCA Framework leans on heavily
 - the OpenAI Codex ecosystem, for shaping one of the main executor environments ORCA Framework is designed to work with
 - Claude Code and Hermes Agent, for pushing host-level patterns that made cross-harness compatibility worth documenting explicitly

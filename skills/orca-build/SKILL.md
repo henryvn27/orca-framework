@@ -29,7 +29,7 @@ Do not use when the user only wants brainstorming, review, or research.
 
 ## Exact Workflow
 
-1. Confirm the approved scope from Linear or the opt-out record.
+1. Confirm the approved scope from the GitHub issue and Project (default), or from an explicitly requested Mission-only record.
 2. Before non-trivial repo edits, follow `docs/version-control.md`: inspect repo root/status/current/default branch, preserve unrelated dirty work, and move implementation to a scoped non-protected branch.
 3. Read relevant files before editing.
 4. Preserve user changes and existing patterns.
@@ -43,7 +43,7 @@ Do not use when the user only wants brainstorming, review, or research.
 
 - Completed file changes
 - Verification notes
-- Updated artifacts or Linear comments when applicable
+- Updated artifacts or GitHub issue comments when applicable
 
 ## Quality Bar
 

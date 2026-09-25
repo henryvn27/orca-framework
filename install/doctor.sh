@@ -7,7 +7,7 @@ harness=""
 services=""
 
 usage() {
-  printf 'Usage: doctor.sh [--target path] [--harness codex|claude-code|vscode|generic] [--services github,linear,...]\n'
+  printf 'Usage: doctor.sh [--target path] [--harness codex|claude-code|vscode|generic] [--services github,...]\n'
 }
 
 while [ "$#" -gt 0 ]; do
@@ -75,13 +75,10 @@ if [ -n "$services" ]; then
     case "$service" in
       github)
         if command -v gh >/dev/null 2>&1; then
-          printf 'Service github: gh available\n'
+          printf 'Service github: gh available; validate repository and Project scopes separately\n'
         else
           printf 'Service github: gh missing, use connector or manual fallback\n'
         fi
-        ;;
-      linear)
-        printf 'Service linear: host or connector validation still required; see docs/linear-setup.md\n'
         ;;
       notebooklm|graphify)
         printf 'Service %s: optional; verify only if your path needs it\n' "$service"

@@ -16,12 +16,12 @@ If the user has provided a vault or live knowledge base for the question, treat 
 
 ## Optional Inputs
 
-- Linear issue ID or opt-out work item
+- GitHub issue URL or number or opt-out work item
 - Preferred sources
 - Recency requirement
 - Decision deadline
 
-## Linear Context
+## GitHub Context
 
 - Expects: issue context, decision to support, constraints, and linked artifacts
 - Reads: the uncertainty blocking spec, plan, security, or implementation
@@ -67,5 +67,5 @@ Attach or summarize the research brief in the chosen record.
 
 ## Related Commands And Skills
 
-- Commands: `orca-spec`, `orca-plan`, `orca-linear-sync`
-- Skills: `orca-research`, `orca-linear-core`
+- Commands: `orca-spec`, `orca-plan`, `orca-github-core`
+- Skills: `orca-research`, `orca-github-core`

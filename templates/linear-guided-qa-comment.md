@@ -1,21 +1,5 @@
-# Linear Guided QA Comment
+# Historical reference: Linear Guided Qa Comment
 
-## ORCA Framework Guided QA
+This file path is retained for historical links. Its former Linear workflow is retired and is not an active instruction or supported integration. Do not access or update Linear.
 
-**Issue:** `ISSUE-ID`
-
-**Pass type:** Briefed or informed.
-
-**Context included:** List disclosed goals, fixes, acceptance criteria, or constraints.
-
-**Context withheld:** List implementation details or rationale intentionally excluded.
-
-**Target flows:** List what was retested.
-
-**Results:** Pass, fail, blocked, or uncertain for each target.
-
-**Evidence:** Screenshots, logs, accessibility output, simulator output, or browser output.
-
-**Difference from blind pass:** State what changed after briefing.
-
-**Recommended next state:** Fix, regression, ready to ship, or blocked.
+For current engineering work, use GitHub Issues and GitHub Projects. Read `docs/workflow.md`, `integrations/github.md`, and `skills/orca-github-core/SKILL.md`.

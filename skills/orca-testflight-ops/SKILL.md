@@ -57,4 +57,4 @@ The skill should leave behind exact tester-distribution state, not just "uploade
 
 ## Relationship To Other ORCA Framework Skills And Commands
 
-Pairs with `orca-testflight-release`, `orca-ship`, and `orca-linear-release`.
+Pairs with `orca-testflight-release`, `orca-ship`, and `orca-github-core`.

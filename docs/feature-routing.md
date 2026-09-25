@@ -17,8 +17,8 @@ ORCA Framework should route dynamically for:
 - If goal support is `supported` and the task is a good candidate, recommend goal mode.
 - If goal support is `partial`, explain caveats and keep the portable fallback visible.
 - If goal support is `not supported` or `unclear`, do not make goal mode the default path.
-- If Linear integration is unavailable, do not recommend direct Linear sync as the default.
-- If GitHub is available but Linear is not, bias toward local repo plus manual issue fallback.
+- If GitHub issue/Project access is unavailable, do not claim a tracker update; continue safe local work and preserve a draft for the authorized writer.
+- If GitHub issue access is available but Project scope is missing, continue issue-level work while recording that Project state was not updated.
 - If tool governance is weak or unclear, tighten approval and avoid aggressive automation defaults.
 
 ## Output

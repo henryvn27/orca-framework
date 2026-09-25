@@ -14,13 +14,13 @@ Use for frontend, product, marketing, mobile, or user-facing CLI work.
 
 ## Optional Inputs
 
-- Linear issue ID or opt-out work item
+- GitHub issue URL or number or opt-out work item
 - Brand constraints
 - Screenshots
 - Design system
 - Target user
 
-## Linear Context
+## GitHub Context
 
 - Expects: issue ID, target user, product surface, screenshots or launch link, acceptance criteria
 - Reads: intended user job, design constraints, QA findings, linked screenshots
@@ -61,4 +61,4 @@ Store design findings in the chosen record.
 ## Related Commands And Skills
 
 - Commands: `orca-impeccable`, `orca-test-blind`, `orca-review`
-- Skills: `orca-design`, `orca-impeccable`, `orca-linear-core`
+- Skills: `orca-design`, `orca-impeccable`, `orca-github-core`

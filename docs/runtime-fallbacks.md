@@ -23,7 +23,7 @@ For each major capability, ORCA Framework should define:
 - Degraded: local artifact-only continuity
 - Blocked: none, as long as durable artifacts remain available
 
-### GitHub And Linear
+### GitHub Issues And Projects
 
 - Preferred: validated native connector or approved MCP path
 - Fallback: CLI helper, token path, or manual artifact flow

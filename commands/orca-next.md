@@ -21,16 +21,16 @@ Use after onboarding, spec creation, milestone planning, implementation, QA, reg
 - Intent style: just tell me what to do, explain briefly, or show options
 - User guidance profile
 
-## Linear Context
+## GitHub Context
 
-- Expects: current issue or project state, latest artifact, and any newly returned worker result when Linear-first mode is active
-- Reads: blockers, approvals, outstanding gates, and latest evidence
-- Posts: optional next-state recommendation when a coordinating comment is useful
-- Human approval: depends on the recommended next action
+- Expects: current GitHub issue URL/number, GitHub Project, latest artifact, and any newly returned worker result
+- Reads: issue body, status, priority, dependencies, approvals, outstanding gates, and latest evidence
+- Posts: optional concise next-state recommendation on the issue when coordination benefits from a durable comment
+- Human approval: depends on the recommended next action and existing repository/project gates
 
-## Opt-Out Context
+## Mission-Only Context
 
-Use the chosen local record as the current-state source and write next-step guidance against it when needed.
+Use a local Mission as the current record only when the user explicitly chose local-only tracking, and write next-step guidance there when needed.
 
 ## Workflow
 

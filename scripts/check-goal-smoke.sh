@@ -19,6 +19,14 @@ need_grep() {
   grep -q "$pattern" "$file" || fail "missing pattern '$pattern' in $file"
 }
 
+need_no_grep() {
+  pattern="$1"
+  file="$2"
+  if grep -q "$pattern" "$file"; then
+    fail "unexpected pattern '$pattern' in $file"
+  fi
+}
+
 need_json_field() {
   file="$1"
   field="$2"
@@ -399,7 +407,7 @@ ORCA_ROOT="$fallback_root" ./bin/orca backend status --json > "$tmp/backend-stat
 need_json_field "$tmp/backend-status-fallback.json" "active_canonical" "markdown"
 need_json_field "$tmp/backend-status-fallback.json" "notion_configured" "false"
 need_json_field "$tmp/backend-status-fallback.json" "notion_status" "markdown_fallback"
-need_json_field "$tmp/backend-status-fallback.json" "linear_configured" "false"
+need_no_grep 'linear' "$tmp/backend-status-fallback.json"
 need_json_field "$tmp/backend-status-fallback.json" "ok" "true"
 if ORCA_ROOT="$fallback_root" ./bin/orca backend status --json --bad > "$tmp/backend-status-bad-json-first.json" 2>&1; then
   fail "expected backend status --json --bad to fail"
@@ -413,14 +421,15 @@ need_json_field "$tmp/backend-status-bad-json-last.json" "ok" "false"
 need_json_field "$tmp/backend-status-bad-json-last.json" "error" "unknown backend status option: --bad"
 need_grep '"notion_configured":false' "$tmp/backend-status-fallback.json"
 need_grep '"notion_status":"markdown_fallback"' "$tmp/backend-status-fallback.json"
-need_grep '"linear_configured":false' "$tmp/backend-status-fallback.json"
+need_no_grep 'linear' "$tmp/backend-status-fallback.json"
 ORCA_ROOT="$fallback_root" ./bin/orca notion doctor > "$tmp/notion-doctor-fallback.txt"
 need_grep "notion issue board: missing" "$tmp/notion-doctor-fallback.txt"
 need_grep "notion sync command: missing" "$tmp/notion-doctor-fallback.txt"
-need_grep "linear: not configured, still optional" "$tmp/notion-doctor-fallback.txt"
+need_no_grep 'linear' "$tmp/notion-doctor-fallback.txt"
 ORCA_ROOT="$fallback_root" ./bin/orca notion doctor --json > "$tmp/notion-doctor-fallback.json"
 need_json_field "$tmp/notion-doctor-fallback.json" "notion_issue_board_configured" "false"
 need_json_field "$tmp/notion-doctor-fallback.json" "notion_sync_command_status" "missing"
+need_no_grep 'linear' "$tmp/notion-doctor-fallback.json"
 need_json_field "$tmp/notion-doctor-fallback.json" "ready" "false"
 need_json_field "$tmp/notion-doctor-fallback.json" "ok" "false"
 if ORCA_ROOT="$fallback_root" ./bin/orca notion doctor --json --bad > "$tmp/notion-doctor-bad-json-first.json" 2>&1; then

@@ -10,7 +10,7 @@ Use before changing an existing project or when constraints are unknown.
 
 ## Required Inputs
 
-- Repository path, app URL, product surface, Linear issue, or opt-out work item
+- Repository path, app URL, product surface, GitHub issue, or opt-out work item
 
 ## Optional Inputs
 
@@ -18,7 +18,7 @@ Use before changing an existing project or when constraints are unknown.
 - Test commands
 - Architecture notes
 
-## Linear Context
+## GitHub Context
 
 - Expects: issue ID, target repo or surface, relevant links, labels, state, and comments
 - Reads: requested scope, linked PRs, existing artifacts, platform labels
@@ -36,12 +36,12 @@ Write discovery notes to the selected artifact location and link or reference th
 2. Inspect structure, dependencies, scripts, tests, and relevant files.
 3. Identify ownership boundaries and existing patterns.
 4. Record risks, constraints, and recommended next steps.
-5. Sync findings to Linear or the opt-out record.
+5. Sync findings to GitHub or the opt-out record.
 
 ## Outputs And Artifacts
 
 - `templates/discovery-notes.md`
-- Linear discovery comment when active
+- GitHub discovery comment when active
 
 ## Failure Cases
 
@@ -51,4 +51,4 @@ Write discovery notes to the selected artifact location and link or reference th
 ## Related Commands And Skills
 
 - Commands: `orca-legacy`, `orca-research`, `orca-spec`, `orca-plan`
-- Skills: `orca-discover`, `orca-legacy`, `orca-linear-core`
+- Skills: `orca-discover`, `orca-legacy`, `orca-github-core`

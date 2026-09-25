@@ -1,5 +1,7 @@
 # Ecosystem Watch
 
+> Linear integration research below is historical. Do not install or use a Linear connector, MCP server, or setup path. Current engineering work is tracked in GitHub Issues and GitHub Projects.
+
 When a finding moves from `Watch` or `Investigate soon` to `Adopt now`, update the existing watch entry in place, preserve its earlier sightings, and link the resulting draft issue back to that history.
 
 The watchlist tracks the full research surface. Use [ecosystem-opportunities](ecosystem-opportunities.md) for the short maintainer list of actionable items.
@@ -28,7 +30,6 @@ Every sweep should explicitly watch:
 - approval and human-in-the-loop patterns
 - tool governance and MCP review
 - GitHub integration setup paths
-- Linear integration setup paths
 - MCP-based setup flows
 - connector support changes
 - host-specific install and config steps
@@ -121,26 +122,26 @@ For each active opportunity, keep:
 
 ### install
 
-- Title: Official Linear MCP remote path is now concrete enough to recommend
-- Short summary: Linear now documents a first-party MCP endpoint with Streamable HTTP (OAuth 2.1 dynamic client registration), explicit Codex CLI setup (including required Codex experimental RMCP flag), and direct `Authorization: Bearer ...` auth as a non-interactive option.
+- Title: Historical record: Linear MCP remote path reviewed in 2026-05
+- Short summary: This entry records setup research from 2026-05. The Linear integration has since been retired; agents must not install, authenticate, or use its MCP endpoint. GitHub Issues and GitHub Projects are the active work ledger.
 - Source links:
   - https://linear.app/docs/mcp
-- Status: `Adopt now`
-- Adoption shape: setup-path update
+- Status: `Retired 2026-09-25`
+- Adoption shape: historical setup-path record; no adoption work remains
 - Primary category: `install`
 - Cross-harness or host-specific: cross-harness with Codex-specific setup details
 - Setup method: remote MCP
 - Affected hosts: Codex, VS Code, Windsurf, Zed, generic MCP-capable hosts
-- Currently recommended setup path: generic "approved MCP or manual" wording
-- Unstable or deprecated setup path: vague/manual-only Linear setup language
-- Required ORCA Framework change: refresh Linear-first setup docs and examples around the official endpoint and auth options
+- Currently recommended setup path: GitHub Issues and GitHub Projects through the GitHub integration
+- Unstable or deprecated setup path: all Linear API, connector, and MCP setup paths
+- Required ORCA Framework change: none; retain only as historical research
 - UX impact: both
 - First seen: 2026-05-31
 - Last confirmed: 2026-06-02
 - Prior sightings:
   - 2026-05-31 initial live ORCA Framework sweep
   - 2026-06-02 docs unchanged; local Linear runtime still blocked by reauthentication
-- Related issue if created: Linear MCP setup refresh.
+- Related issue if created: GitHub migration tracking issue `henryvn27/codex-environment#105`.
 
 - Title: Impeccable wrapper guidance is starting to drift across official surfaces
 - Short summary: Official Impeccable pages now mix `/impeccable teach` and `/impeccable init`, while recent releases changed Codex subagent delivery, deprecated `--fast`, and added daily self-update behavior. ORCA Framework should keep wrapper guidance version-aware instead of restating one brittle install or onboarding story.
@@ -254,30 +255,29 @@ Track existence and confidence for:
 
 ## Integration Setup Watch
 
-Track currently recommended setup paths and caveats. Update this table during each sweep when official docs, host behavior, or connector support changes.
+Track currently recommended setup paths and caveats. Update this table during each sweep when official docs, host behavior, or connector support changes. Retired integrations must not appear as usable setup choices.
 
 | Service | Codex CLI | Claude Code | OpenCode | VS Code | Generic fallback |
 | --- | --- | --- | --- | --- | --- |
 | GitHub | connector, approved MCP, `gh`, or manual; verify locally | MCP or configured connector when available; manual fallback | verify host docs before recommending connector parity | verify current docs and active implementation lineage | Copilot connector, MCP, `gh`, or manual | `gh`, approved MCP, token, or manual |
-| Linear | official remote MCP path now documented; `codex mcp add linear --url https://mcp.linear.app/mcp` | MCP path when approved; manual fallback | verify host docs before recommending connector parity | verify current docs and auth flow before recommending | `npx -y mcp-remote https://mcp.linear.app/mcp` | approved MCP, token, or manual |
+| Linear (retired) | disabled; use GitHub Issues/Projects | disabled; use GitHub Issues/Projects | disabled; use GitHub Issues/Projects | disabled; use GitHub Issues/Projects | disabled; use GitHub Issues/Projects | no Linear connector, token, or MCP |
 | NotebookLM | community MCP or browser path unless enterprise setup is confirmed | community MCP or browser path unless enterprise setup is confirmed | verify host and browser automation support before recommending | unknown; verify local docs | browser automation or enterprise web path, depending on host setup | enterprise path, Google Cloud APIs, or user-managed MCP/browser tooling |
 | Graphify | optional local install or shell invocation; never required | optional local install or shell invocation; never required | verify host shell and file access support first | unknown; verify local docs | optional local install if the user wants graph analysis | direct vault inspection first, Graphify only as optional enhancement |
 
-Current local caveat:
-Linear's official remote MCP path is still the right documented baseline, but local verification in this workspace remains blocked by `401: "Server returned 401: 'Reauthentication required'"`. Keep recurring automations on the local draft-issue fallback until runtime auth is healthy again.
+Historical local caveat (2026-06): the prior Linear connector returned a reauthentication error. This is not a current workflow or migration blocker; Linear access has been retired in favor of GitHub Issues and Projects.
 
 ## Setup Path Risks
 
 Use this section for unstable, broken, or deprecated setup guidance.
 
 - OpenCode risk: ORCA Framework currently tracks active docs against an archived legacy repo. Future setup recommendations should cite the active docs/runtime lineage explicitly.
-- Linear risk: this session's Linear connector required reauthentication, so live issue-native maintenance was blocked even though the setup path is now better documented officially.
+- Linear risk (historical): the former connector required reauthentication and has been retired. No Linear connector is part of the active setup path.
 
 ## Setup Simplification Opportunities
 
 Use this section for easier setup paths ORCA Framework may want to adopt.
 
-- Linear MCP can now be documented with one official endpoint and explicit host examples instead of generic MCP prose.
+- Linear MCP setup was considered in 2026-05 and is retired. Do not restore or recommend it.
 - Codex guidance can move from "maybe experimental" goal wording to a clearer version-aware baseline.
 
 ## Host-Specific Caveats
@@ -291,7 +291,7 @@ Use this section for easier setup paths ORCA Framework may want to adopt.
 
 ## Recently Adopted
 
-- 2026-05-31: Linear official MCP setup path promoted to `Adopt now` for ORCA Framework setup guidance refresh.
+- 2026-05-31: Historical Linear MCP setup research was marked for adoption; that decision was retired during the 2026-09-25 GitHub migration.
 - 2026-05-31: Codex goal/governance baseline promoted to `Adopt now` for host-guidance refresh.
 - 2026-05-31: OpenCode source-tracking split promoted to `Adopt now` to prevent future compatibility overclaim.
 
@@ -303,5 +303,5 @@ Use this section for easier setup paths ORCA Framework may want to adopt.
 
 - First live ecosystem sweep completed on 2026-05-31.
 - No prior dated sweep existed, so all items above are baseline discoveries rather than upgrades from an earlier run.
-- Linear was blocked by reauthentication during this run.
+- Historical Linear auth was blocked by reauthentication; it is not an active integration or work dependency.
 - Direct issue creation was not verified, so adopt-now follow-ups were written as local Markdown drafts.

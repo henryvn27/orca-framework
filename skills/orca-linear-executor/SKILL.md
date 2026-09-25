@@ -1,57 +1,10 @@
 ---
 name: orca-linear-executor
-description: Execute approved Linear issue scope and keep implementation progress synchronized to the issue thread.
+description: Retired compatibility stub; route active engineering work to GitHub Issues and GitHub Projects.
 ---
 
-# ORCA Framework Linear Executor
+# Retired skill compatibility: `orca-linear-executor`
 
-## What This Skill Is
+This old skill name remains for compatibility only. Do not connect to or update Linear. GitHub Issues and GitHub Projects are the active engineering ledger.
 
-The Linear-aware build execution workflow.
-
-## Trigger
-
-Use when an issue is approved for build or assigned to a build agent.
-
-## Do Not Trigger
-
-Do not use when approval is required but missing.
-
-## Required Inputs
-
-- Issue ID
-- Approved plan or approved scope
-
-## Optional Inputs
-
-- Branch name
-- PR link
-- Test commands
-
-## Exact Workflow
-
-1. Confirm the plan is approved when required.
-2. Implement only approved scope.
-3. Post progress comments at meaningful phase boundaries.
-4. Link branches, PRs, validation output, and blockers.
-5. Route scope changes back to planning.
-
-## Expected Outputs
-
-- Implementation updates
-- Verification evidence
-- Review handoff comment
-
-## Quality Bar
-
-The issue thread should show what changed, why, and how it was verified.
-
-## Common Failure Modes
-
-- Building unapproved scope.
-- Posting vague progress.
-- Failing to surface implementation blockers.
-
-## Relationship To Other ORCA Framework Skills And Commands
-
-Pairs with `orca-build`, `orca-review`, and `orca-linear-sync`.
+Use `orca-github-core` for intake, planning, execution updates, QA evidence, review, and verified closure.

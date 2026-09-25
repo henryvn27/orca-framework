@@ -9,6 +9,6 @@
 - Validation steps: access works, connected tools reviewed
 - Common failure modes: hidden trust boundaries, unclear action scope
 - Related ORCA Framework commands or docs: `orca-tool-review`, `orca-mcp-review`
-- Related integrations: GitHub, Linear, OpenAI
+- Related integrations: GitHub Projects, OpenAI
 - Risk notes: watchlist until stronger reviewed patterns are adopted
 - Web, mobile, or platform caveats: automation and tool-governance surface

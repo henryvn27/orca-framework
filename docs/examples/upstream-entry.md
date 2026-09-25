@@ -26,7 +26,7 @@ The public framing that AI-assisted delivery benefits from explicit spec and pla
 
 ## Relationship Detail
 
-ORCA Framework adapts the general spec-driven mindset into a broader Linear-first, QA-layered, multi-harness framework. No code is claimed as copied here.
+ORCA Framework adapts the general spec-driven mindset into a GitHub-first, QA-layered, multi-harness framework. No code is claimed as copied here.
 
 ## Notice Or License Preservation Requirement
 

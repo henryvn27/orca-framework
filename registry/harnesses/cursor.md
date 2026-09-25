@@ -15,7 +15,7 @@ Cursor
 ## Partial Capabilities
 
 - GitHub integration
-- Linear integration
+- GitHub Projects access (validate separately from repository and issue access)
 
 ## Unsupported Capabilities
 

@@ -24,6 +24,23 @@ body:
     validations:
       required: true
   - type: textarea
+    id: scope
+    attributes:
+      label: Scope and acceptance criteria
+      description: What should change, and what observable result will confirm the fix?
+    validations:
+      required: true
+  - type: textarea
+    id: verification
+    attributes:
+      label: Verification and QA
+      description: Relevant checks, platforms, or evidence needed to verify the fix.
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies and release target
+      description: Blocking issues, linked work, or target version if known.
+  - type: textarea
     id: context
     attributes:
       label: Additional context

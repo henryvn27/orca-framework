@@ -1,6 +1,6 @@
 # Workflow
 
-ORCA Framework follows a staged workflow centered on a durable work item. In Linear-first mode, that work item is a Linear issue. In opt-out mode, it is the user's chosen issue, document, or tracker item.
+ORCA Framework follows a staged workflow centered on a durable work item. GitHub Issues and GitHub Projects are the default ledger for engineering work. A local Mission links to its GitHub issue and carries the scoped execution contract and evidence. Use a Mission-only record only when the user explicitly chooses a local-only workflow.
 
 When a workflow introduces a new external upstream influence or wrapper, update the attribution records as part of the same iteration.
 
@@ -28,14 +28,14 @@ flowchart LR
 
 1. `orca-idea` or `orca-evaluate-idea`: structure or pressure-test an opportunity when the work has not yet earned a product spec.
 2. `orca-plan-idea` or `orca-validate-idea`: synthesize a surviving idea into a memo, decision, and next experiment.
-3. `orca-linear-intake` or `orca-onboard`: clarify issue context.
-4. `orca-check-setup` or `orca-setup`: identify required external tools when the next phase depends on GitHub, Linear, MCP, or a host connector.
+3. `orca-onboard`: clarify GitHub issue context, or prepare an issue when the user requests tracked work.
+4. `orca-check-setup` or `orca-setup`: identify required GitHub issue/Project access, MCP, or host connector when the next phase depends on it.
 5. `orca-integration` or `orca-setup-integration`: choose and set up stack integrations when platform or product architecture decisions materially affect the path.
 6. `orca-discover`: inspect the repo, platform, dependencies, and constraints.
 7. `orca-legacy`: run repo archaeology and modernization prep when the system is inherited, under-documented, or fragile.
 8. `orca-research`: gather external evidence when facts may be stale or unknown.
 9. `orca-spec`: define goals, non-goals, user flows, and acceptance criteria.
-10. `orca-linear-plan-comment` or `orca-plan`: create implementation phases, verification gates, and approval expectations.
+10. `orca-plan`: create implementation phases, verification gates, and approval expectations; record the plan on the issue when useful.
 11. `orca-next`: emit concise phase-exit guidance when the next move is not already obvious or underway.
 12. `orca-goal`: decide whether the next bounded milestone should become a goal contract.
 13. `orca-approve`: request or confirm approval when risk, scope, or confidence requires it.
@@ -59,7 +59,7 @@ flowchart LR
 31. `orca-security` or `orca-security-check`: inspect security-relevant surfaces and untrusted inputs.
 32. `orca-benchmark` and `orca-eval`: judge workflow quality when framework behavior is under review.
 33. `orca-replay` or `orca-restore`: compare newer behavior or recover from known-good workflow states when needed.
-34. `orca-linear-ship-check` or `orca-ship`: prepare release and done-state evidence.
+34. `orca-ship`: prepare release and done-state evidence and update the issue/PR.
 35. `orca-retro`: capture lessons and follow-up work.
 36. `orca-improve-framework`: review session friction and session-quality signals, then propose ORCA Framework improvement work when the evidence is reusable.
 37. `orca-status` or `orca-background-status`: explain current harness detection, enabled features, degraded capabilities, policy switches, receipts, and unattended-run state when behavior needs inspection.
@@ -77,19 +77,19 @@ That means:
 
 It should not use the user as the default loop for normal ambiguity, routine setup choices, or next-step decisions that can be made safely from the evidence already on hand.
 
-## Recommended Linear Gates
+## Recommended GitHub Project Statuses
 
-- Triage
-- Ready for Spec
-- Spec Ready
-- Ready for Build
+- Backlog
+- Needs triage
+- Ready / Queued
 - In Progress
-- In Review
-- In QA
-- Ready to Ship
+- Waiting / Blocked
+- Review / Verify
 - Done
+- Canceled
+- Duplicate
 
-Actual state names may vary by team. ORCA Framework expects equivalent gates.
+Map these states to the repository's existing Project Status field where one exists. Preserve distinct QA and ship gates as project-specific statuses or labels when required. Never move unfinished work to Done.
 
 ## Reliability Layer
 
@@ -98,7 +98,7 @@ The workflow now relies on six supporting controls:
 - idea one-pagers, scorecards, memos, and validation plans create a durable upstream decision record
 - onboarding, discovery, and spec create durable context
 - next-step guidance makes phase exits clear without adding process noise
-- setup checks keep GitHub, Linear, and MCP dependencies explicit and optional when possible
+- setup checks keep GitHub issue/Project access and MCP dependencies explicit and optional when possible
 - integration packs keep modern stack choices explicit, platform-aware, and validated
 - orchestration patterns keep parent and worker responsibilities explicit when work benefits from delegation
 - compatibility audits keep harness-specific claims explicit instead of assuming parity
@@ -122,9 +122,9 @@ The workflow now relies on six supporting controls:
 - tool and MCP registries make external execution trust explicit
 - contracts keep artifacts structurally consistent
 
-## Opt-Out Workflow
+## Mission-Only Workflow
 
-If Linear is not used, define:
+If the user explicitly requests a local-only workflow, define:
 
 - Work item location
 - State or gate labels
@@ -132,7 +132,7 @@ If Linear is not used, define:
 - Where linked artifacts live
 - Who can approve build and ship gates
 
-Then run the same ORCA Framework sequence against that record.
+Then run the same ORCA Framework sequence against that record and retain the same evidence and approval gates.
 
 ## Skipping Stages
 

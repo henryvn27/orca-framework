@@ -116,7 +116,7 @@ Primary audience:
 Primary pages:
 
 - `docs/workflow.md`
-- `docs/linear-workflow.md`
+- `docs/workflow.md` (GitHub-first work ledger)
 - `docs/use-case-map.md`
 
 ### Examples

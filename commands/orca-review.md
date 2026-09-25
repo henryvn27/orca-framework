@@ -14,12 +14,12 @@ Use before QA or shipping any meaningful change.
 
 ## Optional Inputs
 
-- Linear issue ID or opt-out work item
+- GitHub issue URL or number or opt-out work item
 - Spec
 - Plan
 - Test output
 
-## Linear Context
+## GitHub Context
 
 - Expects: issue ID, linked branch or PR, spec, plan, verification notes
 - Reads: approved scope, changed artifacts, previous blockers, acceptance criteria
@@ -46,7 +46,7 @@ Post or store the review report in the declared record.
 ## Outputs And Artifacts
 
 - `templates/review-report.md`
-- `templates/linear-review-comment.md` when Linear-first mode is active
+- `templates/github-issue-update.md` when GitHub-first mode is active
 
 ## Failure Cases
 
@@ -56,4 +56,4 @@ Post or store the review report in the declared record.
 ## Related Commands And Skills
 
 - Commands: `orca-design`, `orca-security`, `orca-ship`
-- Skills: `orca-review`, `orca-linear-core`
+- Skills: `orca-review`, `orca-github-core`

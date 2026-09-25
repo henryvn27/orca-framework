@@ -48,7 +48,7 @@ For workflow and recommendation questions, prefer this order:
 
 1. the user's vault or other declared live knowledge base
 2. the active repo and project artifacts
-3. the declared system of record such as Linear
+3. the active GitHub issue and GitHub Project for engineering work
 4. direct user statements in the current request
 5. external primary sources
 6. generic industry guidance

@@ -17,4 +17,4 @@ It should not front-load optional integrations, comparison matrices, or long onb
 
 - web SaaS: Next.js + Vercel + Supabase + Stripe + Resend + PostHog + Sentry
 - mobile app: Expo + React Native + Expo EAS + Supabase or Firebase + RevenueCat + OneSignal + Sentry
-- internal tool: Next.js + Railway + Postgres + Clerk + GitHub + Linear
+- internal tool: Next.js + Railway + Postgres + Clerk + GitHub Issues + GitHub Projects

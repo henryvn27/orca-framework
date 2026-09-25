@@ -1,58 +1,10 @@
 ---
 name: orca-linear-planner
-description: Create Linear-ready specs, plans, approval requests, and state recommendations.
+description: Retired compatibility stub; route active engineering work to GitHub Issues and GitHub Projects.
 ---
 
-# ORCA Framework Linear Planner
+# Retired skill compatibility: `orca-linear-planner`
 
-## What This Skill Is
+This old skill name remains for compatibility only. Do not connect to or update Linear. GitHub Issues and GitHub Projects are the active engineering ledger.
 
-A planning workflow that turns issue context into comments suitable for Linear review and approval.
-
-## Trigger
-
-Use for `Ready for Spec`, `Spec Ready`, `needs-plan`, or equivalent gates.
-
-## Do Not Trigger
-
-Do not use for already-approved implementation work unless scope changed.
-
-## Required Inputs
-
-- Issue ID
-- Issue context
-- Spec or planning goal
-
-## Optional Inputs
-
-- Discovery notes
-- Verification commands
-- Related PRs or artifacts
-
-## Exact Workflow
-
-1. Convert issue context into a structured spec or plan.
-2. Use Linear comment templates for readability.
-3. Include non-goals and verification.
-4. State whether human approval is required.
-5. Recommend the next state without bypassing approval.
-
-## Expected Outputs
-
-- Linear spec comment
-- Linear plan comment
-- Approval request
-
-## Quality Bar
-
-The plan should be buildable by an agent that reads only the issue thread and linked artifacts.
-
-## Common Failure Modes
-
-- Posting a plan without acceptance criteria.
-- Hiding scope changes.
-- Failing to request approval before build.
-
-## Relationship To Other ORCA Framework Skills And Commands
-
-Feeds `orca-plan`, `orca-linear-plan-comment`, and `orca-build`.
+Use `orca-github-core` for intake, planning, execution updates, QA evidence, review, and verified closure.

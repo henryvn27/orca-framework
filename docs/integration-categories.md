@@ -69,8 +69,7 @@ ORCA Framework groups integrations by job, not by vendor popularity.
 
 ## Business And Project Systems
 
-- GitHub
-- Linear
+- GitHub Issues and Projects
 - Notion
 - HubSpot
 - Productboard

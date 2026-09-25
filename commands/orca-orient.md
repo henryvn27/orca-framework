@@ -18,9 +18,9 @@ Use at project entry, resume, handoff, or before delegation.
 - latest receipt
 - latest goal contract
 
-## Linear Context
+## GitHub Context
 
-- Expects: issue or project context, current status, and linked artifacts when Linear-first mode is active
+- Expects: issue or project context, current status, and linked artifacts when GitHub-first mode is active
 - Reads: issue scope, blockers, approvals, receipts, and latest comments
 - Posts: orientation summary only when the parent workflow needs a durable current-state note
 - Human approval: not required

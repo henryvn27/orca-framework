@@ -25,7 +25,7 @@ Use it to:
 - last seen
 - evidence count
 - related session artifacts
-- related GitHub or Linear issue
+- related GitHub issue
 - next action
 
 Use [templates/improvement-backlog-entry.md](../templates/improvement-backlog-entry.md).

@@ -144,8 +144,8 @@ else
 fi
 
 [ "$command_count" = "86" ] || fail "expected 86 commands, found $command_count"
-[ "$skill_count" = "72" ] || fail "expected 72 skills, found $skill_count"
-[ "$template_count" = "183" ] || fail "expected 183 templates, found $template_count"
+[ "$skill_count" = "73" ] || fail "expected 73 skills, found $skill_count"
+[ "$template_count" = "184" ] || fail "expected 184 templates, found $template_count"
 [ "$doc_count" = "460" ] || fail "expected 460 docs, found $doc_count"
 
 for command in install doctor onboard spec plan build review ship context research delegate checkpoint receipt status attribution help impeccable superpowers; do

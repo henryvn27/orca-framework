@@ -23,20 +23,20 @@ Status meanings:
 
 ## Current Matrix
 
-| Harness | Goal mode | Run memory | Shared state / checkpoints | Trace / inspector | Tool / MCP support | GitHub integration | Linear integration | Approval / governance | Multi-agent patterns | Regression / eval / benchmark | Notes |
+| Harness | Goal mode | Run memory | Shared state / checkpoints | Trace / inspector | Tool / MCP support | GitHub repo/issue/PR | GitHub Projects | Approval / governance | Multi-agent patterns | Regression / eval / benchmark | Notes |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Codex | supported | partial | partial | partial | partial | partial | partial | partial | unclear | unclear | `/goal` is a normal current path with documented set, status, pause, resume, and clear commands; external integrations still depend on local configuration, RMCP flags, and available tools. |
-| Claude Code | supported | unclear | partial | unclear | partial | partial | partial | unclear | unclear | unclear | `/goal` is documented and should be preferred when version, workspace trust, and hooks policy allow it; service setup still depends on local configuration. |
-| OpenCode | unclear | unclear | unclear | unclear | supported | partial | partial | unclear | unclear | unclear | Use active `dev.opencode.ai` docs for current behavior; treat the archived GitHub repo as historical context only. |
-| Cursor | unclear | unclear | unclear | unclear | supported | partial | partial | unclear | unclear | unclear | Cursor documents MCP support and a curated MCP server catalog, including GitHub and Linear entries. |
-| GitHub Copilot | unclear | unclear | unclear | unclear | supported | supported | partial | partial | unclear | unclear | Copilot documents MCP support, policy controls, and a built-in GitHub MCP path in supported surfaces. |
-| VS Code | unclear | unclear | unclear | unclear | supported | partial | partial | unclear | unclear | unclear | Depends on the active extension and workspace policy. |
-| Generic host | unclear | unclear | unclear | unclear | partial | partial | partial | unclear | unclear | unclear | Fall back to CLI, approved MCP, token, or manual workflows. |
+| Codex | supported | partial | partial | partial | partial | partial | unclear | partial | unclear | unclear | `/goal` is a normal current path with documented set, status, pause, resume, and clear commands; external integrations still depend on local configuration, scopes, and available tools. |
+| Claude Code | supported | unclear | partial | unclear | partial | partial | unclear | unclear | unclear | unclear | `/goal` is documented and should be preferred when version, workspace trust, and hooks policy allow it; service setup still depends on local configuration. |
+| OpenCode | unclear | unclear | unclear | unclear | supported | partial | unclear | unclear | unclear | unclear | Use active `dev.opencode.ai` docs for current behavior; treat the archived GitHub repo as historical context only. |
+| Cursor | unclear | unclear | unclear | unclear | supported | partial | unclear | unclear | unclear | unclear | Validate issue and Project access separately in the active Cursor setup. |
+| GitHub Copilot | unclear | unclear | unclear | unclear | supported | supported | unclear | partial | unclear | unclear | Copilot documents MCP support, policy controls, and a built-in GitHub MCP path in supported surfaces; Project scope still requires validation. |
+| VS Code | unclear | unclear | unclear | unclear | supported | partial | unclear | unclear | unclear | unclear | Depends on the active extension, workspace policy, and Project scope. |
+| Generic host | unclear | unclear | unclear | unclear | partial | partial | unclear | unclear | unclear | unclear | Validate CLI or connector access separately for repositories, issues, PRs, and Projects. |
 
 ## Footnotes
 
 - `supported` does not imply native support. A capability may rely on MCP, connectors, or manual setup.
-- GitHub and Linear integration columns reflect viable integration options, not guaranteed built-in connectors.
+- GitHub repository/issue/PR and Project access are distinct capabilities and may require different permission scopes.
 - Update automation should also respect harness reality. A host that can run ORCA is not automatically cleared for the same update mode or channel policy as every other host.
 - Knowledge-layer integrations such as NotebookLM depend heavily on setup mode and host tooling; treat enterprise API paths and community MCP paths separately.
 - Graph or vault tooling should be treated as optional helper support, not as part of the minimum compatible path.

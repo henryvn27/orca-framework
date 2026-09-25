@@ -1,6 +1,6 @@
 ---
 name: orca-tool-setup
-description: Identify, guide, validate, and fall back from external tool integrations such as GitHub and Linear across different harnesses.
+description: Identify, guide, and validate GitHub Issues/Projects and other external integrations across different harnesses.
 ---
 
 # ORCA Framework Tool Setup
@@ -11,7 +11,7 @@ A harness-aware setup workflow for external tools and service integrations.
 
 ## Trigger
 
-Use when a task needs GitHub, Linear, MCP, a host connector, a CLI helper, or another external integration.
+Use when a task needs GitHub Issues/Projects, MCP, a host connector, a CLI helper, or another external integration.
 
 ## Inputs
 
@@ -24,7 +24,7 @@ Use when a task needs GitHub, Linear, MCP, a host connector, a CLI helper, or an
 
 1. Identify required and optional tools.
 2. Detect or ask for the current harness only when it affects setup.
-3. Choose a setup path for each service: connector, MCP, API token, plugin, CLI helper, or manual.
+3. Use the authenticated GitHub connector or CLI/API path with the minimum scope required; choose another setup path only for a user-requested optional integration.
 4. Explain why the tool is needed.
 5. Validate reachability, authentication, scope, and write access when safe.
 6. Record status in `templates/integration-status.md`.

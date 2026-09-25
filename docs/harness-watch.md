@@ -51,7 +51,7 @@ No active shifts yet.
 List compatibility shifts here when they should trigger an ORCA Framework update immediately.
 
 - Refresh ORCA Framework Codex guidance for default goal support and newer governance surfaces.
-- Refresh ORCA Framework Linear setup guidance around the official Linear MCP server.
+- Retire the former Linear MCP setup recommendation; GitHub Issues and Projects are the active work ledger.
 - Split ORCA Framework OpenCode tracking between active docs/runtime behavior and the archived legacy repo.
 
 ## Compatibility Research Notes

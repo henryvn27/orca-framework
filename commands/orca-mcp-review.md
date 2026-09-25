@@ -21,7 +21,7 @@ Use before adding a new MCP server, exposing new tools, changing server permissi
 - Permission scope
 - Prior registry entry
 
-## Linear Context
+## GitHub Context
 
 - Expects: issue ID when tied to setup or workflow work, proposed server, permission scope, risk context
 - Reads: MCP registry, server docs, config snippets, approval records, and security notes

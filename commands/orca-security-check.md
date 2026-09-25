@@ -19,7 +19,7 @@ Use when working from external docs, issues, repos, logs, copied shell commands,
 - Proposed risky command or action
 - Tool or MCP registry entry
 
-## Linear Context
+## GitHub Context
 
 - Expects: issue ID, linked external context, risk labels, affected workflow step
 - Reads: source material, scope, current approval state, related security findings

@@ -14,12 +14,12 @@ Use when a user-facing product surface can be tested before the tester reads hid
 
 ## Optional Inputs
 
-- Linear issue ID or opt-out work item
+- GitHub issue URL or number or opt-out work item
 - Device or viewport constraints
 - Accessibility tools available
 - One-sentence user mission
 
-## Linear Context
+## GitHub Context
 
 - Expects: issue ID, platform, launch instructions, and optional one-sentence mission
 - Reads: only allowed launch context during blind pass
@@ -38,12 +38,12 @@ Write the blind report to the chosen record without exposing hidden context.
 3. Observe the product surface.
 4. Infer the product and attempt plausible tasks.
 5. Record findings, evidence, and confidence limits.
-6. Post the report to Linear or the opt-out record.
+6. Post the report to GitHub or the opt-out record.
 
 ## Outputs And Artifacts
 
 - `templates/blind-qa-report.md`
-- `templates/linear-blind-qa-comment.md` when Linear-first mode is active
+- `templates/github-issue-update.md` when GitHub-first mode is active
 
 ## Failure Cases
 
@@ -52,5 +52,5 @@ Write the blind report to the chosen record without exposing hidden context.
 
 ## Related Commands And Skills
 
-- Commands: `orca-linear-qa-report`, `orca-test-briefed`, `orca-test-regression`, `orca-screenshot`
-- Skills: `orca-blind-qa`, `orca-linear-qa`, `orca-ios-sim-qa`, `orca-web-qa`
+- Commands: `orca-github-core`, `orca-test-briefed`, `orca-test-regression`, `orca-screenshot`
+- Skills: `orca-blind-qa`, `orca-github-core`, `orca-ios-sim-qa`, `orca-web-qa`

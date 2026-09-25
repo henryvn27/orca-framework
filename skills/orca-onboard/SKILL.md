@@ -19,7 +19,7 @@ Do not use when a complete approved spec already exists.
 
 ## Required Inputs
 
-- Initial request, Linear issue description, or opt-out work item
+- Initial request or GitHub issue description and Project fields (default); Mission-only record only when explicitly requested
 
 ## Optional Inputs
 
@@ -30,8 +30,8 @@ Do not use when a complete approved spec already exists.
 ## Exact Workflow
 
 1. State that onboarding is gathering enough information for a first useful spec.
-2. If the prompt came from Linear, read issue title, description, labels, state, comments, links, and project context.
-3. If the user opted out of Linear, identify the alternative work item or artifact that will hold the intake.
+2. For repository work, read the GitHub issue title, body, labels, Status, comments, links, Project, and dependencies.
+3. Use a local Mission-only record only when the user explicitly asks to work without GitHub tracking.
 4. Ask high-leverage questions about user, job, success, constraints, risks, platform, data, and non-goals.
 5. Also ask high-leverage operator questions:
    - how much explanation is wanted
@@ -50,14 +50,14 @@ Do not use when a complete approved spec already exists.
 11. Run a human-voice pass: remove any sentence that could ship unchanged in ten unrelated products. Use `docs/human-voice.md` as the bar.
 12. Produce intake summary, operator preference summary, unresolved questions, recommended ORCA Framework path, and draft spec skeleton.
 13. If the user clearly wants durable behavior, prepare `templates/user-guidance-profile.md` or point to `orca-learning`.
-14. Post or prepare the summary for the Linear issue or opt-out record.
+14. Post or prepare the summary for the GitHub issue or opt-out record.
 
 ## Expected Outputs
 
 - Filled `templates/intake.md`
 - Initial spec skeleton using `templates/spec.md`
 - Optional `templates/user-guidance-profile.md` when the user wants durable preference capture
-- Linear intake comment when Linear-first mode is active
+- GitHub intake comment when GitHub-first mode is active
 
 ## Quality Bar
 
@@ -76,4 +76,4 @@ It should also sound like a real operator captured the work item, not like a gen
 
 ## Relationship To Other ORCA Framework Skills And Commands
 
-Feeds `orca-linear-intake`, `orca-spec`, `orca-discover`, and `orca-research`.
+Feeds `orca-onboard`, `orca-spec`, `orca-discover`, and `orca-research`.

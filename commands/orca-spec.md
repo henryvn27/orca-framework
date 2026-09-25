@@ -16,12 +16,12 @@ Use after onboarding or discovery, and before planning non-trivial implementatio
 
 ## Optional Inputs
 
-- Linear issue ID or opt-out work item
+- GitHub issue URL or number or opt-out work item
 - Intake summary
 - Discovery notes
 - Research brief
 
-## Linear Context
+## GitHub Context
 
 - Expects: issue title, description, comments, labels, state, project, links, and related issues
 - Reads: user request, clarified scope, constraints, previous questions, non-goals
@@ -45,7 +45,7 @@ Write the spec to `templates/spec.md` or an equivalent artifact and reference it
 
 - `templates/spec.md`
 - `templates/contracts/spec-contract.md`
-- `templates/linear-spec-comment.md` when Linear-first mode is active
+- `templates/github-issue-update.md` when GitHub-first mode is active
 
 ## Failure Cases
 
@@ -54,5 +54,5 @@ Write the spec to `templates/spec.md` or an equivalent artifact and reference it
 
 ## Related Commands And Skills
 
-- Commands: `orca-linear-plan-comment`, `orca-plan`, `orca-research`
-- Skills: `orca-spec`, `orca-linear-planner`
+- Commands: `orca-plan`, `orca-plan`, `orca-research`
+- Skills: `orca-spec`, `orca-github-core`

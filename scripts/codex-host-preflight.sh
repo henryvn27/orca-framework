@@ -41,4 +41,4 @@ hr
 say "4) Docs"
 say "   - Codex host adapter: $root/docs/hosts/codex-cli.md"
 say "   - Codex friction kit: $root/docs/hosts/codex-friction-kit.md"
-say "   - Linear setup:       $root/docs/linear-setup.md"
+say "   - GitHub work ledger: $root/docs/workflow.md"

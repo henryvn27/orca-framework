@@ -16,18 +16,18 @@ Use after implementation, review, QA, and required fixes are complete.
 
 ## Optional Inputs
 
-- Linear issue ID or opt-out work item
+- GitHub issue URL/number and Project (default), or an explicit Mission-only work item
 - Release notes
 - Version target
 - Deployment procedure
 - platform target such as TestFlight, App Store Connect, or Vercel
 
-## Linear Context
+## GitHub Context
 
-- Expects: issue ID, spec, plan approval, implementation evidence, review, QA, security status, linked artifacts
+- Expects: issue and Project, spec, plan approval, implementation evidence, review, QA, security status, linked artifacts
 - Reads: the full issue thread and linked release evidence
 - Posts: ship readiness checklist, known risks, rollback guidance, done recommendation or blockers
-- Trigger: `Ready to Ship`, `ready-to-ship`
+- Trigger: the repository's ship-ready status or equivalent gate
 - Human approval: required when release ownership or risk acceptance is manual
 
 ## Opt-Out Context
@@ -56,7 +56,7 @@ Write ship readiness to the chosen record before marking work complete.
 ## Outputs And Artifacts
 
 - `templates/ship-checklist.md`
-- `templates/linear-ship-comment.md` when Linear-first mode is active
+- `templates/github-issue-update.md` for the final issue update
 - Release summary
 
 ## Failure Cases
@@ -68,5 +68,5 @@ Write ship readiness to the chosen record before marking work complete.
 
 ## Related Commands And Skills
 
-- Commands: `orca-linear-ship-check`, `orca-retro`, `orca-test-regression`
-- Skills: `orca-ship`, `orca-linear-release`
+- Commands: `orca-ship`, `orca-retro`, `orca-test-regression`
+- Skills: `orca-ship`, `orca-github-core`

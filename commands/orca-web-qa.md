@@ -14,7 +14,7 @@ Use when a URL, local dev server, deployed site, or browser-based product should
 
 ## Optional Inputs
 
-- Linear issue ID or opt-out work item
+- GitHub issue URL or number or opt-out work item
 - viewport targets
 - acceptance criteria
 - artifact goals such as screenshot, snapshot, or trace

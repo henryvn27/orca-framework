@@ -15,12 +15,12 @@ Use for targeted retesting, acceptance criteria checks, and guided product walkt
 
 ## Optional Inputs
 
-- Linear issue ID or opt-out work item
+- GitHub issue URL or number or opt-out work item
 - Blind QA report
 - Known fixes
 - Acceptance criteria
 
-## Linear Context
+## GitHub Context
 
 - Expects: issue ID, first-pass report, context packet, platform, launch instructions
 - Reads: disclosed context only for briefed pass
@@ -44,7 +44,7 @@ Write the context packet and guided QA result to the selected record.
 
 - `templates/guided-qa-report.md`
 - `templates/contracts/qa-brief-contract.md`
-- `templates/linear-guided-qa-comment.md` when Linear-first mode is active
+- `templates/github-issue-update.md` when GitHub-first mode is active
 
 ## Failure Cases
 
@@ -53,5 +53,5 @@ Write the context packet and guided QA result to the selected record.
 
 ## Related Commands And Skills
 
-- Commands: `orca-linear-qa-report`, `orca-test-regression`, `orca-ship`
-- Skills: `orca-context-brief`, `orca-linear-qa`, `orca-web-qa`, `orca-ios-sim-qa`
+- Commands: `orca-github-core`, `orca-test-regression`, `orca-ship`
+- Skills: `orca-context-brief`, `orca-github-core`, `orca-web-qa`, `orca-ios-sim-qa`

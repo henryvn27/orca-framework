@@ -11,13 +11,9 @@ Degraded mode lets ORCA Framework continue when an external integration is missi
 
 ## Examples
 
-### No Linear Connection
+### GitHub Issue or Project Access Unavailable
 
-Use pasted issue context. Write specs, plans, QA reports, and ship checks as local artifacts. Ask the user to paste them into Linear or use another tracker.
-
-### No GitHub Integration
-
-Use the local repo. Prepare commit messages, PR descriptions, draft issues, and release notes locally. Ask the user to create or update GitHub records manually.
+Continue only safe local work. Preserve the exact missing permission and prepare a local draft of any issue comment or Project update. Do not claim that GitHub state changed; resume the canonical issue/Project update when authenticated access is available.
 
 ### No MCP Support
 
@@ -25,7 +21,7 @@ Use a CLI helper, native connector, browser workflow, or manual copy/paste path.
 
 ### Read-Only Access
 
-Read service context, then produce a local write artifact for the user to post manually.
+Read service context, then produce a local write artifact for the authorized GitHub writer. Do not silently treat the draft as a tracker update.
 
 ## Done Condition
 

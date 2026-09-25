@@ -49,3 +49,13 @@ body:
     attributes:
       label: Agent-ready implementation notes
       description: Repo areas, likely files, and scope boundaries if known.
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies and release target
+      description: Blocking issues, linked work, or target version if known.
+  - type: textarea
+    id: verification
+    attributes:
+      label: Verification, QA, and risk
+      description: Required checks, evidence, and material risks.

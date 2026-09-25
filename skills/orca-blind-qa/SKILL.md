@@ -30,7 +30,7 @@ Do not use after the tester has already read hidden project context. Use briefed
 ## Exact Workflow
 
 1. State the context received and confirm hidden context is excluded.
-2. In Linear-first mode, accept only issue ID, platform, launch instructions, and optional one-sentence mission.
+2. In GitHub-first mode, accept only issue ID, platform, launch instructions, and optional one-sentence mission.
 3. In opt-out mode, accept only the equivalent minimal launch context.
 4. Observe only exposed behavior and available accessibility-visible information.
 5. Infer what the product is for.
@@ -42,7 +42,7 @@ Do not use after the tester has already read hidden project context. Use briefed
 ## Expected Outputs
 
 - Filled `templates/blind-qa-report.md`
-- `templates/linear-blind-qa-comment.md` when Linear-first mode is active
+- `templates/github-issue-update.md` when GitHub-first mode is active
 
 ## Quality Bar
 

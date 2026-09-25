@@ -15,7 +15,7 @@ ORCA Framework should not pretend every integration is equally mature.
 - PostHog
 - Sentry
 - GitHub
-- Linear
+- GitHub Projects
 - OpenAI
 
 ## Tier 2: Strong Supported

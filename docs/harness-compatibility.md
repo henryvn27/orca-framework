@@ -22,8 +22,7 @@ ORCA Framework cares about capabilities that affect real workflow quality:
 - shared state and checkpointing
 - trace, inspector, or observability support
 - tool and MCP integration support
-- GitHub integration options
-- Linear integration options
+- GitHub repository, issue, pull request, and Project access options; record their permissions separately when they differ
 - approval, policy, and governance features
 - multi-agent or coordinator patterns
 - regression, eval, and benchmark support

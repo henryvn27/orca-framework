@@ -21,7 +21,7 @@ Use at the end of a meaningful session, blocked session, surprising session, or 
 - Existing related issue links
 - Quality-signal notes when frustration, generic output, or wrong-direction behavior appeared
 
-## Linear Context
+## GitHub Context
 
 - Expects: the completed work record, blockers, and any evidence artifacts
 - Reads: receipts, traces, review findings, QA notes, and retro output

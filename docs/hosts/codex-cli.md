@@ -159,11 +159,9 @@ Codex setup should be verified against the installed CLI and available connector
 | Service | Preferred methods | Verification | Fallback |
 | --- | --- | --- | --- |
 | GitHub | connector when available, approved MCP, or `gh` CLI | check auth, repo reachability, and required read/write scope | local repo plus manual issue, PR, check, or release steps |
-| Linear | connector when available, approved MCP, or manual context | read target issue or validate pasted issue context | pasted issue data plus local artifacts for manual posting |
+| GitHub Projects | authenticated connector or `gh` CLI/API with the `project` scope | verify Project access separately from repository issue access | continue safe local work and retain a draft without claiming the Project changed |
 
-Use `orca-check-setup` before blocking on GitHub or Linear. If setup is incomplete but the next phase is local, continue in degraded mode.
-
-For Linear specifically, prefer the official remote MCP path documented by Linear. In Codex, that means enabling the RMCP feature flag in `~/.codex/config.toml` before assuming `codex mcp add` will work.
+Use `orca-check-setup` to validate GitHub repository, issue, PR, and Project access separately. If setup is incomplete but the next phase is local, continue in degraded mode without claiming tracker updates.
 
 ## Compatibility View
 

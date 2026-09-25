@@ -14,7 +14,7 @@ Use when GitHub Actions or other linked CI status is blocking a branch, PR, or r
 
 ## Optional Inputs
 
-- Linear issue ID or opt-out work item
+- GitHub issue URL or number or opt-out work item
 - specific CI provider
 
 ## Workflow

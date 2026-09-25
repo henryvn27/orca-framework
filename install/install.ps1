@@ -50,7 +50,7 @@ Write-Host "Orca Mission Control installed to $Target"
 Write-Host "Install overview: $(Join-Path $Target 'docs/install-overview.md')"
 Write-Host "Beginner path: $(Join-Path $Target 'docs/install-for-beginners.md')"
 Write-Host "Technical path: $(Join-Path $Target 'docs/install-for-technical-users.md')"
-Write-Host "Optional tracker integration: $(Join-Path $Target 'docs/linear-guidance.md')"
+Write-Host "GitHub work ledger: $(Join-Path $Target 'docs/workflow.md')"
 Write-Host ""
 Write-Host "Next steps:"
 $PathCommand = '$env:PATH = "' + (Join-Path $Target 'bin') + ';$env:PATH"'

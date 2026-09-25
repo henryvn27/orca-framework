@@ -141,9 +141,9 @@ emit_prompt() {
 
   printf 'Follow the optional Orca workflow definition `%s`.\n\n' "$name"
   printf 'Execution rules:\n'
-  printf -- '- Prefer Notion-backed PM/docs/issues when configured.\n'
-  printf -- '- If Notion is unavailable, continue with `.orca/` markdown fallback and say so explicitly.\n'
-  printf -- '- Keep Linear optional; use it only when explicitly selected or already canonical for this work.\n'
+  printf -- '- GitHub Issues and GitHub Projects are the canonical engineering queue and status record.\n'
+  printf -- '- Link the local Mission contract and evidence to its GitHub issue; do not treat a local or Notion artifact as the cross-task work ledger.\n'
+  printf -- '- This local Mission runtime does not claim GitHub issue or Project writes unless the authenticated GitHub connector or CLI confirms them.\n'
   printf -- '- Use the command definition below as the source of truth.\n'
   printf -- '- End with a concise completion summary that states outcome, verification, blockers, and next step.\n\n'
   printf 'Command definition:\n\n'
@@ -307,10 +307,10 @@ ensure_orca_fallback() {
   [ -f "$dir/project.md" ] || cat > "$dir/project.md" <<'EOF'
 # ORCA Project
 
-Canonical state: Notion when configured; markdown fallback otherwise.
+GitHub Issues and GitHub Projects hold the engineering queue and status. Local Mission files hold this run's execution contract and evidence.
 
-Configure Notion by setting project/page/data-source IDs in `.orca/config.env`.
-Linear stays optional and explicit.
+If the optional Notion context mirror is used, configure its project/page/data-source IDs in `.orca/config.env`.
+Do not claim GitHub tracker state changed unless an authenticated GitHub write is verified.
 EOF
   [ -f "$dir/issues.md" ] || cat > "$dir/issues.md" <<'EOF'
 # ORCA Issues
@@ -329,9 +329,6 @@ notion_projects_data_source_id=
 notion_project_page_id=
 notion_issue_board_data_source_id=
 notion_sync_command=
-linear_workspace=
-linear_team=
-linear_project_id=
 markdown_root=.orca
 EOF
   [ -f "$dir/packs/builtin.md" ] || cat > "$dir/packs/builtin.md" <<'EOF'
@@ -360,9 +357,6 @@ load_config() {
   notion_project_page_id=
   notion_issue_board_data_source_id=
   notion_sync_command=
-  linear_workspace=
-  linear_team=
-  linear_project_id=
   markdown_root=.orca
   # shellcheck disable=SC1090
   . "$dir/config.env"
@@ -999,11 +993,6 @@ orca_notion_doctor() {
   fi
   outbox_count=$(count_json_files "$dir/outbox")
   synced_count=$(count_json_files "$dir/synced")
-  if [ -n "$linear_workspace$linear_team$linear_project_id" ]; then
-    linear_configured=true
-  else
-    linear_configured=false
-  fi
   if [ "$failed" -eq 0 ]; then
     ready=true
   else
@@ -1017,7 +1006,6 @@ orca_notion_doctor() {
     printf '"notion_sync_command_status":"%s",' "$sync_command_status"
     printf '"notion_outbox_count":%s,' "$outbox_count"
     printf '"notion_synced_count":%s,' "$synced_count"
-    printf '"linear_configured":%s,' "$linear_configured"
     printf '"ready":%s,' "$ready"
     printf '"ok":%s' "$ready"
     printf '}\n'
@@ -1042,11 +1030,6 @@ orca_notion_doctor() {
     esac
     printf 'notion outbox: %s payload(s)\n' "$outbox_count"
     printf 'notion synced: %s payload(s)\n' "$synced_count"
-    if [ "$linear_configured" = true ]; then
-      printf 'linear: configured optional adapter\n'
-    else
-      printf 'linear: not configured, still optional\n'
-    fi
   fi
   [ "$strict" -eq 0 ] || [ "$failed" -eq 0 ]
 }
@@ -1094,9 +1077,8 @@ render_plan() {
     printf 'Goal: %s\n\n' "$goal"
     printf 'Workflow: clarify -> plan -> apply -> unify -> loop pack -> readiness score -> handoff\n\n'
     printf 'Backend defaults:\n\n'
-    printf -- '- PM/docs/issues: Notion when configured\n'
-    printf -- '- Fallback: `.orca/` markdown\n'
-    printf -- '- Linear: optional adapter only\n\n'
+    printf -- '- Mission storage/context mirror: optional Notion when explicitly configured; otherwise `.orca/` Markdown\n'
+    printf -- '- GitHub Issues and Projects remain the engineering work ledger; this local Mission CLI does not claim to update them.\n\n'
     printf '## Clarify\n\n'
     printf 'Ask only for missing success criteria, scope boundaries, repo/path, backend choice, test/build commands, and do-not-touch areas.\n\n'
     printf '## Acceptance-Driven Tasks\n\n'
@@ -1290,7 +1272,7 @@ orca_goal() {
   plan_path=$(render_plan)
   append_issue "In progress" "High" "Run /goal loop for $goal" "README.md, bin/orca, .orca/*" "Clarify, plan, apply, unify, score, handoff" "orca progress && orca unify" "Handoff includes readiness score and next action" "AC-1..AC-6"
   record_loop_evidence "docs-sync" "pass" "Plan artifact written at $plan_path"
-  record_loop_evidence "issue-board-sync" "pass" "Acceptance-driven issue mirrored locally and queued for Notion when configured"
+  record_loop_evidence "issue-board-sync" "pending" "Local Mission entry recorded; update the GitHub issue and Project through the authenticated host workflow"
   backend=$(canonical_backend)
   if [ "$backend" = "notion" ]; then
     payload=$(printf '{"issue": "%s", "status": "In progress", "priority": "High", "files": "README.md, bin/orca, .orca/*", "action": "Clarify, plan, apply, unify, score, handoff", "verify": "orca progress && orca unify", "done": "Handoff includes readiness score and next action", "acs": "AC-1..AC-6", "plan_path": "%s"}' "$(json_escape "Run /goal loop for $goal")" "$(json_escape "$plan_path")")
@@ -1301,7 +1283,7 @@ orca_goal() {
   printf 'ORCA goal started\n'
   printf 'phase: %s\n' "$phase"
   printf 'pack: %s\n' "$pack"
-  printf 'canonical: %s\n' "$backend"
+  printf 'mission storage: %s\n' "$backend"
   printf 'state: %s/state.env\n' "$(orca_dir)"
   printf 'plan: %s\n' "$plan_path"
   if [ -n "$notion_payload" ]; then
@@ -1337,7 +1319,7 @@ orca_progress() {
   printf 'goal: %s\n' "$goal"
   printf 'phase: %s\n' "$phase"
   printf 'pack: %s\n' "$pack"
-  printf 'canonical: %s\n' "$(canonical_backend)"
+  printf 'mission storage: %s\n' "$(canonical_backend)"
   printf 'readiness: %s%%\n' "$readiness_score"
   case "$phase" in
     plan) printf 'next: apply acceptance-driven tasks\n' ;;
@@ -1360,7 +1342,7 @@ orca_unify() {
   handoff="$dir/handoffs/$goal_slug.md"
   record_loop_evidence "handoffs" "pass" "Handoff artifact written at $handoff"
   record_loop_evidence "docs-sync" "pass" "Plan and handoff artifacts written"
-  record_loop_evidence "issue-board-sync" "pass" "Issue status mirrored and Notion sync payload generated when configured"
+  record_loop_evidence "issue-board-sync" "pending" "Local Mission status recorded; refresh the GitHub issue and Project through the authenticated host workflow"
   readiness_score=$(score_pack)
   if [ "$readiness_score" -ge 80 ]; then
     issue_status="Done"
@@ -1382,12 +1364,13 @@ orca_unify() {
     printf -- '- bounded cycles: %s\n' "$max_cycles"
     printf -- '- until: %s\n' "$until"
     printf -- '- no infinite autonomous mode\n'
-    printf -- '- Notion canonical when configured; markdown fallback available\n'
-    printf -- '- Linear preserved as optional adapter\n\n'
+    printf -- '- GitHub Issues and Projects are the active engineering work ledger\n'
+    printf -- '- Mission artifacts remain local; Notion is optional context mirroring when explicitly configured\n'
+    printf -- '- No GitHub issue or Project write is claimed by this local handoff\n\n'
     if [ "${auto:-0}" -eq 1 ]; then
       printf 'Autonomous mode: stopped after %s cycle(s); max_cycles=%s; reason=no ready issues remain or handoff reached.\n\n' "$cycles_done" "$max_cycles"
     fi
-    printf 'Next action: update Notion issue status and run validation gates.\n'
+    printf 'Next action: update the linked GitHub issue and Project through the authenticated host workflow, then run required validation gates.\n'
   } > "$handoff"
   write_state
   backend=$(canonical_backend)
@@ -1398,7 +1381,7 @@ orca_unify() {
     notion_payload=""
   fi
   printf 'ORCA unified\n'
-  printf 'canonical: %s\n' "$backend"
+  printf 'mission storage: %s\n' "$backend"
   printf 'readiness: %s%%\n' "$readiness_score"
   printf 'handoff: %s\n' "$handoff"
   if [ -n "$notion_payload" ]; then
@@ -1451,11 +1434,6 @@ orca_backend_status() {
   else
     notion_sync_status=configured_shell_command
   fi
-  if [ -n "$linear_workspace$linear_team$linear_project_id" ]; then
-    linear_configured=true
-  else
-    linear_configured=false
-  fi
 
   if [ "$json" -eq 1 ]; then
     printf '{'
@@ -1471,7 +1449,6 @@ orca_backend_status() {
     printf '"notion_dir":"%s",' "$(json_escape "$notion_state_dir")"
     printf '"notion_outbox_count":%s,' "$outbox_count"
     printf '"notion_synced_count":%s,' "$synced_count"
-    printf '"linear_configured":%s,' "$linear_configured"
     printf '"ok":true'
     printf '}\n'
     return 0
@@ -1495,11 +1472,6 @@ orca_backend_status() {
     printf 'notion synced: %s payload(s)\n' "$synced_count"
   else
     printf 'notion: not configured, use markdown fallback\n'
-  fi
-  if [ "$linear_configured" = true ]; then
-    printf 'linear: configured optional adapter\n'
-  else
-    printf 'linear: not configured, still supported when explicit\n'
   fi
 }
 

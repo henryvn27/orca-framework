@@ -15,16 +15,16 @@ Use after a plan exists or for a small change whose plan can be stated inline.
 
 ## Optional Inputs
 
-- Notion issue, `.orca/` task, or explicit Linear issue
+- GitHub issue URL/number and Project (default), or a Mission-only task explicitly requested by the user
 - Test command
 - Design constraints
 - Related issue
 
 ## Backend Context
 
-- Notion mode: update Issue Board status, blockers, verification evidence, branch or PR links, and review handoff.
-- Markdown mode: update `.orca/issues.md`, `.orca/runs/`, and `.orca/handoffs/`.
-- Linear mode: sync comments only when explicitly active.
+- GitHub mode: update the issue and Project with blockers, verification evidence, branch/PR links, and review handoff.
+- Mission-only mode: update `.orca/issues.md`, `.orca/runs/`, and `.orca/handoffs/` only when the user explicitly requests local-only tracking.
+- Notion remains optional and does not replace the GitHub engineering ledger.
 - Human approval: required before starting if approval gate is missing.
 
 ## Workflow
@@ -43,9 +43,8 @@ Use after a plan exists or for a small change whose plan can be stated inline.
 - Code or content changes
 - Verification notes
 - Updated plan when applicable
-- Notion issue update when active
-- `.orca/` run/handoff update when markdown fallback is active
-- Linear sync comments when explicitly active
+- GitHub issue and Project update with branch, exact SHA, checks, PR, blockers, and risk
+- `.orca/` run/handoff update only for an explicitly local-only workflow
 
 ## Failure Cases
 
@@ -57,5 +56,5 @@ Use after a plan exists or for a small change whose plan can be stated inline.
 
 ## Related Commands And Skills
 
-- Commands: `orca-linear-sync`, `orca-review`, `orca-superpowers`, `orca-test-blind`
-- Skills: `orca-build`, `orca-superpowers`, `orca-linear-executor`
+- Commands: `orca-github-core`, `orca-review`, `orca-superpowers`, `orca-test-blind`
+- Skills: `orca-build`, `orca-superpowers`, `orca-github-core`

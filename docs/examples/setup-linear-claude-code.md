@@ -1,15 +1,5 @@
-# Setup Linear In Claude Code
+# Historical: Linear Setup in Claude Code
 
-## Situation
+Retained as provenance for an older ORCA workflow. Retired on 2026-09-24. Do not use this page to configure integrations or update work items. GitHub Issues and GitHub Projects are the source of truth for active engineering work.
 
-Claude Code needs Linear access for issue intake and plan comments.
-
-## Guidance
-
-Use Claude Code's supported MCP setup path when available and approved. Linear also documents an official MCP path. Validate by reading the target issue before attempting writes.
-
-If MCP setup fails, paste the Linear issue into the chat and have ORCA Framework write a local plan comment for manual posting.
-
-## Fallback
-
-ORCA Framework can continue in opt-out style with local artifacts until Linear access is restored.
+The former example described Linear issue intake, plan comments, and local-artifact fallback. Its operational setup steps are retired; see [GitHub integration guidance](../integrations/github.md) for the current workflow.

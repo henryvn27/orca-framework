@@ -56,7 +56,7 @@ Do not use to bypass incomplete review, QA, or security gates.
 ## Expected Outputs
 
 - Filled `templates/ship-checklist.md`
-- `templates/linear-ship-comment.md` when Linear-first mode is active
+- `templates/github-issue-update.md` when GitHub-first mode is active
 - explicit release-lane receipt for archive, export, upload, processing, and distribution state
 
 ## Quality Bar

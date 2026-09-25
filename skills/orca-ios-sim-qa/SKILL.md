@@ -31,7 +31,7 @@ Do not use for web apps or when no iOS app surface is available.
 ## Exact Workflow
 
 1. State whether the pass is blind or briefed.
-2. In Linear-first mode, read only context allowed for that pass.
+2. In GitHub-first mode, read only context allowed for that pass.
 3. Launch or build the app through available simulator tooling.
 4. Interact with visible UI only unless briefed otherwise.
 5. Inspect accessibility-visible labels and navigation when tools support it.

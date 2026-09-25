@@ -24,7 +24,7 @@ Do not use for facts already present in the repo, vault, or conversation unless 
 
 ## Optional Inputs
 
-- Linear issue ID or opt-out work item
+- GitHub issue URL or number or opt-out work item
 - Source preferences
 - Recency requirement
 - Jurisdiction or platform version

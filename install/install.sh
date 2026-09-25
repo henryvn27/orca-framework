@@ -64,5 +64,5 @@ printf 'Orca Mission Control installed to %s\n' "$target"
 printf 'Install overview: %s\n' "$target/docs/install-overview.md"
 printf 'Beginner path: %s\n' "$target/docs/install-for-beginners.md"
 printf 'Technical path: %s\n' "$target/docs/install-for-technical-users.md"
-printf 'Optional tracker integration: %s\n' "$target/docs/linear-guidance.md"
+printf 'GitHub work ledger: %s\n' "$target/docs/workflow.md"
 print_next_steps

@@ -9,6 +9,6 @@
 - Validation steps: instance reachable, workflow can run, credentials configured
 - Common failure modes: hidden automation sprawl, no ownership of failures
 - Related ORCA Framework commands or docs: `orca-integration`, `background-mode.md`
-- Related integrations: GitHub, Linear, Slack
+- Related integrations: GitHub Projects, Slack
 - Risk notes: automation without observability becomes silent debt
 - Web, mobile, or platform caveats: business workflow surface

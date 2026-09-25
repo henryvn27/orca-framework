@@ -53,4 +53,4 @@ The user should get a real preview link or a precise deploy blocker, not just in
 
 ## Relationship To Other ORCA Framework Skills And Commands
 
-Pairs with `orca-ship`, `orca-web-qa`, and `orca-linear-release`.
+Pairs with `orca-ship`, `orca-web-qa`, and `orca-github-core`.

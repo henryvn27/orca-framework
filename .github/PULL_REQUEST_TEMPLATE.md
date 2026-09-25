@@ -1,5 +1,9 @@
 # Pull Request
 
+## Linked issue
+
+Closes #
+
 ## Summary
 
 Describe the change and why it belongs in ORCA-HVN.
@@ -16,9 +20,15 @@ Describe the change and why it belongs in ORCA-HVN.
 
 ## Validation
 
-- [ ] `./scripts/validate-repo.sh`
-- [ ] Documentation links checked
-- [ ] Commands, skills, and templates remain consistent
+List the exact commands/checks run and their results. Include checks that could not run and why.
+
+- [ ] `./scripts/validate-repo.sh` (when relevant)
+- [ ] Documentation links checked (when relevant)
+- [ ] Commands, skills, and templates remain consistent (when relevant)
+
+## Evidence
+
+Screenshots, logs, or other review evidence where relevant.
 
 ## QA Context
 
@@ -30,3 +40,4 @@ State whether this change affects blind QA, briefed QA, informed QA, installatio
 - Risk/rollback:
 - Version/build impact:
 - Deployment, Xcode Cloud, or CI impact:
+- Known remaining issues or follow-up work:

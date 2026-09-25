@@ -15,12 +15,12 @@ Use after changes responding to review, QA, bug reports, or release blockers.
 
 ## Optional Inputs
 
-- Linear issue ID or opt-out work item
+- GitHub issue URL or number or opt-out work item
 - Previous QA reports
 - Test commands
 - Acceptance criteria
 
-## Linear Context
+## GitHub Context
 
 - Expects: issue ID, original finding, fix summary, linked PR or commit, affected flows
 - Reads: prior review and QA comments, acceptance criteria, regression scope
@@ -52,5 +52,5 @@ Store regression evidence in the chosen record.
 
 ## Related Commands And Skills
 
-- Commands: `orca-regression-task`, `orca-review`, `orca-linear-qa-report`, `orca-ship`
-- Skills: `orca-regression-task`, `orca-web-qa`, `orca-ios-sim-qa`, `orca-linear-qa`
+- Commands: `orca-regression-task`, `orca-review`, `orca-github-core`, `orca-ship`
+- Skills: `orca-regression-task`, `orca-web-qa`, `orca-ios-sim-qa`, `orca-github-core`

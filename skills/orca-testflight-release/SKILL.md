@@ -67,4 +67,4 @@ A maintainer should be able to tell exactly how far the release got without conf
 
 ## Relationship To Other ORCA Framework Skills And Commands
 
-Pairs with `orca-ship`, `orca-testflight-ops`, and `orca-linear-release`.
+Pairs with `orca-ship`, `orca-testflight-ops`, and `orca-github-core`.

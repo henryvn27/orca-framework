@@ -29,8 +29,7 @@ At minimum track:
 - memory integration
 - checkpointing
 - trace and inspector support
-- GitHub integration
-- Linear integration
+- GitHub repository, Issues, PRs, and Projects access (track separately when their scopes differ)
 - MCP and tool support
 - approval and governance patterns
 - multi-agent coordination support

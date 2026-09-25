@@ -7,7 +7,7 @@ Use this adapter when the active harness is unknown or does not have a dedicated
 | Service | Preferred methods | Verification | Fallback |
 | --- | --- | --- | --- |
 | GitHub | `gh` CLI, approved MCP, API token, or manual | check auth, repo read, and required write scope | local repo plus manual issue, PR, checks, or release actions |
-| Linear | approved MCP, API token, or manual | check issue read and required write scope | pasted issue context plus local artifacts |
+| GitHub Projects | authenticated connector or approved CLI/API | verify Project access separately from issue and PR access | safe local work plus an update draft; do not claim tracker writes |
 
 ## Guidance
 

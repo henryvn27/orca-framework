@@ -7,7 +7,7 @@ VS Code support depends on the extension and agent surface in use. GitHub Copilo
 | Service | Preferred methods | Verification | Fallback |
 | --- | --- | --- | --- |
 | GitHub | GitHub Copilot connector, GitHub MCP server, `gh` CLI, or manual | confirm repo access, issue or PR access, and needed write scope | local repo plus manual GitHub steps |
-| Linear | MCP server when supported by the active client, API/token path if approved, or manual | confirm target issue read and required write capability | pasted issue context plus local artifacts |
+| GitHub Projects | GitHub Copilot connector, approved GitHub MCP, or authenticated `gh` CLI/API | confirm Project access separately from repository issue access | local work plus an update draft; do not claim Project writes |
 
 ## Guidance
 

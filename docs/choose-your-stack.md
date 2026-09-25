@@ -47,5 +47,5 @@ Mobile default:
 
 Default:
 
-- Next.js + Railway + Postgres + Clerk + GitHub + Linear
+- Next.js + Railway + Postgres + Clerk + GitHub Issues + GitHub Projects
 Confidence: good fit when the user clearly fits an internal-tool workflow.

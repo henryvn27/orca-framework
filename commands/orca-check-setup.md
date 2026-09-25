@@ -6,7 +6,7 @@ Check whether external tools needed by the current workflow are connected, missi
 
 ## When To Use
 
-Use before starting a phase that needs GitHub, Linear, MCP, host connectors, or CLI helpers.
+Use before starting a phase that needs GitHub Issues/Projects, MCP, host connectors, or CLI helpers.
 
 ## Required Inputs
 

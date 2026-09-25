@@ -18,9 +18,9 @@ Use when a controller agent is entering a project, checking state, deciding the 
 - latest receipt
 - latest orientation artifact
 
-## Linear Context
+## GitHub Context
 
-- Expects: issue or project context, active state, latest linked artifacts, and delegation history when Linear-first mode is active
+- Expects: issue or project context, active state, latest linked artifacts, and delegation history when GitHub-first mode is active
 - Reads: current work item, blockers, approvals, and prior executor returns
 - Posts: controller-state summary or next-step note when a coordinating comment is needed
 - Human approval: not required for orientation alone; required before risky delegated execution when the approval gate says so

@@ -18,7 +18,7 @@ Codex
 - trace and inspector support
 - MCP and tool support
 - GitHub integration
-- Linear integration
+- GitHub Projects access (validate separately from repository and issue access)
 - setup validation support
 
 ## Unsupported Capabilities
@@ -47,7 +47,7 @@ Codex
 ## Setup And Integration Caveats
 
 - local capability varies by installed Codex environment
-- Linear remote MCP setup in Codex depends on `~/.codex/config.toml` enabling `[features] experimental_use_rmcp_client = true`
+- GitHub Projects CLI/API writes require authenticated Project scope; validate it in the active host before changing Project fields
 
 ## Risk Notes
 
@@ -61,4 +61,3 @@ Codex
 
 - https://developers.openai.com/codex/cli/slash-commands
 - https://github.com/openai/codex/releases
-- https://linear.app/docs/mcp

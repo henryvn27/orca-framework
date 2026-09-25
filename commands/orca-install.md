@@ -39,7 +39,7 @@ Good starter questions:
 
 - Are you just trying ORCA, using it in one repo, or installing it for repeated cross-project use?
 - Which harness do you actually plan to use first?
-- Do you need GitHub or Linear on day one, or can they wait?
+- Do you need GitHub Issues/Projects on day one, or can they wait until after the local Mission workflow is proven?
 - Do you want the beginner path, the shortest technical path, or a guided path with more explanation?
 - Are you trying to prove ORCA works today, or set up your long-term default environment?
 - How much explanation do you want during setup and first runs?

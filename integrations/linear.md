@@ -1,14 +1,5 @@
-# Linear
+# Historical reference: Linear
 
-- Category: business and project systems
-- Priority tier: tier 1
-- Ideal use cases: system of record for ORCA Framework work items
-- Setup requirements: workspace access, project or team mapping, auth method
-- Permissions or credentials: connector, MCP, token, or manual fallback
-- Supported workflows: issue intake, plan comments, QA reports, ship checks
-- Validation steps: auth works, issue read works, write path documented
-- Common failure modes: auth expired, state mapping unclear, direct write unavailable in harness
-- Related ORCA Framework commands or docs: `orca-linear-intake`, `orca-linear-sync`, `docs/linear-workflow.md`
-- Related integrations: GitHub, Notion, Slack
-- Risk notes: keep project-specific and framework-specific work separated
-- Web, mobile, or platform caveats: system-of-record layer across platforms
+This file path is retained for historical links. Its former Linear workflow is retired and is not an active instruction or supported integration. Do not access or update Linear.
+
+For current engineering work, use GitHub Issues and GitHub Projects. Read `docs/workflow.md`, `integrations/github.md`, and `skills/orca-github-core/SKILL.md`.

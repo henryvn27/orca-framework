@@ -8,14 +8,14 @@
 
 ## Target
 
-- Target system: Linear
-- Target artifact type: issue comment plus linked document
+- Target system: GitHub Issues and Projects
+- Target artifact type: GitHub issue plus linked spec document
 
 ## Mapping Shape
 
-- `goal` -> comment summary heading
+- `goal` -> issue summary heading
 - `requirements` -> linked document checklist
-- `acceptance_criteria` -> issue comment verification section
+- `acceptance_criteria` -> issue acceptance criteria and verification section
 - `open_questions` -> issue comment follow-up section
 
 ## Known Losses

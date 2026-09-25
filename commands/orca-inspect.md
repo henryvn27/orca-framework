@@ -20,7 +20,7 @@ Use when a human or another agent needs to review state before approval, after a
 - Checkpoint artifacts
 - QA or eval status
 
-## Linear Context
+## GitHub Context
 
 - Expects: issue ID, linked artifacts, current phase, blockers, checkpoint status
 - Reads: shared state, run memory, traces, metrics, approvals, QA, eval, and ship artifacts

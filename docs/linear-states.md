@@ -1,38 +1,5 @@
-# Linear States
+# Historical reference: Linear States
 
-ORCA Framework expects workflow gates, not exact state names. Teams can rename states, use different Linear workflows, or opt out of Linear entirely, but equivalent gates should exist.
+This file path is retained for historical links. Its former Linear workflow is retired and is not an active instruction or supported integration. Do not access or update Linear.
 
-## Recommended State Mapping
-
-| ORCA Framework Gate | Example Linear State | Meaning |
-| --- | --- | --- |
-| Intake | Triage | Issue needs clarification, labels, or routing. |
-| Spec intake | Ready for Spec | The issue is clear enough for a spec agent. |
-| Spec complete | Spec Ready | Spec is posted and awaiting approval or planning. |
-| Plan approval | Ready for Build | Plan is approved and build can begin. |
-| Implementation | In Progress | Build agent is actively working. |
-| Review | In Review | Diff or artifact is ready for review. |
-| QA | In QA | Product surface is ready for blind or guided QA. |
-| Release | Ready to Ship | Required gates passed and ship checklist is needed. |
-| Complete | Done | Evidence is posted and no blocking work remains. |
-
-Use `orca-linear-setup` to map existing states before changing a live workspace.
-
-## Labels
-
-Useful labels:
-
-- `needs-triage`
-- `needs-spec`
-- `needs-plan`
-- `needs-approval`
-- `agent-build`
-- `review-required`
-- `blind-qa`
-- `guided-qa`
-- `security-review`
-- `ready-to-ship`
-
-## State Transition Discipline
-
-Agents may recommend state transitions. They should only perform transitions when workspace policy allows it and required evidence is posted. In opt-out mode, record gate transitions in the chosen system of record.
+For current engineering work, use GitHub Issues and GitHub Projects. Read `docs/workflow.md`, `integrations/github.md`, and `skills/orca-github-core/SKILL.md`.

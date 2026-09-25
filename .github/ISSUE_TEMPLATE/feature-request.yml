@@ -17,6 +17,30 @@ body:
       description: Describe the command, skill, template, script, or doc change.
     validations:
       required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope and out of scope
+      description: What should change, and what should remain outside this issue?
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: Observable conditions required for completion.
+    validations:
+      required: true
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies and release target
+      description: Blocking issues, linked work, or target version if known.
+  - type: textarea
+    id: verification
+    attributes:
+      label: Verification, risk, and QA
+      description: Required checks, relevant risks, and QA evidence.
   - type: dropdown
     id: area
     attributes:

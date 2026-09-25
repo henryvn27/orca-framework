@@ -53,10 +53,7 @@ An approval request should state:
 
 ## Recording Decisions
 
-Record approvals in the durable system of record:
-
-- Linear comment or linked artifact in Linear-first mode
-- durable issue comment, doc, or file in opt-out mode
+Record approvals on the GitHub issue or a linked reviewable artifact. For an explicitly local-only Mission, record the approval in its durable file or receipt.
 
 Do not rely on ephemeral chat as the only approval record for non-trivial work.
 

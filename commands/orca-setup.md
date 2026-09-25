@@ -6,7 +6,7 @@ Guide external tool setup for the current ORCA Framework workflow.
 
 ## When To Use
 
-Use before a workflow depends on GitHub, Linear, MCP, a host connector, a CLI helper, or another external tool.
+Use before a workflow depends on GitHub Issues/Projects, MCP, a host connector, a CLI helper, or another external tool. GitHub is the default work-management system.
 
 ## Required Inputs
 

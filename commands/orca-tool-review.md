@@ -21,7 +21,7 @@ Use before introducing a new tool, calling a high-risk tool, or expanding a tool
 - Example parameters
 - Prior registry entry
 
-## Linear Context
+## GitHub Context
 
 - Expects: issue ID when tied to a work item, proposed tool use, risk context
 - Reads: registry entries, approval decisions, security notes, and relevant tool docs

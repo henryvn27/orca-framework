@@ -1,24 +1,25 @@
 # GitHub Integration
 
-GitHub integration is useful when ORCA Framework needs repository metadata, issues, pull requests, reviews, checks, releases, or changelog context.
+GitHub Issues and GitHub Projects are the default ledger for engineering work. GitHub integration also provides repository metadata, pull requests, reviews, checks, releases, and changelog context.
 
 ## When GitHub Is Required
 
-Require GitHub setup when ORCA Framework must:
+Require authenticated GitHub access when ORCA Framework must:
 
 - read or update GitHub issues directly
 - open or update a pull request
 - inspect PR checks or workflow runs
 - create releases or release notes
 - create draft issues for ecosystem findings
+- read or update GitHub Project fields, including Status and Priority
 
 ## When GitHub Is Optional
 
-GitHub is optional when:
+GitHub can be deferred only when:
 
-- the local repository contains enough context
-- the user can manually paste issue or PR content
-- the user will perform GitHub writes outside ORCA Framework
+- the user explicitly requests a local Mission-only action
+- the next action is safe local discovery or implementation that does not depend on changing tracker state
+- a separate authorized GitHub writer will post the prepared update; do not claim it is already posted
 
 ## Setup Paths
 
@@ -36,20 +37,21 @@ Prefer non-destructive checks:
 - confirm target repo is reachable
 - read issue or PR metadata
 - read check status when needed
-- verify write scope only when a write action is required
+- verify issue/PR write access and Project scope separately before changing the corresponding resource
 
 Do not assume write access from read success.
 
-Runtime adaptation should prefer the shortest validated GitHub path for the active host and fall back to local drafts when write scope or host support is missing.
+Runtime adaptation should prefer the shortest validated GitHub path for the active host. If write scope is missing, preserve local work and an update draft without representing it as tracker state.
 
 ## Fallback
 
 If GitHub is unavailable, ORCA Framework can still:
 
-- work from the local repo
+- continue safe local repo work
 - produce branch and commit instructions
 - write draft PR or issue text locally
-- ask the user to paste CI output
+- keep verification claims limited to observed local evidence
+- refresh the issue and Project after authenticated access returns
 - record release notes without publishing them
 
 ## Sources

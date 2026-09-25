@@ -12,7 +12,7 @@ For a typical startup SaaS, ORCA Framework should recommend a bundle instead of 
 - PostHog
 - Sentry
 - GitHub
-- Linear
+- GitHub Projects for project and issue workflow
 
 ## Why This Bundle
 
@@ -22,7 +22,7 @@ For a typical startup SaaS, ORCA Framework should recommend a bundle instead of 
 - billing
 - transactional email
 - analytics and monitoring
-- build and project workflow
+- build and project workflow through GitHub Issues and Projects
 
 ## When To Deviate
 

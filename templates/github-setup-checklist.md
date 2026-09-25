@@ -11,6 +11,8 @@
 - [ ] Read repository metadata.
 - [ ] Read issues or pull requests.
 - [ ] Create issues.
+- [ ] Read and update GitHub Projects, including Status and Priority.
+- [ ] Read dependency, sub-issue, milestone, and linked PR relationships.
 - [ ] Create branches or commits.
 - [ ] Open or update pull requests.
 - [ ] Read checks or workflow status.
@@ -29,7 +31,9 @@
 - [ ] Auth status checked.
 - [ ] Target repo reachable.
 - [ ] Required read scope works.
-- [ ] Required write scope works or is intentionally manual.
+- [ ] Issue/PR write scope works when required.
+- [ ] Project scope works when Project fields need updates.
+- [ ] Missing scope is recorded without claiming a write occurred.
 
 ## Fallback
 

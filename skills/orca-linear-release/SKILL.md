@@ -1,59 +1,10 @@
 ---
 name: orca-linear-release
-description: Validate ship readiness in Linear issue-native terms before recommending done.
+description: Retired compatibility stub; route active engineering work to GitHub Issues and GitHub Projects.
 ---
 
-# ORCA Framework Linear Release
+# Retired skill compatibility: `orca-linear-release`
 
-## What This Skill Is
+This old skill name remains for compatibility only. Do not connect to or update Linear. GitHub Issues and GitHub Projects are the active engineering ledger.
 
-The release gate workflow for Linear-first ORCA Framework projects.
-
-## Trigger
-
-Use for `Ready to Ship`, `ready-to-ship`, release candidate, or done-transition requests.
-
-## Do Not Trigger
-
-Do not use when review or QA gates are incomplete unless the goal is to identify blockers.
-
-## Required Inputs
-
-- Issue ID
-- Verification evidence
-- Review and QA status
-
-## Optional Inputs
-
-- Release notes
-- Rollback plan
-- Follow-up issues
-
-## Exact Workflow
-
-1. Read the issue thread and linked artifacts.
-2. Confirm spec, plan approval, implementation, review, QA, security, and regression status.
-3. Post a ship checklist.
-4. For Apple releases, separate build, archive, export, upload, processing, and distribution evidence instead of one merged "released" note.
-5. For web deploys, separate preview and production evidence.
-6. Recommend done only when evidence is present.
-7. Create or recommend follow-up issues for deferred work.
-
-## Expected Outputs
-
-- Linear ship readiness comment
-- Done or blocked recommendation
-
-## Quality Bar
-
-The issue should not move to done on trust; it moves with evidence.
-
-## Common Failure Modes
-
-- Treating merged code as shipped without QA.
-- Omitting rollback guidance.
-- Losing follow-up work after release.
-
-## Relationship To Other ORCA Framework Skills And Commands
-
-Pairs with `orca-ship`, `orca-retro`, and `orca-linear-ship-check`.
+Use `orca-github-core` for intake, planning, execution updates, QA evidence, review, and verified closure.

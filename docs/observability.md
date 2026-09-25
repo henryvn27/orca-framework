@@ -20,7 +20,7 @@ Use traces to answer questions such as:
 Each meaningful run should capture:
 
 - Run identity: run ID, session ID if available, start time, end time, elapsed time
-- Work identity: Linear issue, project, or opt-out record
+- Work identity: GitHub issue and Project (default), or explicit Mission-only record
 - Agent identity: command, skill, role, harness
 - Context read: artifacts, issue comments, docs, external sources
 - Actions taken: major steps, tools used, commands executed, files read or written
@@ -103,4 +103,4 @@ Start simple:
 - Trace only meaningful work.
 - Keep entries concise and evidence-oriented.
 - Record stop reason clearly.
-- Link the trace from the Linear issue or opt-out record when the run matters to project state.
+- Link the trace from the GitHub issue when the run matters to project state; use a Mission-only record only when explicitly requested.

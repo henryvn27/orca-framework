@@ -25,7 +25,7 @@ Mission Control uses only the Ruby standard library.
 | Item | Required | Why |
 | --- | --- | --- |
 | GitHub auth | no | PRs, issues, checks, release attestation verification |
-| Linear access | no | optional tracker-backed workflow extensions |
+| GitHub issue and Project access | no for a local Mission demo; required for tracker-backed engineering work | authenticated connector or CLI/API, with Project scope where fields need updates |
 | agent harness | no | only when an agent executes Mission work |
 | plugins | no | specialized optional workflows |
 

@@ -22,10 +22,10 @@ Use when workflow state materially changes and Orca Monitor should see the curre
 - latest receipt path
 - recent model/provider/token entries when ORCA already knows them cheaply
 
-## Linear Context
+## GitHub Context
 
-- Reads: current issue or project state when Linear-first mode is active
-- Posts: no Linear update required
+- Reads: current issue or project state when GitHub-first mode is active
+- Posts: no GitHub update required
 - Trigger: status transition, blocker transition, queue change, failing-check change, receipt creation
 - Human approval: not required for local status export
 

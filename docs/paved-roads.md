@@ -14,7 +14,7 @@ They should remove drag, not add ceremony.
 - legacy slice modernization: intake -> discover -> `orca-legacy` -> spec -> phased plan -> build -> QA
 - web SaaS default: Next.js + Vercel + Supabase + Stripe + Resend + PostHog + Sentry
 - mobile app default: Expo + React Native + Expo EAS + Supabase or Firebase + RevenueCat + OneSignal + Sentry
-- internal tool default: Next.js + Railway + Postgres + Clerk + GitHub + Linear
+- internal tool default: Next.js + Railway + Postgres + Clerk + GitHub Issues + GitHub Projects
 
 ## Integration Bundles
 

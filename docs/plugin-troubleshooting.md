@@ -14,7 +14,7 @@ When a plugin fails, do not just say "reinstall it."
 - remove duplicate config
 - use the host-specific setup path instead of a generic one
 - verify auth separately
-- if Linear returns `401 Reauthentication required`, treat Linear as temporarily blocked and continue in degraded local-only mode until the connector is reauthenticated
+- if GitHub returns an authentication or scope error, identify the exact missing permission; continue safe local work and do not claim issue or Project updates until access is restored
 - disable the plugin and continue with the core ORCA path if the plugin is optional
 
 ## Related Docs

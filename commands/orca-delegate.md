@@ -20,9 +20,9 @@ Use when a controller decides implementation, research, QA, review, or goal exec
 - verification requirements
 - stop conditions
 
-## Linear Context
+## GitHub Context
 
-- Expects: issue or project context, linked spec or plan, approval state, and the destination executor lane when Linear-first mode is active
+- Expects: issue or project context, linked spec or plan, approval state, and the destination executor lane when GitHub-first mode is active
 - Reads: current scope, non-goals, blockers, and required evidence
 - Posts: delegation brief or worker-assignment note when a durable handoff comment is needed
 - Human approval: required when the delegated work crosses an approval gate or expands scope

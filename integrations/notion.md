@@ -7,8 +7,8 @@
 - Permissions or credentials: Notion access
 - Supported workflows: research synthesis, documentation, planning artifacts
 - Validation steps: page or database reachable, write path known
-- Common failure modes: no clear source-of-truth boundary with Linear or repo docs
+- Common failure modes: no clear source-of-truth boundary with GitHub Issues/Projects or repository docs
 - Related ORCA Framework commands or docs: `orca-integration`, `orca-docs`
-- Related integrations: Linear, GitHub, Slack
+- Related integrations: GitHub Projects, Slack
 - Risk notes: avoid duplicating durable records without a reason
 - Web, mobile, or platform caveats: business workflow surface

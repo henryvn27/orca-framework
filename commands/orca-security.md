@@ -14,12 +14,12 @@ Use for auth, payments, personal data, external calls, install scripts, CI, gene
 
 ## Optional Inputs
 
-- Linear issue ID or opt-out work item
+- GitHub issue URL or number or opt-out work item
 - Threat model
 - Dependency list
 - Deployment environment
 
-## Linear Context
+## GitHub Context
 
 - Expects: issue ID, changed surface, risk labels, linked PR or diff, deployment context
 - Reads: data handling, permissions, external calls, install and CI changes, prior findings
@@ -51,5 +51,5 @@ Post the security findings to the selected record.
 
 ## Related Commands And Skills
 
-- Commands: `orca-security-check`, `orca-review`, `orca-linear-ship-check`, `orca-ship`
-- Skills: `orca-security`, `orca-linear-release`
+- Commands: `orca-security-check`, `orca-review`, `orca-ship`, `orca-ship`
+- Skills: `orca-security`, `orca-github-core`

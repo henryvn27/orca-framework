@@ -30,7 +30,7 @@ Mission Control requires:
 Optional workflows may also need:
 
 - a harness such as Codex or Claude Code
-- service connections such as GitHub or Linear
+- GitHub repository, issue, PR, or Project access when the workflow manages engineering work
 - official wrapped capability packs such as Impeccable or Superpowers
 - optional plugins or integrations
 

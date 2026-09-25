@@ -19,7 +19,7 @@ Use when validating framework changes, comparing command quality, or reviewing w
 - Spec, plan, QA, review, or ship artifacts
 - Prior eval report
 
-## Linear Context
+## GitHub Context
 
 - Expects: issue or project context when the eval is tied to a real work item
 - Reads: linked artifacts, traces, approval records, and QA evidence

@@ -28,7 +28,7 @@ Installed target validation:
 Broader install doctor:
 
 ```sh
-./install/doctor.sh --target ./.orca-framework --services github,linear
+./install/doctor.sh --target ./.orca-framework --services github
 ```
 
 Harness-aware doctor:

@@ -10,7 +10,7 @@ Default startup web bundle:
 - PostHog
 - Sentry
 - GitHub
-- Linear
+- GitHub Issues and Projects for engineering work
 
 Default startup mobile bundle:
 

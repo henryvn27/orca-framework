@@ -15,7 +15,7 @@ The first run should prove Orca’s product contract with as little setup as pos
 
 Use [First Workflow](first-workflow.md) with a small project change whose verification command you already know.
 
-Do not begin by configuring Notion, Linear, subagents, a hosted service, or the full skill set. Those may help later, but none is required to prove Mission Control works.
+Do not begin by configuring Notion, subagents, a hosted service, or the full skill set. A local Mission can prove Mission Control works on its own; GitHub is the default work ledger when the workflow is managing repository work.
 
 ## After The First Mission
 

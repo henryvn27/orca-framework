@@ -14,18 +14,18 @@ Use after `orca-spec` and before `orca-build`.
 
 ## Optional Inputs
 
-- Notion project page or Issue Board item
-- `.orca/` markdown issue/task
-- Linear issue ID when Linear is explicitly selected
+- GitHub issue URL/number and Project (default)
+- `.orca/` Mission only when the user explicitly chooses local-only tracking
+- Optional linked Notion project page
 - Discovery notes
 - Test commands
 - Release target
 
 ## Backend Context
 
-- Notion mode: read/write the project page and Issue Board as canonical state.
-- Markdown mode: read/write `.orca/project.md`, `.orca/issues.md`, and `.orca/runs/`.
-- Linear mode: use Linear only when explicitly selected; keep Linear ID, URL, and status as optional metadata.
+- GitHub mode: read the issue and Project as canonical queue/status; record the plan and dependencies on the issue when useful.
+- Mission-only mode: read/write `.orca/project.md`, `.orca/issues.md`, and `.orca/runs/` only when the user explicitly chooses local-only tracking.
+- Notion remains an optional linked reference, not the engineering source of truth.
 - Human approval: required before build for product-changing or risk-bearing work.
 
 ## Workflow
@@ -38,7 +38,7 @@ Use after `orca-spec` and before `orca-build`.
 6. Identify review and QA gates.
 7. If the planning or execution discipline clearly benefits from the official Superpowers path, recommend `orca-superpowers` explicitly instead of describing a local ORCA clone of that workflow.
 8. Name the next recommended execution phase explicitly.
-9. Post a plan comment or artifact suitable for approval in the selected backend.
+9. Post a plan comment or link a plan artifact on the GitHub issue for review; preserve any required human approval gate.
 
 ## Project Breakdown Rules
 
@@ -56,7 +56,7 @@ Do not turn a whole project into one vague implementation bucket.
 
 - `templates/plan.md`
 - `templates/approval-request.md` when risk requires an approval gate
-- `templates/linear-plan-comment.md` when Linear mode is explicitly active
+- `templates/github-issue-update.md` for a substantive issue update
 
 ## Failure Cases
 
@@ -66,5 +66,5 @@ Do not turn a whole project into one vague implementation bucket.
 
 ## Related Commands And Skills
 
-- Commands: `orca-linear-plan-comment`, `orca-build`, `orca-review`, `orca-superpowers`
-- Skills: `orca-plan`, `orca-superpowers`, `orca-linear-planner`
+- Commands: `orca-plan`, `orca-build`, `orca-review`, `orca-superpowers`
+- Skills: `orca-plan`, `orca-superpowers`, `orca-github-core`

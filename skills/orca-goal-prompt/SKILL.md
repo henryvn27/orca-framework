@@ -58,7 +58,7 @@ Final answer: completed items, blocked items with proof, skipped items with reas
 ## Defaults
 
 - Chunk: all ready ORCA plans.
-- Tracker: Notion issue board when configured; otherwise ORCA local status artifacts.
+- Tracker: GitHub Issues and GitHub Projects. Keep the ORCA plans and Mission as the execution contract; record ownership, dependencies, workflow status, blockers, verification, and delivery evidence on the mapped GitHub issue/project. Use a mission-only local run only when Henry explicitly requests it.
 - Plan sources: `.orca/work-items/**`, `docs/**` plan/status files, checked-in ORCA plans, and current issue board.
 - Branching: follow repo policy; avoid protected-branch implementation.
 - Delegation: only for blockers with a clean ownership boundary.
